@@ -67,12 +67,9 @@
 
 	<div class="row">
 		<span class="left">
-			<?php echo $form->dropDownListNoPost('introduction', CHtml::listData($element->getStringGroup('Introduction'), 'id', 'name'), array('empty' => '- Introduction -', 'nowrapper' => true, 'class' => 'stringgroup'))?>
-			<?php echo $form->dropDownListNoPost('findings', CHtml::listData($element->getStringGroup('Findings'), 'id', 'name'), array('empty' => '- Findings -', 'nowrapper' => true, 'class' => 'stringroup'))?>
-			<?php echo $form->dropDownListNoPost('diagnosis', CHtml::listData($element->getStringGroup('Diagnosis'), 'id', 'name'), array('empty' => '- Diagnosis -', 'nowrapper' => true, 'class' => 'stringroup'))?>
-			<?php echo $form->dropDownListNoPost('management', CHtml::listData($element->getStringGroup('Management'), 'id', 'name'), array('empty' => '- Management -', 'nowrapper' => true, 'class' => 'stringroup'))?>
-			<?php echo $form->dropDownListNoPost('drugs', CHtml::listData($element->getStringGroup('Drugs'), 'id', 'name'), array('empty' => '- Drugs -', 'nowrapper' => true, 'class' => 'stringroup'))?>
-			<?php echo $form->dropDownListNoPost('outcome', CHtml::listData($element->getStringGroup('Outcome'), 'id', 'name'), array('empty' => '- Outcome -', 'nowrapper' => true, 'class' => 'stringroup'))?>
+			<?php foreach ($element->stringgroups as $string_group) {?>
+				<?php echo $form->dropDownListNoPost(strtolower($string_group->name), CHtml::listData($string_group->strings, 'id', 'name'), array('empty' => '- '.$string_group->name.' -', 'nowrapper' => true, 'class' => 'stringgroup'))?>
+			<?php }?>
 		</span>
 		<span class="right">
 			<?php echo $form->textArea($element, 'body', array('rows' => 20, 'cols' => 100, 'label' => false, 'nowrapper' => true))?>

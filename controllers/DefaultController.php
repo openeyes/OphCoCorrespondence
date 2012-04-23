@@ -110,4 +110,18 @@ class DefaultController extends BaseEventTypeController {
 
 		echo json_encode($data);
 	}
+
+	public function actionGetString() {
+		if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
+			throw new Exception('Patient not found: '.@$_GET['patient_id']);
+		}
+
+		if (!$string = LetterString::model()->findByPk(@$_GET['string_id'])) {
+			throw new Exception('Letter string not found: '.@$_GET['string_id']);
+		}
+
+		$string->substitute($patient);
+
+		echo $string->body;
+	}
 }

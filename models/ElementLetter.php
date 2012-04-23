@@ -139,16 +139,8 @@ class ElementLetter extends BaseEventTypeElement
 		}
 	}
 
-	public function getStringGroup($name) {
-		if (!$group = LetterStringGroup::model()->find('name=?',array($name))) {
-			throw new Exception('string group not found: '.$name);
-		}
-
-		$criteria = new CDbCriteria;
-		$criteria->compare('letter_string_group_id',$group->id);
-		$criteria->order = 'display_order asc';
-
-		return LetterString::model()->findAll($criteria);
+	public function getStringGroups() {
+		return LetterStringGroup::model()->findAll(array('order'=>'display_order'));
 	}
 
 	public function setDefaultOptions() {

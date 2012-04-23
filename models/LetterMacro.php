@@ -105,10 +105,6 @@ class LetterMacro extends BaseEventTypeElement
 	}
 
 	public function substitute($patient) {
-		preg_match_all('/\[([a-z]{3})\]/s',$this->body,$m);
-
-		foreach ($m[1] as $el) {
-			$this->body = str_replace('['.$el.']',$patient->{$el},$this->body);
-		}
+		$this->body = OphCoCorrespondence_Substitution::replace($this->body, $patient);
 	}
 }
