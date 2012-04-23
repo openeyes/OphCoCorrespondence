@@ -25,7 +25,7 @@
  * The followings are the available model relations:
  * @property Event $event
  */
-class ElementLetter extends BaseEventTypeElement
+class LetterStringGroup extends BaseEventTypeElement
 {
 	/**
 	 * Returns the static model of the specified AR class.
@@ -41,7 +41,7 @@ class ElementLetter extends BaseEventTypeElement
 	 */
 	public function tableName()
 	{
-		return 'et_ophcocorrespondence_letter';
+		return 'et_ophcocorrespondence_letter_string_group';
 	}
 
 	/**
@@ -52,11 +52,11 @@ class ElementLetter extends BaseEventTypeElement
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('event_id, recipient_id, use_nickname, date, introduction, re, body, footer, draft', 'safe'),
-			array('event_id, recipient_id, use_nickname, date, introduction, body, footer', 'required'),
+			array('name, display_order', 'safe'),
+			array('name', 'required'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, event_id, recipient_id, use_nickname, date, introduction, re, body, footer, draft', 'safe', 'on' => 'search'),
+			array('name, display_order', 'safe', 'on' => 'search'),
 		);
 	}
 	
@@ -73,7 +73,6 @@ class ElementLetter extends BaseEventTypeElement
 			'event' => array(self::BELONGS_TO, 'Event', 'event_id'),
 			'user' => array(self::BELONGS_TO, 'User', 'created_user_id'),
 			'usermodified' => array(self::BELONGS_TO, 'User', 'last_modified_user_id'),
-			'recipient' => array(self::BELONGS_TO, 'Contact', 'recipient_id'),
 		);
 	}
 
@@ -83,14 +82,6 @@ class ElementLetter extends BaseEventTypeElement
 	public function attributeLabels()
 	{
 		return array(
-			'recipient_id' => 'Recipient',
-			'use_nickname' => 'Nickname',
-			'date' => 'Date',
-			'introduction' => 'Introduction',
-			're' => 'Re',
-			'body' => 'Body',
-			'footer' => 'Footer',
-			'draft' => 'Draft',
 		);
 	}
 
@@ -111,61 +102,5 @@ class ElementLetter extends BaseEventTypeElement
 		return new CActiveDataProvider(get_class($this), array(
 			'criteria' => $criteria,
 		));
-	}
-
-	public function getAddress_targets() {
-		if (Yii::app()->getController()->getAction()->id == 'create') {
-			if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
-				throw new Exception('patient not found: '.@$_GET['patient_id']);
-			}
-
-			$options = array('patient' => $patient->fullname.' (Patient)');
-
-			foreach (Yii::app()->db->createCommand()
-				->select('c.id, c.title, c.first_name, c.last_name')
-				->from('contact c')
-				->join('patient_contact_assignment pca','pca.contact_id = c.id')
-				->where('pca.patient_id = :patient_id',array(':patient_id' => $patient->id))
-				->queryAll() as $contact) {
-
-				$options['contact'.$contact->id] = $contact->title.' '.$contact->first_name.' '.$contact->last_name.' (Ophthalmologist)';
-			}
-
-			if ($gp = Gp::model()->findByPk($patient->gp_id)) {
-				$options['gp'] = $gp->contact->fullname.' (GP)';
-			}
-
-			return $options;
-		}
-	}
-
-	public function getStringGroup($name) {
-		if (!$group = LetterStringGroup::model()->find('name=?',array($name))) {
-			throw new Exception('string group not found: '.$name);
-		}
-
-		$criteria = new CDbCriteria;
-		$criteria->compare('letter_string_group_id',$group->id);
-		$criteria->order = 'display_order asc';
-
-		return LetterString::model()->findAll($criteria);
-	}
-
-	public function setDefaultOptions() {
-		if (Yii::app()->getController()->getAction()->id == 'create') {
-			if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
-				throw new Exception('Patient not found: '.@$_GET['patient_id']);
-			} 
-
-			$this->re = $patient->first_name.' '.$patient->last_name;
-
-			foreach (array('address1','address2','city','postcode') as $field) {
-				if ($patient->address->{$field}) {
-					$this->re .= ', '.$patient->address->{$field};
-				}
-			}
-
-			$this->re .= ', DofB: '.date('d/m/Y',strtotime($patient->dob)).', HosNum: '.$patient->hos_num;
-		}
 	}
 }

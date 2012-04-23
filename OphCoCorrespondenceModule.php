@@ -9,10 +9,10 @@ class OphCoCorrespondenceModule extends BaseEventTypeModule
 
 		// import the module-level models and components
 		$this->setImport(array(
-			'Example.models.*',
-			'Example.views.*',
-			'Example.components.*',
-			'Example.controllers.*',
+			'OphCoCorrespondence.models.*',
+			'OphCoCorrespondence.views.*',
+			'OphCoCorrespondence.components.*',
+			'OphCoCorrespondence.controllers.*',
 		));
 		parent::init();
 	}
