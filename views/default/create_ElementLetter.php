@@ -92,5 +92,7 @@
 		<span class="right">
 			<?php echo $form->textArea($element, 'cc', array('rows' => 8, 'cols' => 100, 'label' => false, 'nowrapper' => true))?>
 		</span>
+		<div id="cc_targets">
+		</div>
 	</div>
 </div>

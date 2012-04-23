@@ -124,4 +124,32 @@ class DefaultController extends BaseEventTypeController {
 
 		echo $string->body;
 	}
+
+	public function actionGetFrom() {
+		if (!$contact = Contact::model()->findByPk(@$_GET['contact_id'])) {
+			throw new Exception('Contact not found: '.@$_GET['contact_id']);
+		}
+
+		echo "Yours sincerely\n\n\n\n\n".$contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications."\nConsultant Ophthalmic Surgeon";
+	}
+
+	public function actionGetCc() {
+		if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
+			throw new Exception('Patient not found: '.@$_GET['patient_id']);
+		}
+
+		if (@$_GET['contact_id'] == 'patient') {
+			$contact = $patient;
+		} else if (@$_GET['contact_id'] == 'gp') {
+			$contact = $patient->gp->contact;
+		} else if (preg_match('/^contact([0-9]+)$/',@$_GET['contact_id'],$m)) {
+			if (!$contact = Contact::model()->findByPk($m[1])) {
+				throw new Exception('Unknown contact id: '.$m[1]);
+			}
+		} else {
+			throw new Exception('Unknown or missing contact_id value: '.@$_GET['contact_id']);
+		}
+
+		echo $contact->title.' '.$contact->last_name.', '.implode(', ',$contact->address->getLetterarray(false));
+	}
 }

@@ -158,6 +158,10 @@ class ElementLetter extends BaseEventTypeElement
 			}
 
 			$this->re .= ', DofB: '.date('d/m/Y',strtotime($patient->dob)).', HosNum: '.$patient->hos_num;
+
+			$contact = Yii::app()->session['user']->userContactAssignments->contact;
+
+			$this->footer = "Yours sincerely\n\n\n\n\n".$contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications."\nConsultant Ophthalmic Surgeon";
 		}
 	}
 }

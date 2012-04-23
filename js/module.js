@@ -47,12 +47,56 @@ $(document).ready(function() {
 			});
 		}
 	});
-/*
-	$('#introduction').change(function() {
-		$.ajax({
-			'type': 'GET',
-			'url': '/OphCoCorrespondence/Default/getString?patient_id='+patient_id+'&group=introduction
-	});*/
+
+	$('#from').change(function() {
+		var	contact_id = $(this).children('option:selected').val();
+
+		if (contact_id != '') {
+			$.ajax({
+				'type': 'GET',
+				'url': '/OphCoCorrespondence/Default/getFrom?contact_id='+contact_id,
+				'success': function(text) {
+					$('#ElementLetter_footer').html(text);
+				}
+			});
+		}
+	});
+
+	$('#cc').change(function() {
+		var contact_id = $(this).children('option:selected').val();
+
+		if (contact_id != '') {
+			var ok = true;
+
+			$('#cc_targets').children('input').map(function() {
+				if ($(this).val() == contact_id) {
+					ok = false;
+				}
+			});
+
+			if (!ok) return true;
+
+			$.ajax({
+				'type': 'GET',
+				'url': '/OphCoCorrespondence/Default/getCc?patient_id='+patient_id+'&contact_id='+contact_id,
+				'success': function(text) {
+					if ($('#ElementLetter_cc').val().length >0) {
+						var cur = $('#ElementLetter_cc').val();
+
+						if (!$('#ElementLetter_cc').val().match(/\n$/)) {
+							$('#ElementLetter_cc').val(cur+"\n");
+						}
+
+						$('#ElementLetter_cc').val(cur+"\t"+text+"\n");
+					} else {
+						$('#ElementLetter_cc').val("cc:\t"+text+"\n");
+					}
+
+					$('#cc_targets').append('<input type="hidden" name="CC_Targets[]" value="'+contact_id+'" />');
+				}
+			});
+		}
+	});
 });
 
 function correspondence_load_data(data) {
@@ -66,7 +110,7 @@ function correspondence_load_data(data) {
 		} else if (m = i.match(/^textappend_(.*)$/)) {
 			$('#'+m[1]).text($('#'+m[1]).text()+data[i]);
 		}
-	} 
+	}
 }
 
 function correspondence_append_body(text) {
