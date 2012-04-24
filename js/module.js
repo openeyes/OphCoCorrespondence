@@ -83,8 +83,8 @@ $(document).ready(function() {
 					if ($('#ElementLetter_cc').val().length >0) {
 						var cur = $('#ElementLetter_cc').val();
 
-						if (!$('#ElementLetter_cc').val().match(/\n$/)) {
-							$('#ElementLetter_cc').val(cur+"\n");
+						if (!$('#ElementLetter_cc').val().match(/[\n\r]$/)) {
+							cur += "\n";
 						}
 
 						$('#ElementLetter_cc').val(cur+"\t"+text+"\n");
@@ -109,6 +109,10 @@ function correspondence_load_data(data) {
 			$('#'+m[1]).attr('checked',(data[i] == 1 ? true : false));
 		} else if (m = i.match(/^textappend_(.*)$/)) {
 			$('#'+m[1]).text($('#'+m[1]).text()+data[i]);
+		} else if (m = i.match(/^hidden_(.*)$/)) {
+			$('#'+m[1]).val(data[i]);
+		} else if (m = i.match(/^elementappend_(.*)$/)) {
+			$('#'+m[1]).append(data[i]);
 		}
 	}
 }

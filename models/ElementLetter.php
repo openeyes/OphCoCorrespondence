@@ -52,8 +52,8 @@ class ElementLetter extends BaseEventTypeElement
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('event_id, recipient_id, use_nickname, date, introduction, re, body, footer, draft', 'safe'),
-			array('event_id, recipient_id, use_nickname, date, introduction, body, footer', 'required'),
+			array('event_id, recipient_id, address, use_nickname, date, introduction, cc, re, body, footer, draft', 'safe'),
+			array('use_nickname, date, address, introduction, cc, body, footer', 'required'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, event_id, recipient_id, use_nickname, date, introduction, re, body, footer, draft', 'safe', 'on' => 'search'),
@@ -118,25 +118,27 @@ class ElementLetter extends BaseEventTypeElement
 			if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
 				throw new Exception('patient not found: '.@$_GET['patient_id']);
 			}
-
-			$options = array('patient' => $patient->fullname.' (Patient)');
-
-			foreach (Yii::app()->db->createCommand()
-				->select('c.id, c.title, c.first_name, c.last_name')
-				->from('contact c')
-				->join('patient_contact_assignment pca','pca.contact_id = c.id')
-				->where('pca.patient_id = :patient_id',array(':patient_id' => $patient->id))
-				->queryAll() as $contact) {
-
-				$options['contact'.$contact->id] = $contact->title.' '.$contact->first_name.' '.$contact->last_name.' (Ophthalmologist)';
-			}
-
-			if ($gp = Gp::model()->findByPk($patient->gp_id)) {
-				$options['gp'] = $gp->contact->fullname.' (GP)';
-			}
-
-			return $options;
+		} else {
+			$patient = $this->event->episode->patient;
 		}
+
+		$options = array('patient' => $patient->fullname.' (Patient)');
+
+		foreach (Yii::app()->db->createCommand()
+			->select('c.id, c.title, c.first_name, c.last_name')
+			->from('contact c')
+			->join('patient_contact_assignment pca','pca.contact_id = c.id')
+			->where('pca.patient_id = :patient_id',array(':patient_id' => $patient->id))
+			->queryAll() as $contact) {
+
+			$options['contact'.$contact->id] = $contact->title.' '.$contact->first_name.' '.$contact->last_name.' (Ophthalmologist)';
+		}
+
+		if ($gp = Gp::model()->findByPk($patient->gp_id)) {
+			$options['gp'] = $gp->contact->fullname.' (GP)';
+		}
+
+		return $options;
 	}
 
 	public function getStringGroups() {
@@ -163,5 +165,38 @@ class ElementLetter extends BaseEventTypeElement
 
 			$this->footer = "Yours sincerely\n\n\n\n\n".$contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications."\nConsultant Ophthalmic Surgeon";
 		}
+	}
+
+	public function afterSave() {
+		if (!empty($_POST['CC_Targets'])) {
+
+			LetterCc::model()->deleteAll('letter_id = ?',array($this->id));
+
+			$order = 1;
+
+			foreach ($_POST['CC_Targets'] as $contact_id) {
+				$lettercc = new LetterCc;
+				$lettercc->letter_id = $this->id;
+
+				if ($contact_id == 'patient') {
+					$lettercc->patient_id = $this->event->episode->patient->id;
+				} else if ($contact_id == 'gp') {
+					$lettercc->contact_id = $this->event->episode->patient->gp->contact->id;
+				} else {
+					preg_match('/^contact([0-9]+)$/',$contact_id,$m);
+					$lettercc->contact_id = $m[1];
+				}
+
+				$lettercc->display_order = $order;
+
+				if (!$lettercc->save()) {
+					throw new Exception('Unable to save lettercc: '.print_r($lettercc->getErrors(),true));
+				}
+
+				$order++;
+			}
+		}
+
+		return parent::afterSave();
 	}
 }

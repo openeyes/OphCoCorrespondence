@@ -52,11 +52,11 @@ class LetterCc extends BaseEventTypeElement
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('letter_id, recipient_id, display_order', 'safe'),
-			array('letter_id, recipient_id', 'required'),
+			array('letter_id, patient_id, contact_id, display_order', 'safe'),
+			array('letter_id', 'required'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, letter_id, recipient_id, display_order', 'safe', 'on' => 'search'),
+			array('id, letter_id, patient_id, contact_id, display_order', 'safe', 'on' => 'search'),
 		);
 	}
 	
@@ -74,6 +74,8 @@ class LetterCc extends BaseEventTypeElement
 			'user' => array(self::BELONGS_TO, 'User', 'created_user_id'),
 			'usermodified' => array(self::BELONGS_TO, 'User', 'last_modified_user_id'),
 			'letter' => array(self::BELONGS_TO, 'ElementLetter', 'letter_id'),
+			'patient' => array(self::BELONGS_TO, 'Patient', 'patient_id'),
+			'contact' => array(self::BELONGS_TO, 'Contact', 'contact_id'),
 		);
 	}
 

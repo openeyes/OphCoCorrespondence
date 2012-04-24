@@ -34,6 +34,8 @@ class DefaultController extends BaseEventTypeController {
 			throw new Exception('Unknown or missing address_id value: '.@$_GET['address_id']);
 		}
 
+		$data['hidden_ElementLetter_recipient_id'] = $contact->id;
+
 		$data['text_ElementLetter_address'] = $contact->fullName;
 
 		if (isset($contact->qualifications) && $contact->qualifications) {
@@ -75,6 +77,8 @@ class DefaultController extends BaseEventTypeController {
 		}
 
 		if (isset($contact)) {
+			$data['hidden_ElementLetter_recipient_id'] = $contact->id;
+
 			$data['text_ElementLetter_address'] = $contact->fullName;
 			if (isset($contact->qualifications) && $contact->qualifications) {
 				$data['text_ElementLetter_address'] .= ' '.$contact->qualifications;
@@ -106,6 +110,7 @@ class DefaultController extends BaseEventTypeController {
 
 		if ($macro->cc_patient) {
 			$data['textappend_ElementLetter_cc'] = "cc:\t".$patient->title.' '.$patient->last_name.', '.implode(', ',$patient->address->getLetterarray(false));
+			$data['elementappend_cc_targets'] = '<input type="hidden" name="CC_Targets[]" value="patient" />';
 		}
 
 		echo json_encode($data);

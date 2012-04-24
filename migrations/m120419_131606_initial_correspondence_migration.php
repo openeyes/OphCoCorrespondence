@@ -14,7 +14,7 @@ class m120419_131606_initial_correspondence_migration extends CDbMigration
 		$this->createTable('et_ophcocorrespondence_letter', array(
 				'id' => 'int(10) unsigned NOT NULL AUTO_INCREMENT',
 				'event_id' => 'int(10) unsigned NOT NULL',
-				'recipient_id' => 'int(10) unsigned NOT NULL',
+				'recipient_id' => 'int(10) unsigned NULL',
 				'use_nickname' => 'tinyint(1) unsigned NOT NULL DEFAULT 0',
 				'date' => 'datetime NOT NULL',
 				'address' => 'varchar(1024) COLLATE utf8_bin DEFAULT NULL',
@@ -30,11 +30,9 @@ class m120419_131606_initial_correspondence_migration extends CDbMigration
 				'created_date' => 'datetime NOT NULL DEFAULT \'1900-01-01 00:00:00\'',
 				'PRIMARY KEY (`id`)',
 				'KEY `et_ophcocorrespondence_letter_event_id_fk` (`event_id`)',
-				'KEY `et_ophcocorrespondence_letter_recipient_id_fk` (`recipient_id`)',
 				'KEY `et_ophcocorrespondence_letter_last_modified_user_id_fk` (`last_modified_user_id`)',
 				'KEY `et_ophcocorrespondence_letter_created_user_id_fk` (`created_user_id`)',
 				'CONSTRAINT `et_ophcocorrespondence_letter_event_id_fk` FOREIGN KEY (`event_id`) REFERENCES `event` (`id`)',
-				'CONSTRAINT `et_ophcocorrespondence_letter_recipient_id_fk` FOREIGN KEY (`recipient_id`) REFERENCES `contact` (`id`)',
 				'CONSTRAINT `et_ophcocorrespondence_letter_last_modified_user_id_fk` FOREIGN KEY (`created_user_id`) REFERENCES `user` (`id`)',
 				'CONSTRAINT `et_ophcocorrespondence_letter_created_user_id_fk` FOREIGN KEY (`last_modified_user_id`) REFERENCES `user` (`id`)'
 			),
@@ -44,7 +42,8 @@ class m120419_131606_initial_correspondence_migration extends CDbMigration
 		$this->createTable('et_ophcocorrespondence_letter_cc', array(
 				'id' => 'int(10) unsigned NOT NULL AUTO_INCREMENT',
 				'letter_id' => 'int(10) unsigned NOT NULL',
-				'recipient_id' => 'int(10) unsigned NOT NULL',
+				'patient_id' => 'int(10) unsigned NULL',
+				'contact_id' => 'int(10) unsigned NULL',
 				'display_order' => 'tinyint(3) unsigned NOT NULL DEFAULT 1',
 				'last_modified_user_id' => 'int(10) unsigned NOT NULL DEFAULT \'1\'',
 				'last_modified_date' => 'datetime NOT NULL DEFAULT \'1900-01-01 00:00:00\'',
@@ -52,11 +51,9 @@ class m120419_131606_initial_correspondence_migration extends CDbMigration
 				'created_date' => 'datetime NOT NULL DEFAULT \'1900-01-01 00:00:00\'',
 				'PRIMARY KEY (`id`)',
 				'KEY `et_ophcocorrespondence_letter_cc_letter_id_fk` (`letter_id`)',
-				'KEY `et_ophcocorrespondence_letter_cc_recipient_id_fk` (`recipient_id`)',
 				'KEY `et_ophcocorrespondence_letter_cc_last_modified_user_id_fk` (`last_modified_user_id`)',
 				'KEY `et_ophcocorrespondence_letter_cc_created_user_id_fk` (`created_user_id`)',
 				'CONSTRAINT `et_ophcocorrespondence_letter_cc_letter_id_fk` FOREIGN KEY (`letter_id`) REFERENCES `et_ophcocorrespondence_letter` (`id`)',
-				'CONSTRAINT `et_ophcocorrespondence_letter_cc_recipient_id_fk` FOREIGN KEY (`recipient_id`) REFERENCES `contact` (`id`)',
 				'CONSTRAINT `et_ophcocorrespondence_letter_cc_last_modified_user_id_fk` FOREIGN KEY (`created_user_id`) REFERENCES `user` (`id`)',
 				'CONSTRAINT `et_ophcocorrespondence_letter_cc_created_user_id_fk` FOREIGN KEY (`last_modified_user_id`) REFERENCES `user` (`id`)'
 			),
@@ -180,6 +177,7 @@ class m120419_131606_initial_correspondence_migration extends CDbMigration
     $event_type = $this->dbConnection->createCommand()->select('id')->from('event_type')->where('event_group_id=:event_group_id and class_name=:class_name',array(':event_group_id'=>$group['id'],':class_name'=>'OphCoCorrespondence'))->queryRow();
 
 		$this->delete('element_type','event_type_id='.$event_type['id']);
+		$this->delete('event','event_type_id='.$event_type['id']);
 		$this->delete('event_type','id='.$event_type['id']);
 	}
 }
