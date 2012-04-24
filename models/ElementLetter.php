@@ -52,11 +52,11 @@ class ElementLetter extends BaseEventTypeElement
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('event_id, recipient_id, address, use_nickname, date, introduction, cc, re, body, footer, draft', 'safe'),
+			array('event_id, address, use_nickname, date, introduction, cc, re, body, footer, draft', 'safe'),
 			array('use_nickname, date, address, introduction, cc, body, footer', 'required'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, event_id, recipient_id, use_nickname, date, introduction, re, body, footer, draft', 'safe', 'on' => 'search'),
+			array('id, event_id, use_nickname, date, introduction, re, body, footer, draft', 'safe', 'on' => 'search'),
 		);
 	}
 	
@@ -73,7 +73,6 @@ class ElementLetter extends BaseEventTypeElement
 			'event' => array(self::BELONGS_TO, 'Event', 'event_id'),
 			'user' => array(self::BELONGS_TO, 'User', 'created_user_id'),
 			'usermodified' => array(self::BELONGS_TO, 'User', 'last_modified_user_id'),
-			'recipient' => array(self::BELONGS_TO, 'Contact', 'recipient_id'),
 		);
 	}
 
@@ -83,7 +82,6 @@ class ElementLetter extends BaseEventTypeElement
 	public function attributeLabels()
 	{
 		return array(
-			'recipient_id' => 'Recipient',
 			'use_nickname' => 'Nickname',
 			'date' => 'Date',
 			'introduction' => 'Introduction',
