@@ -166,37 +166,4 @@ class ElementLetter extends BaseEventTypeElement
 			$this->footer = "Yours sincerely\n\n\n\n\n".$contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications."\nConsultant Ophthalmic Surgeon";
 		}
 	}
-
-	public function afterSave() {
-		if (!empty($_POST['CC_Targets'])) {
-
-			LetterCc::model()->deleteAll('letter_id = ?',array($this->id));
-
-			$order = 1;
-
-			foreach ($_POST['CC_Targets'] as $contact_id) {
-				$lettercc = new LetterCc;
-				$lettercc->letter_id = $this->id;
-
-				if ($contact_id == 'patient') {
-					$lettercc->patient_id = $this->event->episode->patient->id;
-				} else if ($contact_id == 'gp') {
-					$lettercc->contact_id = $this->event->episode->patient->gp->contact->id;
-				} else {
-					preg_match('/^contact([0-9]+)$/',$contact_id,$m);
-					$lettercc->contact_id = $m[1];
-				}
-
-				$lettercc->display_order = $order;
-
-				if (!$lettercc->save()) {
-					throw new Exception('Unable to save lettercc: '.print_r($lettercc->getErrors(),true));
-				}
-
-				$order++;
-			}
-		}
-
-		return parent::afterSave();
-	}
 }
