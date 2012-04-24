@@ -14,7 +14,6 @@ class m120424_102904_correspondence_initial_migration extends CDbMigration
 		$this->createTable('et_ophcocorrespondence_letter', array(
 				'id' => 'int(10) unsigned NOT NULL AUTO_INCREMENT',
 				'event_id' => 'int(10) unsigned NOT NULL',
-				'recipient_id' => 'int(10) unsigned NULL',
 				'use_nickname' => 'tinyint(1) unsigned NOT NULL DEFAULT 0',
 				'date' => 'datetime NOT NULL',
 				'address' => 'varchar(1024) COLLATE utf8_bin DEFAULT NULL',
