@@ -1,6 +1,6 @@
 <?php
 
-class m120419_131606_initial_correspondence_migration extends CDbMigration
+class m120424_102904_correspondence_initial_migration extends CDbMigration
 {
 	public function up()
 	{
@@ -35,27 +35,6 @@ class m120419_131606_initial_correspondence_migration extends CDbMigration
 				'CONSTRAINT `et_ophcocorrespondence_letter_event_id_fk` FOREIGN KEY (`event_id`) REFERENCES `event` (`id`)',
 				'CONSTRAINT `et_ophcocorrespondence_letter_last_modified_user_id_fk` FOREIGN KEY (`created_user_id`) REFERENCES `user` (`id`)',
 				'CONSTRAINT `et_ophcocorrespondence_letter_created_user_id_fk` FOREIGN KEY (`last_modified_user_id`) REFERENCES `user` (`id`)'
-			),
-			'ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin'
-		);
-
-		$this->createTable('et_ophcocorrespondence_letter_cc', array(
-				'id' => 'int(10) unsigned NOT NULL AUTO_INCREMENT',
-				'letter_id' => 'int(10) unsigned NOT NULL',
-				'patient_id' => 'int(10) unsigned NULL',
-				'contact_id' => 'int(10) unsigned NULL',
-				'display_order' => 'tinyint(3) unsigned NOT NULL DEFAULT 1',
-				'last_modified_user_id' => 'int(10) unsigned NOT NULL DEFAULT \'1\'',
-				'last_modified_date' => 'datetime NOT NULL DEFAULT \'1900-01-01 00:00:00\'',
-				'created_user_id' => 'int(10) unsigned NOT NULL DEFAULT \'1\'',
-				'created_date' => 'datetime NOT NULL DEFAULT \'1900-01-01 00:00:00\'',
-				'PRIMARY KEY (`id`)',
-				'KEY `et_ophcocorrespondence_letter_cc_letter_id_fk` (`letter_id`)',
-				'KEY `et_ophcocorrespondence_letter_cc_last_modified_user_id_fk` (`last_modified_user_id`)',
-				'KEY `et_ophcocorrespondence_letter_cc_created_user_id_fk` (`created_user_id`)',
-				'CONSTRAINT `et_ophcocorrespondence_letter_cc_letter_id_fk` FOREIGN KEY (`letter_id`) REFERENCES `et_ophcocorrespondence_letter` (`id`)',
-				'CONSTRAINT `et_ophcocorrespondence_letter_cc_last_modified_user_id_fk` FOREIGN KEY (`created_user_id`) REFERENCES `user` (`id`)',
-				'CONSTRAINT `et_ophcocorrespondence_letter_cc_created_user_id_fk` FOREIGN KEY (`last_modified_user_id`) REFERENCES `user` (`id`)'
 			),
 			'ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin'
 		);
@@ -169,7 +148,6 @@ class m120419_131606_initial_correspondence_migration extends CDbMigration
 		$this->dropTable('et_ophcocorrespondence_letter_string');
 		$this->dropTable('et_ophcocorrespondence_letter_string_group');
 		$this->dropTable('et_ophcocorrespondence_letter_macro');
-		$this->dropTable('et_ophcocorrespondence_letter_cc');
 		$this->dropTable('et_ophcocorrespondence_letter');
 
     $group = $this->dbConnection->createCommand()->select('id')->from('event_group')->where('name=:name',array(':name'=>'Communication events'))->queryRow();
