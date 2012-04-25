@@ -31,8 +31,6 @@
 		</span>
 	</div>
 
-	<?php echo $form->hiddenField($element, 'recipient_id')?>
-
 	<div class="row">
 		<span class="left">
 			<?php echo $form->dropDownListNoPost('address_target', $element->address_targets, array('empty' => '- Recipient -', 'nowrapper' => true))?>

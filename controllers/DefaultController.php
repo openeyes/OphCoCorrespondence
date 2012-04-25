@@ -34,8 +34,6 @@ class DefaultController extends BaseEventTypeController {
 			throw new Exception('Unknown or missing address_id value: '.@$_GET['address_id']);
 		}
 
-		$data['hidden_ElementLetter_recipient_id'] = $contact->id;
-
 		$data['text_ElementLetter_address'] = $contact->fullName;
 
 		if (isset($contact->qualifications) && $contact->qualifications) {
@@ -77,8 +75,6 @@ class DefaultController extends BaseEventTypeController {
 		}
 
 		if (isset($contact)) {
-			$data['hidden_ElementLetter_recipient_id'] = $contact->id;
-
 			$data['text_ElementLetter_address'] = $contact->fullName;
 			if (isset($contact->qualifications) && $contact->qualifications) {
 				$data['text_ElementLetter_address'] .= ' '.$contact->qualifications;
