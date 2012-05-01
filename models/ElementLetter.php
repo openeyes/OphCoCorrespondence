@@ -122,13 +122,7 @@ class ElementLetter extends BaseEventTypeElement
 
 		$options = array('patient' => $patient->fullname.' (Patient)');
 
-		foreach (Yii::app()->db->createCommand()
-			->select('c.id, c.title, c.first_name, c.last_name')
-			->from('contact c')
-			->join('patient_contact_assignment pca','pca.contact_id = c.id')
-			->where('pca.patient_id = :patient_id',array(':patient_id' => $patient->id))
-			->queryAll() as $contact) {
-
+		foreach (Contact::model()->findAll('parent_class=:parent_class and parent_id=:parent_id',array(':parent_class'=>'Patient',':parent_id'=>$patient->id)) as $contact) {
 			$options['contact'.$contact->id] = $contact->title.' '.$contact->first_name.' '.$contact->last_name.' (Ophthalmologist)';
 		}
 
