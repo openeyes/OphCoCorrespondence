@@ -160,13 +160,13 @@ $(document).ready(function() {
 function correspondence_load_data(data) {
 	for (var i in data) {
 		if (m = i.match(/^text_(.*)$/)) {
-			$('#'+m[1]).text(data[i]);
+			$('#'+m[1]).val(data[i]);
 		} else if (m = i.match(/^sel_(.*)$/)) {
 			$('#'+m[1]).val(data[i]);
 		} else if (m = i.match(/^check_(.*)$/)) {
 			$('#'+m[1]).attr('checked',(data[i] == 1 ? true : false));
 		} else if (m = i.match(/^textappend_(.*)$/)) {
-			$('#'+m[1]).text($('#'+m[1]).text()+data[i]);
+			$('#'+m[1]).val($('#'+m[1]).val()+data[i]);
 		} else if (m = i.match(/^hidden_(.*)$/)) {
 			$('#'+m[1]).val(data[i]);
 		} else if (m = i.match(/^elementappend_(.*)$/)) {
@@ -180,13 +180,15 @@ function correspondence_append_body(text) {
 		text = text + '.';
 	}
 
-	if ($('#ElementLetter_body').text() == '') {
-		$('#ElementLetter_body').text(text);
-	} else if ($('#ElementLetter_body').text().match(/\.$/)) {
-		$('#ElementLetter_body').append(' '+text);
-	} else if (!$('#ElementLetter_body').text().match(/[\.\s]+$/)) {
-		$('#ElementLetter_body').append('. '+text);
+	var current = $('#ElementLetter_body').val();
+
+	if (current == '') {
+		$('#ElementLetter_body').val(text);
+	} else if (current.match(/\.$/)) {
+		$('#ElementLetter_body').val(current+' '+text);
+	} else if (!current.match(/[\.\s]+$/)) {
+		$('#ElementLetter_body').val(current+'. '+text);
 	} else {
-		$('#ElementLetter_body').append(text);
+		$('#ElementLetter_body').val(current+text);
 	}
 }
