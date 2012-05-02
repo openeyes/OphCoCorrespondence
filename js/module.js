@@ -139,6 +139,8 @@ $(document).ready(function() {
 	});
 
 	$('#ElementLetter_body').unbind('keyup').bind('keyup',function() {
+		et_oph_correspondence_body_cursor_position = $(this).prop('selectionEnd');
+
 		if (m = $(this).val().match(/\[([a-z]{3})\]/)) {
 
 			var text = $(this).val();
@@ -155,7 +157,13 @@ $(document).ready(function() {
 			});
 		}
 	});
+
+	$('#ElementLetter_body').unbind('click').click(function() {
+		et_oph_correspondence_body_cursor_position = $(this).prop('selectionEnd');
+	});
 });
+
+var et_oph_correspondence_body_cursor_position = 0;
 
 function correspondence_load_data(data) {
 	for (var i in data) {
@@ -176,14 +184,21 @@ function correspondence_load_data(data) {
 }
 
 function correspondence_append_body(text) {
-	if (!text.match(/\.$/)) {
+	/*if (!text.match(/\.$/)) {
 		text = text + '.';
-	}
+	}*/
+
+	var cpos = et_oph_correspondence_body_cursor_position;
 
 	var current = $('#ElementLetter_body').val();
 
 	if (current == '') {
 		$('#ElementLetter_body').val(text);
+	} else {
+		$('#ElementLetter_body').val(current.substring(0,cpos)+text+current.substring(cpos,current.length));
+	}
+
+	/*
 	} else if (current.match(/\.$/)) {
 		$('#ElementLetter_body').val(current+' '+text);
 	} else if (!current.match(/[\.\s]+$/)) {
@@ -191,4 +206,5 @@ function correspondence_append_body(text) {
 	} else {
 		$('#ElementLetter_body').val(current+text);
 	}
+	*/
 }
