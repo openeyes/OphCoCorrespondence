@@ -42,7 +42,7 @@
 
 	<div class="row">
 		<span class="left">
-			<?php echo $form->dropDownListNoPost('macro', CHtml::listData(LetterMacro::model()->findAll(array('order'=>'display_order')), 'id', 'name'), array('empty' => '- Macro -', 'nowrapper' => true))?>
+			<?php echo $form->dropDownListNoPost('macro', $element->letter_macros, array('empty' => '- Macro -', 'nowrapper' => true))?>
 		</span>
 		<span class="right">
 			<?php echo $form->datePicker($element, 'date', array('maxDate' => 'today'), array('nowrapper'=>true))?>
@@ -68,7 +68,7 @@
 	<div class="row">
 		<span class="left">
 			<?php foreach ($element->stringgroups as $string_group) {?>
-				<?php echo $form->dropDownListNoPost(strtolower($string_group->name), CHtml::listData($string_group->strings, 'id', 'name'), array('empty' => '- '.$string_group->name.' -', 'nowrapper' => true, 'class' => 'stringgroup'))?>
+				<?php echo $form->dropDownListNoPost(strtolower($string_group->name), $string_group->strings, array('empty' => '- '.$string_group->name.' -', 'nowrapper' => true, 'class' => 'stringgroup'))?>
 			<?php }?>
 		</span>
 		<span class="right">

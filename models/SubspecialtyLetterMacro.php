@@ -25,7 +25,7 @@
  * The followings are the available model relations:
  * @property Event $event
  */
-class LetterStringGroup extends BaseEventTypeElement
+class SubspecialtyLetterMacro extends BaseEventTypeElement
 {
 	/**
 	 * Returns the static model of the specified AR class.
@@ -41,7 +41,7 @@ class LetterStringGroup extends BaseEventTypeElement
 	 */
 	public function tableName()
 	{
-		return 'et_ophcocorrespondence_letter_string_group';
+		return 'et_ophcocorrespondence_subspecialty_letter_macro';
 	}
 
 	/**
@@ -52,11 +52,11 @@ class LetterStringGroup extends BaseEventTypeElement
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, display_order', 'safe'),
-			array('name', 'required'),
+			array('subspecialty_id, name, recipient_patient, recipient_doctor, use_nickname, body, cc_patient, display_order', 'safe'),
+			array('subspecialty_id, name, recipient_patient, recipient_doctor, use_nickname, body, cc_patient', 'required'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('name, display_order', 'safe', 'on' => 'search'),
+			array('subspecialty_id, name, recipient_patient, recipient_doctor, use_nickname, body, cc_patient, display_order', 'safe', 'on' => 'search'),
 		);
 	}
 	
@@ -73,6 +73,7 @@ class LetterStringGroup extends BaseEventTypeElement
 			'event' => array(self::BELONGS_TO, 'Event', 'event_id'),
 			'user' => array(self::BELONGS_TO, 'User', 'created_user_id'),
 			'usermodified' => array(self::BELONGS_TO, 'User', 'last_modified_user_id'),
+			'subspecialty' => array(self::BELONGS_TO, 'Subspecialty', 'subspecialty_id'),
 		);
 	}
 
@@ -104,45 +105,7 @@ class LetterStringGroup extends BaseEventTypeElement
 		));
 	}
 
-	public function getStrings() {
-		$strings = array();
-		$string_names = array();
-
-		$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
-
-		$criteria = new CDbCriteria;
-		$criteria->compare('letter_string_group_id', $this->id);
-		$criteria->compare('firm_id', $firm->id, true);
-		$criteria->order = 'display_order asc';
-		
-		foreach (FirmLetterString::model()->findAll($criteria) as $flm) {
-			if (!in_array($flm->name, $string_names)) {
-				$strings['firm'.$flm->id] = $string_names[] = $flm->name;
-			}
-		}
-
-		$criteria = new CDbCriteria;
-		$criteria->compare('letter_string_group_id', $this->id);
-		$criteria->compare('subspecialty_id', $firm->serviceSubspecialtyAssignment->subspecialty_id, true);
-		$criteria->order = 'display_order asc';
-
-		foreach (SubspecialtyLetterString::model()->findAll($criteria) as $slm) {
-			if (!in_array($slm->name, $string_names)) {
-				$strings['subspecialty'.$slm->id] = $string_names[] = $slm->name;
-			}
-		}
-
-		$criteria = new CDbCriteria;
-		$criteria->compare('letter_string_group_id', $this->id);
-		$criteria->compare('site_id', Yii::app()->session['selected_site_id'], true);
-		$criteria->order = 'display_order asc';
-
-		foreach (SiteLetterString::model()->findAll($criteria) as $slm) {
-			if (!in_array($slm->name, $string_names)) {
-				$strings['site'.$slm->id] = $string_names[] = $slm->name;
-			}
-		}
-
-		return $strings;
+	public function substitute($patient) {
+		$this->body = OphCoCorrespondence_Substitution::replace($this->body, $patient);
 	}
 }

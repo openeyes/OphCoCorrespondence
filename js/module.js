@@ -55,10 +55,12 @@ $(document).ready(function() {
 		var nickname = $('#ElementLetter_use_nickname').is(':checked') ? '1' : '0';
 
 		if ($(this).val() != '') {
+			var m = $(this).val().match(/^([a-z]+)([0-9]+)$/);
+
 			$.ajax({
 				'type': 'GET',
 				'dataType': 'json',
-				'url': '/OphCoCorrespondence/Default/getMacroData?patient_id='+patient_id+'&macro_id='+$(this).val()+'&nickname='+nickname,
+				'url': '/OphCoCorrespondence/Default/getMacroData?patient_id='+patient_id+'&macro_type='+m[1]+'&macro_id='+m[2]+'&nickname='+nickname,
 				'success': function(data) {
 					correspondence_load_data(data);
 				}
@@ -71,12 +73,14 @@ $(document).ready(function() {
 	});
 
 	$('select.stringgroup').change(function() {
-		var string_id = $(this).children('option:selected').val();
+		var selected_val = $(this).children('option:selected').val();
 
-		if (string_id != '') {
+		if (selected_val != '') {
+			var m = selected_val.match(/^([a-z]+)([0-9]+)$/);
+
 			$.ajax({
 				'type': 'GET',
-				'url': '/OphCoCorrespondence/Default/getString?patient_id='+patient_id+'&string_id='+string_id,
+				'url': '/OphCoCorrespondence/Default/getString?patient_id='+patient_id+'&string_type='+m[1]+'&string_id='+m[2],
 				'success': function(text) {
 					correspondence_append_body(text);
 				}
@@ -129,6 +133,24 @@ $(document).ready(function() {
 					}
 
 					$('#cc_targets').append('<input type="hidden" name="CC_Targets[]" value="'+contact_id+'" />');
+				}
+			});
+		}
+	});
+
+	$('#ElementLetter_body').unbind('keyup').bind('keyup',function() {
+		if (m = $(this).val().match(/\[([a-z]{3})\]/)) {
+
+			var text = $(this).val();
+
+			$.ajax({
+				'type': 'POST',
+				'url': '/OphCoCorrespondence/Default/expandStrings',
+				'data': 'patient_id='+patient_id+'&text='+text,
+				'success': function(resp) {
+					if (resp) {
+						$('#ElementLetter_body').val(resp);
+					}
 				}
 			});
 		}

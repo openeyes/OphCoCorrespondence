@@ -25,7 +25,7 @@
  * The followings are the available model relations:
  * @property Event $event
  */
-class LetterMacro extends BaseEventTypeElement
+class FirmLetterMacro extends BaseEventTypeElement
 {
 	/**
 	 * Returns the static model of the specified AR class.
@@ -41,7 +41,7 @@ class LetterMacro extends BaseEventTypeElement
 	 */
 	public function tableName()
 	{
-		return 'et_ophcocorrespondence_letter_macro';
+		return 'et_ophcocorrespondence_firm_letter_macro';
 	}
 
 	/**
@@ -52,11 +52,11 @@ class LetterMacro extends BaseEventTypeElement
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, recipient_patient, recipient_doctor, use_nickname, body, cc_patient, display_order', 'safe'),
-			array('name, recipient_patient, recipient_doctor, use_nickname, body, cc_patient', 'required'),
+			array('firm_id, name, recipient_patient, recipient_doctor, use_nickname, body, cc_patient, display_order', 'safe'),
+			array('firm_id, name, recipient_patient, recipient_doctor, use_nickname, body, cc_patient', 'required'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('name, recipient_patient, recipient_doctor, use_nickname, body, cc_patient, display_order', 'safe', 'on' => 'search'),
+			array('firm_id, name, recipient_patient, recipient_doctor, use_nickname, body, cc_patient, display_order', 'safe', 'on' => 'search'),
 		);
 	}
 	
@@ -73,6 +73,7 @@ class LetterMacro extends BaseEventTypeElement
 			'event' => array(self::BELONGS_TO, 'Event', 'event_id'),
 			'user' => array(self::BELONGS_TO, 'User', 'created_user_id'),
 			'usermodified' => array(self::BELONGS_TO, 'User', 'last_modified_user_id'),
+			'firm' => array(self::BELONGS_TO, 'Firm', 'firm_id'),
 		);
 	}
 

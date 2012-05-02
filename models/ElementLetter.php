@@ -158,4 +158,43 @@ class ElementLetter extends BaseEventTypeElement
 			$this->footer = "Yours sincerely\n\n\n\n\n".$contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications."\nConsultant Ophthalmic Surgeon";
 		}
 	}
+
+	public function getLetter_macros() {
+		$macros = array();
+		$macro_names = array();
+
+		$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
+
+		$criteria = new CDbCriteria;
+		$criteria->compare('firm_id', $firm->id, true);
+		$criteria->order = 'display_order asc';
+
+		foreach (FirmLetterMacro::model()->findAll($criteria) as $flm) {
+			if (!in_array($flm->name, $macro_names)) {
+				$macros['firm'.$flm->id] = $macro_names[] = $flm->name;
+			}
+		}
+
+		$criteria = new CDbCriteria;
+		$criteria->compare('subspecialty_id', $firm->serviceSubspecialtyAssignment->subspecialty_id, true);
+		$criteria->order = 'display_order asc';
+
+		foreach (SubspecialtyLetterMacro::model()->findAll($criteria) as $slm) {
+			if (!in_array($slm->name, $macro_names)) {
+				$macros['subspecialty'.$slm->id] = $macro_names[] = $slm->name;
+			}
+		}
+
+		$criteria = new CDbCriteria;
+		$criteria->compare('site_id', Yii::app()->session['selected_site_id'], true);
+		$criteria->order = 'display_order asc';
+
+		foreach (SiteLetterMacro::model()->findAll($criteria) as $slm) {
+			if (!in_array($slm->name, $macro_names)) {
+				$macros['site'.$slm->id] = $macro_names[] = $slm->name;
+			}
+		}
+
+		return $macros;
+	}
 }

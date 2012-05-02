@@ -56,8 +56,24 @@ class DefaultController extends BaseEventTypeController {
 			throw new Exception('Patient not found: '.@$_GET['patient_id']);
 		}
 
-		if (!$macro = LetterMacro::model()->findByPk(@$_GET['macro_id'])) {
-			throw new Exception('Macro not found: '.@$_GET['macro_id']);
+		switch (@$_GET['macro_type']) {
+			case 'site':
+				if (!$macro = SiteLetterMacro::model()->findByPk(@$_GET['macro_id'])) {
+					throw new Exception('Site macro not found: '.@$_GET['macro_id']);
+				}
+				break;
+			case 'subspecialty':
+				if (!$macro = SubspecialtyLetterMacro::model()->findByPk(@$_GET['macro_id'])) {
+					throw new Exception('Subspecialty macro not found: '.@$_GET['macro_id']);
+				}
+				break;
+			case 'firm':
+				if (!$macro = FirmLetterMacro::model()->findByPk(@$_GET['macro_id'])) {
+					throw new Exception('Firm macro not found: '.@$_GET['macro_id']);
+				}
+				break;
+			default:
+				throw new Exception('Unknown macro type: '.@$_GET['macro_type']);
 		}
 
 		$data = array();
@@ -117,8 +133,23 @@ class DefaultController extends BaseEventTypeController {
 			throw new Exception('Patient not found: '.@$_GET['patient_id']);
 		}
 
-		if (!$string = LetterString::model()->findByPk(@$_GET['string_id'])) {
-			throw new Exception('Letter string not found: '.@$_GET['string_id']);
+		switch (@$_GET['string_type']) {
+			case 'site':
+				if (!$string = SiteLetterString::model()->findByPk(@$_GET['string_id'])) {
+					throw new Exception('Site letter string not found: '.@$_GET['string_id']);
+				}
+				break;
+			case 'subspecialty':
+				if (!$string = SubspecialtyLetterString::model()->findByPk(@$_GET['string_id'])) {
+					throw new Exception('Subspecialty letter string not found: '.@$_GET['string_id']);
+				}
+				break;
+			case 'firm':
+				if (!$firm = FirmLetterString::model()->findByPk(@$_GET['string_id'])) {
+					throw new Exception('Firm letter string not found: '.@$_GET['string_id']);
+				}
+			default:
+				throw new Exception('Unknown letter string type: '.@$_GET['string_type']);
 		}
 
 		$string->substitute($patient);
@@ -152,5 +183,28 @@ class DefaultController extends BaseEventTypeController {
 		}
 
 		echo $contact->title.' '.$contact->last_name.', '.implode(', ',$contact->address->getLetterarray(false));
+	}
+
+	public function actionExpandStrings() {
+		if (!$patient = Patient::model()->findByPk(@$_POST['patient_id'])) {
+			throw new Exception('Patient not found: '.@$_POST['patient_id']);
+		}
+
+		$text = @$_POST['text'];
+
+		preg_match_all('/\[([a-z]{3})\]/',$text,$m);
+
+		$changed = false;
+
+		foreach ($m[1] as $code) {
+			if (isset($patient->{$code})) {
+				$text = str_replace('['.$code.']',$patient->{$code},$text);
+				$changed = true;
+			}
+		}
+
+		if ($changed) {
+			echo $text;
+		}
 	}
 }

@@ -25,7 +25,7 @@
  * The followings are the available model relations:
  * @property Event $event
  */
-class LetterString extends BaseEventTypeElement
+class SiteLetterString extends BaseEventTypeElement
 {
 	/**
 	 * Returns the static model of the specified AR class.
@@ -41,7 +41,7 @@ class LetterString extends BaseEventTypeElement
 	 */
 	public function tableName()
 	{
-		return 'et_ophcocorrespondence_letter_string';
+		return 'et_ophcocorrespondence_site_letter_string';
 	}
 
 	/**
@@ -52,11 +52,11 @@ class LetterString extends BaseEventTypeElement
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('letter_string_group_id, subspecialty_id, name, body, display_order', 'safe'),
-			array('letter_string_group_id, subspecialty_id, name, body', 'required'),
+			array('letter_string_group_id, site_id, name, body, display_order', 'safe'),
+			array('letter_string_group_id, site_id, name, body', 'required'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('letter_string_group_id, subspecialty_id, name, body, display_order', 'safe', 'on' => 'search'),
+			array('letter_string_group_id, site_id, name, body, display_order', 'safe', 'on' => 'search'),
 		);
 	}
 	
@@ -74,7 +74,7 @@ class LetterString extends BaseEventTypeElement
 			'user' => array(self::BELONGS_TO, 'User', 'created_user_id'),
 			'usermodified' => array(self::BELONGS_TO, 'User', 'last_modified_user_id'),
 			'letter_string_group' => array(self::BELONGS_TO, 'LetterStringGroup', 'letter_string_group_id'),
-			'subspecialty' => array(self::BELONGS_TO, 'Subspecialty', 'subspecialty_id'),
+			'site' => array(self::BELONGS_TO, 'Site', 'site_id'),
 		);
 	}
 
