@@ -6,3 +6,4 @@ div.ElementLetter select { width: 160px; }
 div.ElementLetter textarea,input { font-family: courier !important; }
 
 #ElementLetter_re { font-weight: bold; }
+#dialog-confirm-cancel { display: none; }
