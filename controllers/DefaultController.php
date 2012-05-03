@@ -58,7 +58,7 @@ class DefaultController extends BaseEventTypeController {
 
 		switch (@$_GET['macro_type']) {
 			case 'site':
-				if (!$macro = SiteLetterMacro::model()->findByPk(@$_GET['macro_id'])) {
+				if (!$macro = LetterMacro::model()->findByPk(@$_GET['macro_id'])) {
 					throw new Exception('Site macro not found: '.@$_GET['macro_id']);
 				}
 				break;
@@ -135,7 +135,7 @@ class DefaultController extends BaseEventTypeController {
 
 		switch (@$_GET['string_type']) {
 			case 'site':
-				if (!$string = SiteLetterString::model()->findByPk(@$_GET['string_id'])) {
+				if (!$string = LetterString::model()->findByPk(@$_GET['string_id'])) {
 					throw new Exception('Site letter string not found: '.@$_GET['string_id']);
 				}
 				break;

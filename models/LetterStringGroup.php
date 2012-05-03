@@ -137,7 +137,7 @@ class LetterStringGroup extends BaseEventTypeElement
 		$criteria->compare('site_id', Yii::app()->session['selected_site_id'], true);
 		$criteria->order = 'display_order asc';
 
-		foreach (SiteLetterString::model()->findAll($criteria) as $slm) {
+		foreach (LetterString::model()->findAll($criteria) as $slm) {
 			if (!in_array($slm->name, $string_names)) {
 				$strings['site'.$slm->id] = $string_names[] = $slm->name;
 			}

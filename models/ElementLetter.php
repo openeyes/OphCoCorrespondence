@@ -189,7 +189,7 @@ class ElementLetter extends BaseEventTypeElement
 		$criteria->compare('site_id', Yii::app()->session['selected_site_id'], true);
 		$criteria->order = 'display_order asc';
 
-		foreach (SiteLetterMacro::model()->findAll($criteria) as $slm) {
+		foreach (LetterMacro::model()->findAll($criteria) as $slm) {
 			if (!in_array($slm->name, $macro_names)) {
 				$macros['site'.$slm->id] = $macro_names[] = $slm->name;
 			}
