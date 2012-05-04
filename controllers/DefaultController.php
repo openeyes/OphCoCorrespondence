@@ -34,13 +34,7 @@ class DefaultController extends BaseEventTypeController {
 			throw new Exception('Unknown or missing address_id value: '.@$_GET['address_id']);
 		}
 
-		$data['text_ElementLetter_address'] = $contact->fullName;
-
-		if (isset($contact->qualifications) && $contact->qualifications) {
-			$data['text_ElementLetter_address'] .= ' '.$contact->qualifications;
-		}
-
-		$data['text_ElementLetter_address'] .= "\n".implode("\n",$contact->address->getLetterarray(false));
+		$data['text_ElementLetter_address'] = $contact->getLetterAddress();
 
 		if ($nickname && isset($contact->nick_name) && $contact->nick_name) {
 			$data['text_ElementLetter_introduction'] = "Dear ".$contact->nick_name.",";
@@ -91,11 +85,7 @@ class DefaultController extends BaseEventTypeController {
 		}
 
 		if (isset($contact)) {
-			$data['text_ElementLetter_address'] = $contact->fullName;
-			if (isset($contact->qualifications) && $contact->qualifications) {
-				$data['text_ElementLetter_address'] .= ' '.$contact->qualifications;
-			}
-			$data['text_ElementLetter_address'] .= "\n".implode("\n",$contact->address->getLetterarray(false));
+			$data['text_ElementLetter_address'] = $contact->getLetterAddress();
 		}
 
 		if ($macro->use_nickname) {

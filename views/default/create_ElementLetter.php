@@ -33,7 +33,7 @@
 
 	<div class="row">
 		<span class="left">
-			<?php echo $form->dropDownListNoPost('address_target', $element->address_targets, array('empty' => '- Recipient -', 'nowrapper' => true))?>
+			<?php echo $form->dropDownListNoPost('address_target', $element->address_targets, $element->address_target, array('empty' => '- Recipient -', 'nowrapper' => true))?>
 		</span>
 		<span class="right">
 			<?php echo $form->textArea($element, 'address', array('rows' => 7, 'cols' => 55, 'label' => false, 'nowrapper' => true))?>
@@ -93,6 +93,9 @@
 			<?php echo $form->textArea($element, 'cc', array('rows' => 8, 'cols' => 100, 'label' => false, 'nowrapper' => true))?>
 		</span>
 		<div id="cc_targets">
+			<?php foreach ($element->cc_targets as $cc_target) {?>
+				<input type="hidden" name="CC_Targets[]" value="<?php echo $cc_target?>" />
+			<?php }?>
 		</div>
 	</div>
 </div>
