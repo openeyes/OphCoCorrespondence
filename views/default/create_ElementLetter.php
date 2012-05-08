@@ -42,7 +42,7 @@
 
 	<div class="row">
 		<span class="left">
-			<?php echo $form->dropDownListNoPost('macro', $element->letter_macros, array('empty' => '- Macro -', 'nowrapper' => true))?>
+			<?php echo $form->dropDownListNoPost('macro', $element->letter_macros, '', array('empty' => '- Macro -', 'nowrapper' => true))?>
 		</span>
 		<span class="right">
 			<?php echo $form->datePicker($element, 'date', array('maxDate' => 'today'), array('nowrapper'=>true))?>
@@ -68,7 +68,7 @@
 	<div class="row">
 		<span class="left">
 			<?php foreach ($element->stringgroups as $string_group) {?>
-				<?php echo $form->dropDownListNoPost(strtolower($string_group->name), $string_group->strings, array('empty' => '- '.$string_group->name.' -', 'nowrapper' => true, 'class' => 'stringgroup'))?>
+				<?php echo $form->dropDownListNoPost(strtolower($string_group->name), $string_group->strings, '', array('empty' => '- '.$string_group->name.' -', 'nowrapper' => true, 'class' => 'stringgroup'))?>
 			<?php }?>
 		</span>
 		<span class="right">
@@ -78,7 +78,7 @@
 
 	<div class="row">
 		<span class="left">
-			<?php echo $form->dropDownListNoPost('from', CHtml::listData($this->firm->members, 'id', 'fullNameAndTitle'), array('empty' => '- From -', 'nowrapper' => true))?>
+			<?php echo $form->dropDownListNoPost('from', CHtml::listData($this->firm->members, 'id', 'fullNameAndTitle'), '', array('empty' => '- From -', 'nowrapper' => true))?>
 		</span>
 		<span class="right">
 			<?php echo $form->textArea($element, 'footer', array('rows' => 8, 'cols' => 55, 'label' => false, 'nowrapper' => true))?>
@@ -87,7 +87,7 @@
 
 	<div class="row">
 		<span class="left">
-			<?php echo $form->dropDownListNoPost('cc', $element->address_targets, array('empty' => '- Cc -', 'nowrapper' => true))?>
+			<?php echo $form->dropDownListNoPost('cc', $element->address_targets, '', array('empty' => '- Cc -', 'nowrapper' => true))?>
 		</span>
 		<span class="right">
 			<?php echo $form->textArea($element, 'cc', array('rows' => 8, 'cols' => 100, 'label' => false, 'nowrapper' => true))?>
