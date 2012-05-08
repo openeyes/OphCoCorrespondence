@@ -161,6 +161,23 @@ $(document).ready(function() {
 	$('#ElementLetter_body').unbind('click').click(function() {
 		et_oph_correspondence_body_cursor_position = $(this).prop('selectionEnd');
 	});
+
+	if ($('#OphCoCorrespondence_printLetter').val() == 1) {
+		var m = window.location.href.match(/\/view\/([0-9]+)/);
+		$.ajax({
+			'type': 'GET',
+			'url': '/OphCoCorrespondence/Default/markPrinted/'+m[1],
+			'success': function(html) {
+			}
+		});
+		printUrl('/OphCoCorrespondence/Default/print/'+m[1]);
+	}
+
+	$('#et_print').unbind('click').click(function() {
+		var m = window.location.href.match(/\/view\/([0-9]+)/);
+		printUrl('/OphCoCorrespondence/Default/print/'+m[1]);
+		return false;
+	});
 });
 
 var et_oph_correspondence_body_cursor_position = 0;

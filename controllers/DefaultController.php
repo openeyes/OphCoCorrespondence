@@ -197,4 +197,11 @@ class DefaultController extends BaseEventTypeController {
 			echo $text;
 		}
 	}
+
+	public function actionMarkPrinted($id) {
+		if ($letter = ElementLetter::model()->find('event_id=? and print=1',array($id))) {
+			$letter->print = 0;
+			$letter->save();
+		}
+	}
 }

@@ -23,14 +23,26 @@
 	'patient' => $this->patient,
 ))?>
 
+<br/><br/><br/>
+
 <p>
-	<?php echo str_replace("\n","<br/>",$element->introduction)?>
+	<strong>Re: <?php echo $element->re?></strong>
+	<br/>
+	<br/>
 </p>
+
+<p>
+	<?php echo $element->introduction?>
+	<br/>
+	<br/>
+</p>
+
 <p>
 	<?php echo str_replace("\n","<br/>",$element->body)?>
+	<br/><br/>
 </p>
+
 <p>
 	<?php echo str_replace("\n","<br/>",$element->footer)?>
 </p>
 
-<input type="hidden" name="OphCoCorrespondence_printLetter" id="OphCoCorrespondence_printLetter" value="<?php echo $element->print?>" />

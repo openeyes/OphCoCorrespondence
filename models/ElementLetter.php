@@ -55,7 +55,7 @@ class ElementLetter extends BaseEventTypeElement
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('event_id, address, use_nickname, date, introduction, cc, re, body, footer, draft', 'safe'),
+			array('event_id, print, address, use_nickname, date, introduction, cc, re, body, footer, draft', 'safe'),
 			array('use_nickname, date, address, introduction, cc, body, footer', 'required'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -246,5 +246,13 @@ class ElementLetter extends BaseEventTypeElement
 		}
 
 		return $macros;
+	}
+
+	public function beforeSave() {
+		if (Yii::app()->getController()->getAction()->id == 'create') {
+			$this->print = 1;
+		}
+
+		return parent::beforeSave();
 	}
 }
