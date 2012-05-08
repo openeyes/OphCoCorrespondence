@@ -184,10 +184,6 @@ function correspondence_load_data(data) {
 }
 
 function correspondence_append_body(text) {
-	/*if (!text.match(/\.$/)) {
-		text = text + '.';
-	}*/
-
 	var cpos = et_oph_correspondence_body_cursor_position;
 
 	var current = $('#ElementLetter_body').val();
@@ -197,14 +193,4 @@ function correspondence_append_body(text) {
 	} else {
 		$('#ElementLetter_body').val(current.substring(0,cpos)+text+current.substring(cpos,current.length));
 	}
-
-	/*
-	} else if (current.match(/\.$/)) {
-		$('#ElementLetter_body').val(current+' '+text);
-	} else if (!current.match(/[\.\s]+$/)) {
-		$('#ElementLetter_body').val(current+'. '+text);
-	} else {
-		$('#ElementLetter_body').val(current+text);
-	}
-	*/
 }
