@@ -250,7 +250,9 @@ class ElementLetter extends BaseEventTypeElement
 
 	public function beforeSave() {
 		if (Yii::app()->getController()->getAction()->id == 'create') {
-			$this->print = 1;
+			if (!$this->draft) {
+				$this->print = 1;
+			}
 		}
 
 		return parent::beforeSave();
