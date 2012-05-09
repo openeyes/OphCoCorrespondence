@@ -162,17 +162,17 @@ class ElementLetter extends BaseEventTypeElement
 
 			// Look for a macro based on the episode_status
 			$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
-			$episode = $patient->getEpisodeForCurrentSubspecialty();
+			if ($episode = $patient->getEpisodeForCurrentSubspecialty()) {
+				if (!$macro = FirmLetterMacro::model()->find('firm_id=? and episode_status_id=?',array($firm->id, $episode->episode_status_id))) {
+					$subspecialty_id = $firm->serviceSubspecialtyAssignment->subspecialty_id;
 
-			if (!$macro = FirmLetterMacro::model()->find('firm_id=? and episode_status_id=?',array($firm->id, $episode->episode_status_id))) {
-				$subspecialty_id = $firm->serviceSubspecialtyAssignment->subspecialty_id;
-
-				if (!$macro = SubspecialtyLetterMacro::model()->find('subspecialty_id=? and episode_status_id=?',array($subspecialty_id, $episode->episode_status_id))) {
-					$macro = LetterMacro::model()->find('episode_status_id=?',array($episode->episode_status_id));
+					if (!$macro = SubspecialtyLetterMacro::model()->find('subspecialty_id=? and episode_status_id=?',array($subspecialty_id, $episode->episode_status_id))) {
+						$macro = LetterMacro::model()->find('episode_status_id=?',array($episode->episode_status_id));
+					}
 				}
 			}
 
-			if ($macro) {
+			if (@$macro) {
 				$this->populate_from_macro($macro, $patient);
 			}
 		}
