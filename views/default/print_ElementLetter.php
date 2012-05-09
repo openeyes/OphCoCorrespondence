@@ -44,5 +44,13 @@
 
 <p>
 	<?php echo str_replace("\n","<br/>",$element->footer)?>
+	<br/><br/><br/><br/>
+</p>
+
+<p>
+	<?php foreach (explode("\n",trim($element->cc)) as $line) {
+		$line = preg_replace('/^cc:[\s\t]+/','',$line);?>
+		cc: <?php echo $line?><br />
+	<?php }?>
 </p>
 
