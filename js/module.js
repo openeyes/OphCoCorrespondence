@@ -40,12 +40,21 @@ $(document).ready(function() {
 		var nickname = $('#ElementLetter_use_nickname').is(':checked') ? '1' : '0';
 
 		if ($(this).val() != '') {
+			if ($(this).children('option:selected').text().match(/NO ADDRESS/)) {
+				alert("Sorry, this contact has no address so you can't send a letter to them.");
+				$(this).val(selected_recipient);
+				return false;
+			}
+
+			var val = $(this).children('option:selected').val();
+
 			$.ajax({
 				'type': 'GET',
 				'dataType': 'json',
 				'url': '/OphCoCorrespondence/Default/getAddress?patient_id='+patient_id+'&address_id='+$(this).val()+'&nickname='+nickname,
 				'success': function(data) {
 					correspondence_load_data(data);
+					selected_recipient = val;
 				}
 			});
 		}
@@ -120,19 +129,23 @@ $(document).ready(function() {
 				'type': 'GET',
 				'url': '/OphCoCorrespondence/Default/getCc?patient_id='+patient_id+'&contact_id='+contact_id,
 				'success': function(text) {
-					if ($('#ElementLetter_cc').val().length >0) {
-						var cur = $('#ElementLetter_cc').val();
+					if (!text.match(/NO ADDRESS/)) {
+						if ($('#ElementLetter_cc').val().length >0) {
+							var cur = $('#ElementLetter_cc').val();
 
-						if (!$('#ElementLetter_cc').val().match(/[\n\r]$/)) {
-							cur += "\n";
+							if (!$('#ElementLetter_cc').val().match(/[\n\r]$/)) {
+								cur += "\n";
+							}
+
+							$('#ElementLetter_cc').val(cur+"\t"+text+"\n");
+						} else {
+							$('#ElementLetter_cc').val("cc:\t"+text+"\n");
 						}
 
-						$('#ElementLetter_cc').val(cur+"\t"+text+"\n");
+						$('#cc_targets').append('<input type="hidden" name="CC_Targets[]" value="'+contact_id+'" />');
 					} else {
-						$('#ElementLetter_cc').val("cc:\t"+text+"\n");
+						alert("Sorry, this contact has no address and so cannot be cc'd.");
 					}
-
-					$('#cc_targets').append('<input type="hidden" name="CC_Targets[]" value="'+contact_id+'" />');
 				}
 			});
 		}
@@ -184,6 +197,8 @@ $(document).ready(function() {
 		printUrl('/OphCoCorrespondence/Default/print/'+m[1]+'?all=1');
 		return false;
 	});
+
+	var selected_recipient = $('#address_target').val();
 });
 
 var et_oph_correspondence_body_cursor_position = 0;

@@ -172,7 +172,11 @@ class DefaultController extends BaseEventTypeController {
 			throw new Exception('Unknown or missing contact_id value: '.@$_GET['contact_id']);
 		}
 
-		echo $contact->title.' '.$contact->last_name.', '.implode(', ',$contact->address->getLetterarray(false));
+		if ($contact->address) {
+			echo $contact->title.' '.$contact->last_name.', '.implode(', ',$contact->address->getLetterarray(false));
+		} else {
+			echo "NO ADDRESS";
+		}
 	}
 
 	public function actionExpandStrings() {

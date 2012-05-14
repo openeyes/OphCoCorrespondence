@@ -125,12 +125,20 @@ class ElementLetter extends BaseEventTypeElement
 
 		$options = array('patient' => $patient->fullname.' (Patient)');
 
-		foreach (Contact::model()->findAll('parent_class=:parent_class and parent_id=:parent_id',array(':parent_class'=>'Patient',':parent_id'=>$patient->id)) as $contact) {
-			$options['contact'.$contact->id] = $contact->title.' '.$contact->first_name.' '.$contact->last_name.' (Ophthalmologist)';
+		if ($gp = Gp::model()->findByPk($patient->gp_id)) {
+			if ($gp->contact->address) {
+				$options['gp'] = $gp->contact->fullname.' (GP)';
+			} else {
+				$options['gp'] = $gp->contact->fullname.' (GP) - NO ADDRESS';
+			}
 		}
 
-		if ($gp = Gp::model()->findByPk($patient->gp_id)) {
-			$options['gp'] = $gp->contact->fullname.' (GP)';
+		foreach (PatientContactAssignment::model()->findAll('patient_id=?',array($patient->id)) as $pca) {
+			if ($pca->contact->address) {
+				$options['contact'.$pca->contact_id] = $pca->contact->fullname.' ('.$pca->contact->parent_class.')';
+			} else {
+				$options['contact'.$pca->contact_id] = $pca->contact->fullname.' ('.$pca->contact->parent_class.') - NO ADDRESS';
+			}
 		}
 
 		return $options;
