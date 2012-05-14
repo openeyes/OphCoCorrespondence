@@ -141,6 +141,8 @@ class ElementLetter extends BaseEventTypeElement
 			}
 		}
 
+		asort($options);
+
 		return $options;
 	}
 
