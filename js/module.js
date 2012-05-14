@@ -183,7 +183,7 @@ $(document).ready(function() {
 			'success': function(html) {
 			}
 		});
-		printUrl('/OphCoCorrespondence/Default/print/'+m[1]);
+		printUrl('/OphCoCorrespondence/Default/print/'+m[1]+'?all=1');
 	}
 
 	$('#et_print').unbind('click').click(function() {
