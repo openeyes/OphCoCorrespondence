@@ -19,6 +19,7 @@
 ?>
 
 <?php $this->renderPartial("letter_start", array(
+	'site' => $element->site,
 	'toAddress' => str_replace("\n","<br/>",$element->address),
 	'patient' => $this->patient,
 ))?>

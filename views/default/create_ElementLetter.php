@@ -32,6 +32,13 @@
 	</div>
 
 	<div class="row">
+		<span class="left"></span>
+		<span class="right">
+			<?php echo $form->dropDownList($element, 'site_id', CHtml::listData(Site::model()->findAll(array('order'=>'name asc')),'id','name'), array('nowrapper'=>true))?>
+		</span>
+	</div>
+
+	<div class="row">
 		<span class="left">
 			<?php echo $form->dropDownListNoPost('address_target', $element->address_targets, $element->address_target, array('empty' => '- Recipient -', 'nowrapper' => true))?>
 		</span>

@@ -56,11 +56,11 @@ class ElementLetter extends BaseEventTypeElement
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('event_id, print, address, use_nickname, date, introduction, cc, re, body, footer, draft', 'safe'),
-			array('use_nickname, date, address, introduction, cc, body, footer', 'required'),
+			array('event_id, site_id, print, address, use_nickname, date, introduction, cc, re, body, footer, draft', 'safe'),
+			array('use_nickname, site_id, date, address, introduction, cc, body, footer', 'required'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, event_id, use_nickname, date, introduction, re, body, footer, draft', 'safe', 'on' => 'search'),
+			array('id, event_id, site_id, use_nickname, date, introduction, re, body, footer, draft', 'safe', 'on' => 'search'),
 		);
 	}
 	
@@ -77,6 +77,7 @@ class ElementLetter extends BaseEventTypeElement
 			'event' => array(self::BELONGS_TO, 'Event', 'event_id'),
 			'user' => array(self::BELONGS_TO, 'User', 'created_user_id'),
 			'usermodified' => array(self::BELONGS_TO, 'User', 'last_modified_user_id'),
+			'site' => array(self::BELONGS_TO, 'Site', 'site_id'),
 		);
 	}
 
@@ -153,6 +154,8 @@ class ElementLetter extends BaseEventTypeElement
 
 	public function setDefaultOptions() {
 		if (Yii::app()->getController()->getAction()->id == 'create') {
+			$this->site_id = Yii::app()->request->cookies['site_id']->value;
+
 			if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
 				throw new Exception('Patient not found: '.@$_GET['patient_id']);
 			} 
