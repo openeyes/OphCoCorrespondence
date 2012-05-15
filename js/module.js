@@ -39,7 +39,7 @@ $(document).ready(function() {
 	$('#address_target').change(function() {
 		var nickname = $('#ElementLetter_use_nickname').is(':checked') ? '1' : '0';
 
-		if ($(this).val() != '') {
+		if ($(this).children('option:selected').val() != '') {
 			if ($(this).children('option:selected').text().match(/NO ADDRESS/)) {
 				alert("Sorry, this contact has no address so you can't send a letter to them.");
 				$(this).val(selected_recipient);
@@ -51,10 +51,114 @@ $(document).ready(function() {
 			$.ajax({
 				'type': 'GET',
 				'dataType': 'json',
-				'url': '/OphCoCorrespondence/Default/getAddress?patient_id='+patient_id+'&address_id='+$(this).val()+'&nickname='+nickname,
+				'url': '/OphCoCorrespondence/Default/getAddress?patient_id='+patient_id+'&address_id='+val+'&nickname='+nickname,
 				'success': function(data) {
 					correspondence_load_data(data);
 					selected_recipient = val;
+
+					// try to remove the selected recipient's address from the cc field
+					if ($('#ElementLetter_cc').val().length >0) {
+						$.ajax({
+							'type': 'GET',
+							'url': '/OphCoCorrespondence/Default/getCc?patient_id='+patient_id+'&contact_id='+val,
+							'success': function(text) {
+								if (!text.match(/NO ADDRESS/)) {
+									if ($('#ElementLetter_cc').val().length >0) {
+										var cur = $('#ElementLetter_cc').val();
+
+										if (cur.indexOf(text) != -1) {
+											var strings = cur.split("\n");
+											var replace = '';
+
+											for (var i in strings) {
+												if (strings[i].length >0 && strings[i].indexOf(text) == -1) {
+													if (replace.length >0) {
+														replace += "\n";
+													}
+													replace += $.trim(strings[i]);
+												}
+											}
+
+											if (replace.length >0 && !replace.match(/^cc:/)) {
+												replace = "cc:\t"+replace;
+											}
+
+											$('#ElementLetter_cc').val(replace);
+										}
+									}
+
+									var targets = '';
+
+									$('#cc_targets').children().map(function() {
+										if ($(this).val() != val) {
+											targets += '<input type="hidden" name="CC_Targets[]" value="'+$(this).val()+'" />';
+										}
+									});
+									$('#cc_targets').html(targets);
+								} else {
+									alert("Warning: letters should be cc'd to the patient's GP, but the current patient's GP has no valid address.");
+								}
+							}
+						});
+					}
+
+					// if the letter is to anyone but the GP we need to cc the GP
+					if (val != 'gp') {
+						$.ajax({
+							'type': 'GET',
+							'url': '/OphCoCorrespondence/Default/getCc?patient_id='+patient_id+'&contact_id=gp',
+							'success': function(text) {
+								if (!text.match(/NO ADDRESS/)) {
+									if ($('#ElementLetter_cc').val().length >0) {
+										var cur = $('#ElementLetter_cc').val();
+
+										if (cur.indexOf(text) == -1) {
+											if (!$('#ElementLetter_cc').val().match(/[\n\r]$/)) {
+												cur += "\n";
+											}
+
+											$('#ElementLetter_cc').val(cur+"\t"+text);
+											$('#cc_targets').append('<input type="hidden" name="CC_Targets[]" value="gp" />');
+										}
+
+									} else {
+										$('#ElementLetter_cc').val("cc:\t"+text);
+										$('#cc_targets').append('<input type="hidden" name="CC_Targets[]" value="gp" />');
+									}
+								} else {
+									alert("Warning: letters should be cc'd to the patient's GP, but the current patient's GP has no valid address.");
+								}
+							}
+						});
+					} else {
+						// if the letter is to the GP we need to cc the patient
+						$.ajax({
+							'type': 'GET',
+							'url': '/OphCoCorrespondence/Default/getCc?patient_id='+patient_id+'&contact_id=patient',
+							'success': function(text) {
+								if (!text.match(/NO ADDRESS/)) {
+									if ($('#ElementLetter_cc').val().length >0) {
+										var cur = $('#ElementLetter_cc').val();
+
+										if (cur.indexOf(text) == -1) {
+											if (!$('#ElementLetter_cc').val().match(/[\n\r]$/)) {
+												cur += "\n";
+											}
+
+											$('#ElementLetter_cc').val(cur+"\t"+text);
+											$('#cc_targets').append('<input type="hidden" name="CC_Targets[]" value="patient" />');
+										}
+
+									} else {
+										$('#ElementLetter_cc').val("cc:\t"+text);
+										$('#cc_targets').append('<input type="hidden" name="CC_Targets[]" value="patient" />');
+									}
+								} else {
+									alert("Warning: letters should be cc'd to the patient's GP, but the current patient's GP has no valid address.");
+								}
+							}
+						});
+					}
 				}
 			});
 		}
