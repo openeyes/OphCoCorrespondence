@@ -218,6 +218,14 @@ class DefaultController extends BaseEventTypeController {
 					return;
 				}
 			}
+
+			$letter->event->deleteIssues();
+			$letter->event->info = 'Letter has been printed';
+			if (!$letter->event->save()) {
+				echo "0";
+				return;
+			}
+
 			echo "1";
 			return;
 		}

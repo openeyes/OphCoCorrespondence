@@ -276,6 +276,8 @@ class ElementLetter extends BaseEventTypeElement
 		if ($this->draft) {
 			$ts = date('H:i d/m/Y',strtotime($this->created_date) + ($this->lock_period_hours *60 *60));
 			$this->event->addIssue("You have until $ts to edit this draft before it is locked");
+		} else {
+			$this->event->deleteIssues();
 		}
 
 		return parent::afterSave();
@@ -283,7 +285,11 @@ class ElementLetter extends BaseEventTypeElement
 
 	public function getInfotext() {
 		if ($this->draft) {
-			return 'Letter is being drafted';
+			if ($this->locked) {
+				return 'Draft has been locked';
+			} else {
+				return 'Letter is being drafted';
+			}
 		}
 	}
 
@@ -312,6 +318,11 @@ class ElementLetter extends BaseEventTypeElement
 		if ((time() - strtotime($this->created_date)) >= ($this->lock_period_hours *60 *60)) {
 			$this->locked = true;
 			$this->save();
+
+			$this->event->deleteIssues();
+			$this->event->info = 'Draft has been locked';
+			$this->event->save();
+
 			return false;
 		}
 
