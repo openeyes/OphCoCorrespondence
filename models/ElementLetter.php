@@ -317,4 +317,28 @@ class ElementLetter extends BaseEventTypeElement
 
 		return true;
 	}
+
+	public function save($runValidation=true, $attributes=null, $allow_overriding=false) {
+		$old = new ElementLetterOld;
+
+		if ($current = ElementLetter::model()->findByPk($this->id)) {
+			$old->letter_id = $current->id;
+
+			foreach (array('site_id','print','address','use_nickname','date','introduction','cc','re','body','footer','draft','created_date','created_user_id','last_modified_date','last_modified_user_id') as $key) {
+				$old->{$key} = $current->{$key};
+			}
+
+			if (parent::save()) {
+				if (!$old->save()) {
+					throw new Exception('Unable to save old letter: '.print_r($old->getErrors(),true));
+					return false;
+				}
+				return true;
+			}
+
+			return false;
+		}
+
+		return parent::save($runValidation, $attributes, $allow_overriding);
+	}
 }
