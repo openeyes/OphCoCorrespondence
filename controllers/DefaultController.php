@@ -208,4 +208,19 @@ class DefaultController extends BaseEventTypeController {
 			$letter->save();
 		}
 	}
+
+	public function actionConfirmPrinted($id) {
+		if ($letter = ElementLetter::model()->find('event_id=?',array($id))) {
+			if ($letter->locked != 1) {
+				$letter->locked = 1;
+				if (!$letter->save()) {
+					echo "0";
+					return;
+				}
+			}
+			echo "1";
+			return;
+		}
+		echo "0";
+	}
 }
