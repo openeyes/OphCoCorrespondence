@@ -29,6 +29,7 @@ class ElementLetter extends BaseEventTypeElement
 {
 	public $cc_targets = array();
 	public $address_target = null;
+	public $lock_period_hours = 24;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -268,6 +269,21 @@ class ElementLetter extends BaseEventTypeElement
 		return parent::beforeSave();
 	}
 
+	public function afterSave() {
+		if ($this->draft) {
+			$ts = date('H:i d/m/Y',strtotime($this->created_date) + ($this->lock_period_hours *60 *60));
+			$this->event->addIssue("You have until $ts to edit this draft before it is locked");
+		}
+
+		return parent::afterSave();
+	}
+
+	public function getInfotext() {
+		if ($this->draft) {
+			return 'Letter is being drafted';
+		}
+	}
+
 	public function getCcTargets() {
 		$targets = array();
 
@@ -285,5 +301,17 @@ class ElementLetter extends BaseEventTypeElement
 		}
 
 		return $targets;
+	}
+
+	public function isEditable() {
+		if ($this->locked) return false;
+
+		if ((time() - strtotime($this->created_date)) >= ($this->lock_period_hours *60 *60)) {
+			$this->locked = true;
+			$this->save();
+			return false;
+		}
+
+		return true;
 	}
 }
