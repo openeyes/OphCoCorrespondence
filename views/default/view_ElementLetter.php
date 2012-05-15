@@ -18,19 +18,22 @@
  */
 ?>
 
-<?php $this->renderPartial("letter_start", array(
-	'toAddress' => $element->address,
-	'patient' => $this->patient,
-))?>
+<div id="correspondence_out"<?php if ($element->draft){?> class="draft"<?php }?>>
+	<?php $this->renderPartial("letter_start", array(
+		'site' => $element->site,
+		'toAddress' => $element->address,
+		'patient' => $this->patient,
+	))?>
 
-<p>
-	<?php echo str_replace("\n","<br/>",$element->introduction)?>
-</p>
-<p>
-	<?php echo str_replace("\n","<br/>",$element->body)?>
-</p>
-<p>
-	<?php echo str_replace("\n","<br/>",$element->footer)?>
-</p>
+	<p>
+		<?php echo str_replace("\n","<br/>",$element->introduction)?>
+	</p>
+	<p>
+		<?php echo str_replace("\n","<br/>",$element->body)?>
+	</p>
+	<p>
+		<?php echo str_replace("\n","<br/>",$element->footer)?>
+	</p>
 
-<input type="hidden" name="OphCoCorrespondence_printLetter" id="OphCoCorrespondence_printLetter" value="<?php echo $element->print?>" />
+	<input type="hidden" name="OphCoCorrespondence_printLetter" id="OphCoCorrespondence_printLetter" value="<?php echo $element->print?>" />
+</div>

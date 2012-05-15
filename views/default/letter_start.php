@@ -17,12 +17,12 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html The GNU General Public License V3.0
  */
 ?>
-<div class="banner">
+<div class="banner clearfix">
 	<div class="seal"><img src="/img/_print/letterhead_seal.jpg" alt="letterhead_seal" /></div>
 	<div class="logo"><img src="/img/_print/letterhead_Moorfields_NHS.jpg" alt="letterhead_Moorfields_NHS" /></div>
 </div>
 <?php if (isset($site)) {?>
-	<div class="fromAddress"<?php if (isset($size)) {?> style="font-size: <?php echo $size?>;"<?php }?>>
+	<div class="fromAddress">
 		<?php echo $site->letterhtml ?>
 		<br />Tel: <?php echo CHtml::encode($site->telephone) ?>
 		<?php if($site->fax) { ?>
@@ -30,9 +30,5 @@
 		<?php } ?>
 	</div>
 <?php }?>
-<div class="toAddress"<?php if (isset($size)) {?> style="font-size: <?php echo $size?>;"<?php }?>>
-	<?php echo $toAddress?>
-</div>
-<div class="date"<?php if (isset($size)) {?> style="font-size: <?php echo $size?>"<?php }?>>
-	<?php echo date(Helper::NHS_DATE_FORMAT) ?>
-</div>
+<div class="toAddress"><pre><?php echo $toAddress?></pre></div>
+<div class="date"><?php echo date(Helper::NHS_DATE_FORMAT) ?></div>
