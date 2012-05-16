@@ -175,6 +175,7 @@ $(document).ready(function() {
 				'dataType': 'json',
 				'url': '/OphCoCorrespondence/Default/getMacroData?patient_id='+patient_id+'&macro_type='+m[1]+'&macro_id='+m[2]+'&nickname='+nickname,
 				'success': function(data) {
+					$('#ElementLetter_cc').val('');
 					correspondence_load_data(data);
 				}
 			});

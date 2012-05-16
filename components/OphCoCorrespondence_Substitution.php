@@ -25,6 +25,12 @@ class OphCoCorrespondence_Substitution {
 			$text = str_replace('['.$el.']',$patient->{$el},$text);
 		}
 
+		preg_match_all('/\[([A-Z][a-z]{2})\]/s',$text,$m);
+
+		foreach ($m[1] as $el) {
+			$text = str_replace('['.$el.']',ucfirst($patient->{$el}),$text);
+		}
+
 		return $text;
 	}
 }
