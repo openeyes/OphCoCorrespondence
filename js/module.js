@@ -187,6 +187,7 @@ $(document).ready(function() {
 	});
 
 	$('select.stringgroup').change(function() {
+		var obj = $(this);
 		var selected_val = $(this).children('option:selected').val();
 
 		if (selected_val != '') {
@@ -197,6 +198,7 @@ $(document).ready(function() {
 				'url': '/OphCoCorrespondence/Default/getString?patient_id='+patient_id+'&string_type='+m[1]+'&string_id='+m[2],
 				'success': function(text) {
 					correspondence_append_body(text);
+					obj.val('');
 				}
 			});
 		}
@@ -344,12 +346,42 @@ function correspondence_load_data(data) {
 
 function correspondence_append_body(text) {
 	var cpos = et_oph_correspondence_body_cursor_position;
+	var insert_prefix = '';
 
 	var current = $('#ElementLetter_body').val();
 
 	if (current == '') {
+		text = ucfirst(text);
 		$('#ElementLetter_body').val(text);
 	} else {
-		$('#ElementLetter_body').val(current.substring(0,cpos)+text+current.substring(cpos,current.length));
+		// attempt to intelligently drop the text in based on what it follows
+		var preceeding_blob = current.substring(0,cpos);
+
+		if (preceeding_blob.match(/\.$/)) {
+			insert_prefix = '  ';
+			text = ucfirst(text);
+		} else if (preceeding_blob.match(/\.[\s\t]+$/)) {
+			text = ucfirst(text);
+		} else if (preceeding_blob.match(/[a-zA-Z]+$/)) {
+			insert_prefix = ', ';
+			text = uclower(text);
+		}
+
+		$('#ElementLetter_body').val(current.substring(0,cpos) + insert_prefix + text + current.substring(cpos,current.length));
 	}
+
+	et_oph_correspondence_body_cursor_position += insert_prefix.length;
+	et_oph_correspondence_body_cursor_position += text.length;
+}
+
+function ucfirst(str) {
+	str += '';
+	var f = str.charAt(0).toUpperCase();
+	return f + str.substr(1);
+}
+
+function uclower(str) {
+	str += '';
+	var f = str.charAt(0).toLowerCase();
+	return f + str.substr(1);
 }
