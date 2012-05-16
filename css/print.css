@@ -48,6 +48,11 @@ p,h2,h3 {
 	widows: 3;
 }
 
+p {
+	margin-bottom: 15px;
+	padding: 10px;
+}
+
 h1,h2,h3 {
 	page-break-after: avoid;
 	clear: both;

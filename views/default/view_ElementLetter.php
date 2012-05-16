@@ -25,6 +25,14 @@
 		'patient' => $this->patient,
 	))?>
 
+	<br/><br/><br/>
+
+	<p>
+		<strong>Re: <?php echo $element->re?></strong>
+		<br/>
+		<br/>
+	</p>
+
 	<p>
 		<?php echo str_replace("\n","<br/>",$element->introduction)?>
 	</p>
@@ -33,6 +41,15 @@
 	</p>
 	<p>
 		<?php echo str_replace("\n","<br/>",$element->footer)?>
+		<br/><br/><br/>
+	</p>
+
+	<p>
+		To: <?php echo preg_replace('/[\r\n]+/',', ',$element->address)?><br/>
+		<?php foreach (explode("\n",trim($element->cc)) as $line) {
+			$line = preg_replace('/^cc:[\s\t]+/','',$line);?>
+			cc: <?php echo $line?><br />
+		<?php }?>
 	</p>
 
 	<input type="hidden" name="OphCoCorrespondence_printLetter" id="OphCoCorrespondence_printLetter" value="<?php echo $element->print?>" />

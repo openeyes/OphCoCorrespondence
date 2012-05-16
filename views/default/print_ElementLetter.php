@@ -28,24 +28,20 @@
 
 <p>
 	<strong>Re: <?php echo $element->re?></strong>
-	<br/>
-	<br/>
-</p>
-
-<p>
-	<?php echo $element->introduction?>
-	<br/>
-	<br/>
-</p>
-
-<p>
-	<?php echo str_replace("\n","<br/>",$element->body)?>
 	<br/><br/>
 </p>
 
 <p>
+	<?php echo str_replace("\n","<br/>",$element->introduction)?>
+</p>
+
+<p>
+	<?php echo str_replace("\n","<br/>",$element->body)?>
+</p>
+
+<p>
 	<?php echo str_replace("\n","<br/>",$element->footer)?>
-	<br/><br/><br/><br/>
+	<br/><br/><br/>
 </p>
 
 <p>
@@ -68,24 +64,20 @@
 
 		<p>
 			<strong>Re: <?php echo $element->re?></strong>
-			<br/>
-			<br/>
-		</p>
-
-		<p>
-			<?php echo $element->introduction?>
-			<br/>
-			<br/>
-		</p>
-
-		<p>
-			<?php echo str_replace("\n","<br/>",$element->body)?>
 			<br/><br/>
 		</p>
 
 		<p>
+			<?php echo $element->introduction?>
+		</p>
+
+		<p>
+			<?php echo str_replace("\n","<br/>",$element->body)?>
+		</p>
+
+		<p>
 			<?php echo str_replace("\n","<br/>",$element->footer)?>
-			<br/><br/><br/><br/>
+			<br/><br/><br/>
 		</p>
 
 		<p>
