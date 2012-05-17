@@ -166,6 +166,7 @@ $(document).ready(function() {
 
 	$('#macro').change(function() {
 		var nickname = $('input[id="ElementLetter_use_nickname"][type="checkbox"]').is(':checked') ? '1' : '0';
+		var obj = $(this);
 
 		if ($(this).val() != '') {
 			var m = $(this).val().match(/^([a-z]+)([0-9]+)$/);
@@ -176,7 +177,9 @@ $(document).ready(function() {
 				'url': '/OphCoCorrespondence/Default/getMacroData?patient_id='+patient_id+'&macro_type='+m[1]+'&macro_id='+m[2]+'&nickname='+nickname,
 				'success': function(data) {
 					$('#ElementLetter_cc').val('');
+					$('#cc_targets').html('');
 					correspondence_load_data(data);
+					obj.val('');
 				}
 			});
 		}
@@ -206,6 +209,7 @@ $(document).ready(function() {
 
 	$('#from').change(function() {
 		var	contact_id = $(this).children('option:selected').val();
+		var obj = $(this);
 
 		if (contact_id != '') {
 			$.ajax({
@@ -213,6 +217,7 @@ $(document).ready(function() {
 				'url': '/OphCoCorrespondence/Default/getFrom?contact_id='+contact_id,
 				'success': function(text) {
 					$('#ElementLetter_footer').html(text);
+					obj.val('');
 				}
 			});
 		}
@@ -220,6 +225,7 @@ $(document).ready(function() {
 
 	$('#cc').change(function() {
 		var contact_id = $(this).children('option:selected').val();
+		var obj = $(this);
 
 		if (contact_id != '') {
 			var ok = true;
@@ -253,6 +259,8 @@ $(document).ready(function() {
 					} else {
 						alert("Sorry, this contact has no address and so cannot be cc'd.");
 					}
+
+					obj.val('');
 				}
 			});
 		}
