@@ -37,7 +37,7 @@ $(document).ready(function() {
 	});
 
 	$('#address_target').change(function() {
-		var nickname = $('#ElementLetter_use_nickname').is(':checked') ? '1' : '0';
+		var nickname = $('input[id="ElementLetter_use_nickname"][type="checkbox"]').is(':checked') ? '1' : '0';
 
 		if ($(this).children('option:selected').val() != '') {
 			if ($(this).children('option:selected').text().match(/NO ADDRESS/)) {
@@ -165,7 +165,7 @@ $(document).ready(function() {
 	});
 
 	$('#macro').change(function() {
-		var nickname = $('#ElementLetter_use_nickname').is(':checked') ? '1' : '0';
+		var nickname = $('input[id="ElementLetter_use_nickname"][type="checkbox"]').is(':checked') ? '1' : '0';
 
 		if ($(this).val() != '') {
 			var m = $(this).val().match(/^([a-z]+)([0-9]+)$/);
@@ -182,7 +182,7 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#ElementLetter_use_nickname').click(function() {
+	$('input[id="ElementLetter_use_nickname"][type="checkbox"]').click(function() {
 		$('#address_target').change();
 	});
 
@@ -333,7 +333,7 @@ function correspondence_load_data(data) {
 		} else if (m = i.match(/^sel_(.*)$/)) {
 			$('#'+m[1]).val(data[i]);
 		} else if (m = i.match(/^check_(.*)$/)) {
-			$('#'+m[1]).attr('checked',(data[i] == 1 ? true : false));
+			$('input[id="'+m[1]+'"][type="checkbox"]').attr('checked',(parseInt(data[i]) == 1 ? true : false));
 		} else if (m = i.match(/^textappend_(.*)$/)) {
 			$('#'+m[1]).val($('#'+m[1]).val()+data[i]);
 		} else if (m = i.match(/^hidden_(.*)$/)) {
