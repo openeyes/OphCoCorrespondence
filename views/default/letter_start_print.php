@@ -31,5 +31,5 @@
 	</div>
 <?php }?>
 <div class="toAddress"><?php echo $toAddress?></div>
-<br/>
 <div class="date"><?php echo date(Helper::NHS_DATE_FORMAT,strtotime($date)) ?></div>
+<br/><br/>

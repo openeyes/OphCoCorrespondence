@@ -169,7 +169,8 @@ body {
 	padding-top: 1em;
 	clear: both;
 	padding-top:3em;
-	float: left;
+	float: left !important;
+	text-align: left !important;
 }
 
 .toAddress {
