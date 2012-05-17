@@ -23,25 +23,20 @@
 		'site' => $element->site,
 		'toAddress' => $element->address,
 		'patient' => $this->patient,
+		'date' => $element->date,
 	))?>
 
-	<br/><br/><br/>
+	<br/><br/>
 
 	<p>
+		<?php echo str_replace("\n","<br/>",trim($element->introduction))?>
+		<br/><br/>
 		<strong>Re: <?php echo $element->re?></strong>
-		<br/>
-		<br/>
-	</p>
-
-	<p>
-		<?php echo str_replace("\n","<br/>",$element->introduction)?>
-	</p>
-	<p>
+		<br/><br/>
 		<?php echo str_replace("\n","<br/>",$element->body)?>
-	</p>
-	<p>
+		<br/><br/>
 		<?php echo str_replace("\n","<br/>",$element->footer)?>
-		<br/><br/><br/>
+		<br/><br/>
 	</p>
 
 	<p>

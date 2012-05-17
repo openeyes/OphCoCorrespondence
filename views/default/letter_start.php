@@ -30,5 +30,6 @@
 		<?php } ?>
 	</div>
 <?php }?>
-<div class="toAddress"><pre><?php echo $toAddress?></pre></div>
-<div class="date"><?php echo date(Helper::NHS_DATE_FORMAT) ?></div>
+<div class="toAddress"><?php echo str_replace("\n","<br/>",$toAddress)?></div>
+<br/><br/><br/>
+<div class="date"><?php echo date(Helper::NHS_DATE_FORMAT,strtotime($date)) ?></div>

@@ -363,8 +363,8 @@ function correspondence_append_body(text) {
 		} else if (preceeding_blob.match(/\.[\s\t]+$/)) {
 			text = ucfirst(text);
 		} else if (preceeding_blob.match(/[a-zA-Z]+$/)) {
-			insert_prefix = ', ';
-			text = uclower(text);
+			insert_prefix = '. ';
+			text = ucfirst(text);
 		}
 
 		$('#ElementLetter_body').val(current.substring(0,cpos) + insert_prefix + text + current.substring(cpos,current.length));

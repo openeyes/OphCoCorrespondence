@@ -22,17 +22,15 @@
 	'site' => $element->site,
 	'toAddress' => str_replace("\n","<br/>",$element->address),
 	'patient' => $this->patient,
+	'date' => $element->date,
 ))?>
 
 <br/><br/><br/>
 
 <p>
-	<strong>Re: <?php echo $element->re?></strong>
-	<br/><br/>
-</p>
-
-<p>
 	<?php echo str_replace("\n","<br/>",$element->introduction)?>
+	<br/><br/>
+	<strong>Re: <?php echo $element->re?></strong>
 </p>
 
 <p>
@@ -41,7 +39,7 @@
 
 <p>
 	<?php echo str_replace("\n","<br/>",$element->footer)?>
-	<br/><br/><br/>
+	<br/><br/>
 </p>
 
 <p>
@@ -55,20 +53,19 @@
 <?php if (@$_GET['all']) {?>
 	<div class="pageBreak"></div>
 	<?php foreach ($element->getCcTargets() as $cc) {?>
-		<?php $this->renderPartial("letter_start", array(
+		<?php $this->renderPartial("letter_start_print", array(
+			'site' => $element->site,
 			'toAddress' => implode("<br/>",$cc),
 			'patient' => $this->patient,
+			'date' => $element->date,
 		))?>
 
 		<br/><br/><br/>
 
 		<p>
-			<strong>Re: <?php echo $element->re?></strong>
+			<?php echo str_replace("\n","<br/>",$element->introduction)?>
 			<br/><br/>
-		</p>
-
-		<p>
-			<?php echo $element->introduction?>
+			<strong>Re: <?php echo $element->re?></strong>
 		</p>
 
 		<p>
@@ -77,7 +74,7 @@
 
 		<p>
 			<?php echo str_replace("\n","<br/>",$element->footer)?>
-			<br/><br/><br/>
+			<br/><br/>
 		</p>
 
 		<p>
