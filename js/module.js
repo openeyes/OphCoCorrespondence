@@ -350,21 +350,22 @@ function correspondence_append_body(text) {
 
 	var current = $('#ElementLetter_body').val();
 
+	text = ucfirst(text);
+
+	if (!text.match(/\.$/)) {
+		text += '. ';
+	}
+
 	if (current == '') {
-		text = ucfirst(text);
 		$('#ElementLetter_body').val(text);
 	} else {
 		// attempt to intelligently drop the text in based on what it follows
 		var preceeding_blob = current.substring(0,cpos);
 
 		if (preceeding_blob.match(/\.$/)) {
-			insert_prefix = '  ';
-			text = ucfirst(text);
-		} else if (preceeding_blob.match(/\.[\s\t]+$/)) {
-			text = ucfirst(text);
+			insert_prefix = ' ';
 		} else if (preceeding_blob.match(/[a-zA-Z]+$/)) {
 			insert_prefix = '. ';
-			text = ucfirst(text);
 		}
 
 		$('#ElementLetter_body').val(current.substring(0,cpos) + insert_prefix + text + current.substring(cpos,current.length));
