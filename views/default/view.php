@@ -5,6 +5,8 @@
 
 <h3 class="withEventIcon" style="background:transparent url(<?php echo $this->imgPath?>medium.png) center left no-repeat;"><?php echo $this->event_type->name ?></h3>
 
+<input type="hidden" id="moduleCSSPath" value="<?php echo $this->cssPath?>" />
+
 <div>
 	<?php $this->renderDefaultElements($this->action->id); ?>
 	<?php $this->renderOptionalElements($this->action->id); ?>

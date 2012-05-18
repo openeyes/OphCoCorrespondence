@@ -25,21 +25,18 @@
 	'date' => $element->date,
 ))?>
 
-<br/><br/><br/>
+<br/><br/>
 
 <p>
 	<?php echo str_replace("\n","<br/>",$element->introduction)?>
 	<br/><br/>
 	<strong>Re: <?php echo $element->re?></strong>
-</p>
-
-<p>
+	<br/><br/>
 	<?php echo str_replace("\n","<br/>",$element->body)?>
 </p>
 
 <p>
 	<?php echo str_replace("\n","<br/>",$element->footer)?>
-	<br/><br/>
 </p>
 
 <p>

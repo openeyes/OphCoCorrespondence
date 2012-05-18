@@ -166,17 +166,18 @@ body {
 }
 
 .date {
-	padding-top: 1em;
+	padding-top:1em;
 	clear: both;
-	padding-top:3em;
 	float: left !important;
 	text-align: left !important;
+	padding-left:10px;
 }
 
 .toAddress {
-	padding-left:5em;
 	padding-top:3em;
 	width:200px;
+	padding-left:10px;
+	padding-bottom: 20px;
 }
 
 .red {
