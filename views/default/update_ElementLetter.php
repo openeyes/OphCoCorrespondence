@@ -23,13 +23,7 @@
 
 	<script type="text/javascript"> var patient_id = <?php echo $this->patient->id?>; </script>
 
-	<div class="row">
-		<span class="left"></span>
-		<span class="right">
-			<?php echo $form->checkBox($element, 'draft', array('nowrapper' => true))?>
-			<?php echo $element->getAttributeLabel('draft')?>
-		</span>
-	</div>
+	<?php echo $form->hiddenInput($element, 'draft', 1)?>
 
 	<div class="row">
 		<span class="left"></span>

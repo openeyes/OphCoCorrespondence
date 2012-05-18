@@ -1,8 +1,18 @@
 
 $(document).ready(function() {
-	$('#et_save').unbind('click').click(function() {
+	$('#et_save_draft').unbind('click').click(function() {
 		if (!$(this).hasClass('inactive')) {
 			disableButtons();
+			$('#ElementLetter_draft').val(1);
+			return true;
+		}
+		return false;
+	});
+
+	$('#et_save_print').unbind('click').click(function() {
+		if (!$(this).hasClass('inactive')) {
+			disableButtons();
+			$('#ElementLetter_draft').val(0);
 			return true;
 		}
 		return false;
@@ -304,12 +314,14 @@ $(document).ready(function() {
 	$('#et_print').unbind('click').click(function() {
 		var m = window.location.href.match(/\/view\/([0-9]+)/);
 		printUrl('/OphCoCorrespondence/Default/print/'+m[1],null,true);
+		$('#correspondence_out').removeClass('draft');
 		return false;
 	});
 
 	$('#et_print_all').unbind('click').click(function() {
 		var m = window.location.href.match(/\/view\/([0-9]+)/);
 		printUrl('/OphCoCorrespondence/Default/print/'+m[1]+'?all=1',null,true);
+		$('#correspondence_out').removeClass('draft');
 		return false;
 	});
 

@@ -209,26 +209,21 @@ class DefaultController extends BaseEventTypeController {
 		}
 	}
 
-	public function actionConfirmPrinted($id) {
-		if ($letter = ElementLetter::model()->find('event_id=?',array($id))) {
-			if ($letter->locked != 1) {
-				$letter->locked = 1;
-				if (!$letter->save()) {
-					echo "0";
-					return;
-				}
-			}
-
-			$letter->event->deleteIssues();
-			$letter->event->info = 'Letter has been printed';
-			if (!$letter->event->save()) {
-				echo "0";
-				return;
-			}
-
-			echo "1";
-			return;
+	public function actionPrint($id) {
+		if (!$event = Event::model()->findByPk($id)) {
+			throw new Exception('Event not found: '.$id);
 		}
-		echo "0";
+
+		if (!$letter = ElementLetter::model()->find('event_id=?',array($id))) {
+			throw new Exception('Letter not found were event_id = '.$id);
+		}
+
+		$letter->draft = 0;
+		if (!$letter->save()) {
+			throw new Exception('Unable to save letter: '.print_r($letter->getErrors(),true));
+		}
+		$event = Event::model()->findByPk($id);
+
+		parent::actionPrint($id);
 	}
 }
