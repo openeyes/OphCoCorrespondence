@@ -75,7 +75,11 @@
 	<div class="row">
 		<span class="left">
 			<?php foreach ($element->stringgroups as $string_group) {?>
-				<?php echo $form->dropDownListNoPost(strtolower($string_group->name), $string_group->strings, '', array('empty' => '- '.$string_group->name.' -', 'nowrapper' => true, 'class' => 'stringgroup'))?>
+				<?php if ($string_group->name == 'Findings') {?>
+					<?php echo $form->dropDownListNoPost(strtolower($string_group->name), $string_group->strings, '', array('empty' => '- '.$string_group->name.' -', 'nowrapper' => true, 'class' => 'stringgroup', 'title' => 'Findings will be available with the upcoming Examination module', 'disabled' => true))?>
+				<?php }else{?>
+					<?php echo $form->dropDownListNoPost(strtolower($string_group->name), $string_group->strings, '', array('empty' => '- '.$string_group->name.' -', 'nowrapper' => true, 'class' => 'stringgroup'))?>
+				<?php }?>
 			<?php }?>
 		</span>
 		<span class="right">
