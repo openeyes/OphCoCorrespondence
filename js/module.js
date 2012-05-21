@@ -105,8 +105,6 @@ $(document).ready(function() {
 										}
 									});
 									$('#cc_targets').html(targets);
-								} else {
-									alert("Warning: letters should be cc'd to the patient's GP, but the current patient's GP has no valid address.");
 								}
 							}
 						});
@@ -164,7 +162,7 @@ $(document).ready(function() {
 										$('#cc_targets').append('<input type="hidden" name="CC_Targets[]" value="patient" />');
 									}
 								} else {
-									alert("Warning: letters should be cc'd to the patient's GP, but the current patient's GP has no valid address.");
+									alert("Warning: letters to the GP should be cc'd to the patient's, but the patient has no valid address.");
 								}
 							}
 						});

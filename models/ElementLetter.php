@@ -136,8 +136,15 @@ class ElementLetter extends BaseEventTypeElement
 		}
 
 		foreach (PatientContactAssignment::model()->findAll('patient_id=?',array($patient->id)) as $pca) {
-			if ($pca->contact->address) {
-				$options['contact'.$pca->contact_id] = $pca->contact->fullname.' ('.$pca->contact->parent_class.')';
+			if ($pca->site || $pca->institution || $pca->contact->address) {
+				$options['contact'.$pca->contact_id] = $pca->contact->fullname.' ('.$pca->contact->parent_class.', ';
+				if ($pca->site) {
+					$options['contact'.$pca->contact_id] .= $pca->site->name.')';
+				} else if ($pca->institution) {
+					$options['contact'.$pca->contact_id] .= $pca->institution->name.')';
+				} else {
+					$options['contact'.$pca->contact_id] .= str_replace(',','',$pca->contact->address->address1).')';
+				}
 			} else {
 				$options['contact'.$pca->contact_id] = $pca->contact->fullname.' ('.$pca->contact->parent_class.') - NO ADDRESS';
 			}
@@ -346,5 +353,17 @@ class ElementLetter extends BaseEventTypeElement
 		}
 
 		return parent::save($runValidation, $attributes, $allow_overriding);
+	}
+
+	public function getFirm_members() {
+		$members = CHtml::listData(Yii::app()->getController()->firm->members, 'id', 'fullNameAndTitle');
+
+		$user = Yii::app()->session['user'];
+
+		if (!isset($members[$user->id])) {
+			$members[$user->id] = $user->fullNameAndTitle;
+		}
+
+		return $members;
 	}
 }

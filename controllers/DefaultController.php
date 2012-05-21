@@ -24,17 +24,28 @@ class DefaultController extends BaseEventTypeController {
 
 		if (@$_GET['address_id'] == 'patient') {
 			$contact = $patient;
+			$address = $contact->getLetterAddress();
 		} else if (@$_GET['address_id'] == 'gp') {
 			$contact = $patient->gp->contact;
+			$address = $contact->getLetterAddress();
 		} else if (preg_match('/^contact([0-9]+)$/',@$_GET['address_id'],$m)) {
 			if (!$contact = Contact::model()->findByPk($m[1])) {
 				throw new Exception('Unknown contact id: '.$m[1]);
+			}
+			$pca = PatientContactAssignment::model()->find('patient_id=? and contact_id=?',array($patient->id,$contact->id));
+
+			if ($pca->site) {
+				$address = $pca->site->getLetterAddress();
+			} else if ($pca->institution) {
+				$address = $pca->institution->getLetterAddress();
+			} else {
+				$address = $contact->getLetterAddress();
 			}
 		} else {
 			throw new Exception('Unknown or missing address_id value: '.@$_GET['address_id']);
 		}
 
-		$data['text_ElementLetter_address'] = $contact->getLetterAddress();
+		$data['text_ElementLetter_address'] = $address;
 
 		if ($nickname && isset($contact->nick_name) && $contact->nick_name) {
 			$data['text_ElementLetter_introduction'] = "Dear ".$contact->nick_name.",";
@@ -162,18 +173,40 @@ class DefaultController extends BaseEventTypeController {
 
 		if (@$_GET['contact_id'] == 'patient') {
 			$contact = $patient;
+			$address = $contact->address;
 		} else if (@$_GET['contact_id'] == 'gp') {
 			$contact = $patient->gp->contact;
+			$address = $contact->address;
 		} else if (preg_match('/^contact([0-9]+)$/',@$_GET['contact_id'],$m)) {
 			if (!$contact = Contact::model()->findByPk($m[1])) {
 				throw new Exception('Unknown contact id: '.$m[1]);
+			}
+			$pca = PatientContactAssignment::model()->find('patient_id=? and contact_id=?',array($patient->id,$contact->id));
+
+			$address = null;
+
+			if ($pca->site) {
+				if ($pca->site) {
+					$address = $pca->site;
+				}
+			} else if ($pca->institution) {
+				if ($pca->institution->address) {
+					$address = $pca->institution->address;
+				}
+			} else {
+				$address = $contact->address;
 			}
 		} else {
 			throw new Exception('Unknown or missing contact_id value: '.@$_GET['contact_id']);
 		}
 
-		if ($contact->address) {
-			echo $contact->title.' '.$contact->last_name.', '.implode(', ',$contact->address->getLetterarray(false));
+		if ($address) {
+			if ($contact->title) {
+				echo $contact->title.' '.$contact->last_name.', ';
+			} else {
+				echo $contact->first_name.' ' .$contact->last_name.', ';
+			}
+			echo implode(', ',$address->getLetterarray(false));
 		} else {
 			echo "NO ADDRESS";
 		}
