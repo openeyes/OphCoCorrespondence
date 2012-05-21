@@ -83,7 +83,7 @@
 
 	<div class="row">
 		<span class="left">
-			<?php echo $form->dropDownListNoPost('from', CHtml::listData($this->firm->members, 'id', 'fullNameAndTitle'), '', array('empty' => '- From -', 'nowrapper' => true))?>
+			<?php echo $form->dropDownListNoPost('from', $element->firm_members, '', array('empty' => '- From -', 'nowrapper' => true))?>
 		</span>
 		<span class="right">
 			<?php echo $form->textArea($element, 'footer', array('rows' => 8, 'cols' => 55, 'label' => false, 'nowrapper' => true))?>
