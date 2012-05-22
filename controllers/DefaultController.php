@@ -92,7 +92,9 @@ class DefaultController extends BaseEventTypeController {
 
 		if ($macro->recipient_doctor) {
 			$data['sel_address_target'] = 'gp';
-			$contact = $patient->gp->contact;
+			if ($patient->gp) {
+				$contact = $patient->gp->contact;
+			}
 		}
 
 		if (isset($contact)) {
