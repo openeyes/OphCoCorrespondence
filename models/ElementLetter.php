@@ -177,9 +177,9 @@ class ElementLetter extends BaseEventTypeElement
 
 			$this->re .= ', DofB: '.date('d/m/Y',strtotime($patient->dob)).', HosNum: '.$patient->hos_num;
 
-			$contact = Yii::app()->session['user']->contact;
-
-			$this->footer = "Yours sincerely\n\n\n\n\n".$contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications."\nConsultant Ophthalmic Surgeon";
+			if ($contact = Yii::app()->session['user']->contact) {
+				$this->footer = "Yours sincerely\n\n\n\n\n".$contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications."\nConsultant Ophthalmic Surgeon";
+			}
 
 			// Look for a macro based on the episode_status
 			$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
