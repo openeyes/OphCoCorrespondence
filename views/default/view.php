@@ -21,6 +21,9 @@
 	<?php if ($this->editable) {?>
 		<button type="submit" class="classy green venti" id="et_confirm_printed" name="confirmprinted"><span class="button-span button-span-green">Confirm printed</span></button>
 	<?php }?>
+  <?php if ($this->event->canDelete()) {?>
+    <button type="submit" class="classy red venti" id="et_delete" name="delete"><span class="button-span button-span-red">Delete</span></button>
+  <?php }?>
 </div>
 
 <?php $this->footer() ?>
