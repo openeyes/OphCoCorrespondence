@@ -18,9 +18,6 @@
 	<img class="loader" style="display: none;" src="/img/ajax-loader.gif" alt="loading..." />&nbsp;
 	<button type="submit" class="classy blue venti" id="et_print" name="print"><span class="button-span button-span-blue">Print</span></button>
 	<button type="submit" class="classy blue venti" id="et_print_all" name="printall"><span class="button-span button-span-blue">Print all</span></button>
-	<?php if ($this->editable) {?>
-		<button type="submit" class="classy green venti" id="et_confirm_printed" name="confirmprinted"><span class="button-span button-span-green">Confirm printed</span></button>
-	<?php }?>
 </div>
 
 <?php $this->footer() ?>
