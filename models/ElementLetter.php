@@ -212,7 +212,7 @@ class ElementLetter extends BaseEventTypeElement
 			} else {
 				$this->introduction = "Dear ".$patient->title." ".$patient->last_name.",";
 			}
-		} else if ($macro->recipient_doctor) {
+		} else if ($macro->recipient_doctor && $patient->gp) {
 			$this->address = $patient->gp->contact->getLetterAddress();
 			$this->address_target = 'gp';
 			if ($macro->use_nickname && $patient->gp->contact->nick_name) {
