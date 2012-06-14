@@ -23,6 +23,10 @@
 
 	<script type="text/javascript"> var patient_id = <?php echo $this->patient->id?>; </script>
 
+	<?php if ($element->macro) {?>
+		<h1><?php echo $element->macro->name?></h1>
+	<?php }?>
+
 	<?php echo $form->hiddenInput($element, 'draft', 1)?>
 
 	<div class="row">
