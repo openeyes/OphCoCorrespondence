@@ -30,6 +30,7 @@ class ElementLetter extends BaseEventTypeElement
 	public $cc_targets = array();
 	public $address_target = null;
 	public $lock_period_hours = 24;
+	public $macro = null;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -184,47 +185,47 @@ class ElementLetter extends BaseEventTypeElement
 			// Look for a macro based on the episode_status
 			$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
 			if ($episode = $patient->getEpisodeForCurrentSubspecialty()) {
-				if (!$macro = FirmLetterMacro::model()->find('firm_id=? and episode_status_id=?',array($firm->id, $episode->episode_status_id))) {
+				if (!$this->macro = FirmLetterMacro::model()->find('firm_id=? and episode_status_id=?',array($firm->id, $episode->episode_status_id))) {
 					$subspecialty_id = $firm->serviceSubspecialtyAssignment->subspecialty_id;
 
-					if (!$macro = SubspecialtyLetterMacro::model()->find('subspecialty_id=? and episode_status_id=?',array($subspecialty_id, $episode->episode_status_id))) {
-						$macro = LetterMacro::model()->find('episode_status_id=?',array($episode->episode_status_id));
+					if (!$this->macro = SubspecialtyLetterMacro::model()->find('subspecialty_id=? and episode_status_id=?',array($subspecialty_id, $episode->episode_status_id))) {
+						$this->macro = LetterMacro::model()->find('episode_status_id=?',array($episode->episode_status_id));
 					}
 				}
 			}
 
-			if (@$macro) {
-				$this->populate_from_macro($macro, $patient);
+			if ($this->macro) {
+				$this->populate_from_macro($patient);
 			}
 		}
 	}
 
-	public function populate_from_macro($macro, $patient) {
-		if ($macro->use_nickname) {
+	public function populate_from_macro($patient) {
+		if ($this->macro->use_nickname) {
 			$this->use_nickname = 1;
 		}
 
-		if ($macro->recipient_patient) {
+		if ($this->macro->recipient_patient) {
 			$this->address = $patient->getLetterAddress();
 			$this->address_target = 'patient';
-			if ($macro->use_nickname && $patient->nick_name) {
+			if ($this->macro->use_nickname && $patient->nick_name) {
 				$this->introduction = "Dear ".$patient->nick_name.",";
 			} else {
 				$this->introduction = "Dear ".$patient->title." ".$patient->last_name.",";
 			}
-		} else if ($macro->recipient_doctor && $patient->gp) {
+		} else if ($this->macro->recipient_doctor && $patient->gp) {
 			$this->address = $patient->gp->contact->getLetterAddress();
 			$this->address_target = 'gp';
-			if ($macro->use_nickname && $patient->gp->contact->nick_name) {
+			if ($this->macro->use_nickname && $patient->gp->contact->nick_name) {
 				$this->introduction = "Dear ".$patient->gp->contact->nick_name.",";
 			} else {
 				$this->introduction = "Dear ".$patient->gp->contact->title." ".$patient->gp->contact->last_name.",";
 			}
 		}
 
-		$this->body = $macro->substitute($patient);
+		$this->body = $this->macro->substitute($patient);
 
-		if ($macro->cc_patient) {
+		if ($this->macro->cc_patient) {
 			$this->cc = "cc:\t".$patient->title.' '.$patient->last_name.', '.implode(', ',$patient->address->getLetterarray(false));
 			$this->cc_targets[] = 'patient';
 		}
