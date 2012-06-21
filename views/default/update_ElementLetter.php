@@ -43,7 +43,7 @@
 
 	<div class="row">
 		<span class="left">
-			<?php echo $form->dropDownListNoPost('macro', CHtml::listData(LetterMacro::model()->findAll(array('order'=>'display_order')), 'id', 'name'), '', array('empty' => '- Macro -', 'nowrapper' => true))?>
+			<?php echo $form->dropDownListNoPost('macro', $element->letter_macros, '', array('empty' => '- Macro -', 'nowrapper' => true))?>
 		</span>
 		<span class="right">
 			<?php echo $form->datePicker($element, 'date', array('maxDate' => 'today'), array('nowrapper'=>true))?>
