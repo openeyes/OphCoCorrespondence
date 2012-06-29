@@ -171,7 +171,7 @@ class ElementLetter extends BaseEventTypeElement
 			$this->re = $patient->first_name.' '.$patient->last_name;
 
 			foreach (array('address1','address2','city','postcode') as $field) {
-				if ($patient->address->{$field}) {
+				if ($patient->address && $patient->address->{$field}) {
 					$this->re .= ', '.$patient->address->{$field};
 				}
 			}
