@@ -120,7 +120,7 @@ class DefaultController extends BaseEventTypeController {
 		}
 
 		if ($macro->body) {
-			$data['textappend_ElementLetter_body'] = $macro->body;
+			$data['text_ElementLetter_body'] = $macro->body;
 		}
 
 		if ($macro->cc_patient) {
