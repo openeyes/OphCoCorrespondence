@@ -137,7 +137,7 @@ class ElementLetter extends BaseEventTypeElement
 		}
 
 		foreach (PatientContactAssignment::model()->findAll('patient_id=?',array($patient->id)) as $pca) {
-			if ($pca->contact->parent_class = 'Specialist') {
+			if ($pca->contact->parent_class == 'Specialist') {
 				$type = Specialist::model()->findByPk($pca->contact->parent_id)->specialist_type->name;
 			} else {
 				$type = $pca->contact->parent_class;
