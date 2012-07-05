@@ -59,15 +59,19 @@ class DefaultController extends BaseEventTypeController {
 
 		$person = trim($contact->title.' '.$contact->first_name.' '.$contact->last_name);
 
-		if ($contact->parent_class == 'Specialist') {
-			$specialist = Specialist::model()->findByPk($contact->parent_id);
-			$person .= "\n".$specialist->specialist_type->name."\n";
-		} else if ($contact->parent_class == 'Consultant') {
-			$person .= "\nConsultant Ophthalmologist\n";
-		} else if ($contact->parent_class == 'Gp') {
-			$person = '';
+		if (isset($contact->parent_class)) {
+			if ($contact->parent_class == 'Specialist') {
+				$specialist = Specialist::model()->findByPk($contact->parent_id);
+				$person .= "\n".$specialist->specialist_type->name."\n";
+			} else if ($contact->parent_class == 'Consultant') {
+				$person .= "\nConsultant Ophthalmologist\n";
+			} else if ($contact->parent_class == 'Gp') {
+				$person = '';
+			} else {
+				$person .= "\n".$contact->parent_class."\n";
+			}
 		} else {
-			$person .= "\n".$contact->parent_class."\n";
+			$person = '';
 		}
 
 		$data['text_ElementLetter_address'] = $person.$address;
