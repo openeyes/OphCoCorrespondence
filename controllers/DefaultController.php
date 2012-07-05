@@ -64,6 +64,8 @@ class DefaultController extends BaseEventTypeController {
 			$person .= "\n".$specialist->specialist_type->name."\n";
 		} else if ($contact->parent_class == 'Consultant') {
 			$person .= "\nConsultant Ophthalmologist\n";
+		} else if ($contact->parent_class == 'Gp') {
+			$person = '';
 		} else {
 			$person .= "\n".$contact->parent_class."\n";
 		}
