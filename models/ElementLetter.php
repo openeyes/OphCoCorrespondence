@@ -137,17 +137,31 @@ class ElementLetter extends BaseEventTypeElement
 		}
 
 		foreach (PatientContactAssignment::model()->findAll('patient_id=?',array($patient->id)) as $pca) {
+			if ($pca->contact->parent_class = 'Specialist') {
+				$type = Specialist::model()->findByPk($pca->contact->parent_id)->specialist_type->name;
+			} else {
+				$type = $pca->contact->parent_class;
+			}
+
 			if ($pca->site || $pca->institution || $pca->contact->address) {
-				$options['contact'.$pca->contact_id] = $pca->contact->fullname.' ('.$pca->contact->parent_class.', ';
 				if ($pca->site) {
-					$options['contact'.$pca->contact_id] .= $pca->site->name.')';
+					$key = 'contact'.$pca->contact_id.'_site'.$pca->site->id;
 				} else if ($pca->institution) {
-					$options['contact'.$pca->contact_id] .= $pca->institution->name.')';
+					$key = 'contact'.$pca->contact_id.'_institution'.$pca->institution->id;
 				} else {
-					$options['contact'.$pca->contact_id] .= str_replace(',','',$pca->contact->address->address1).')';
+					$key = 'contact'.$pca->contact_id;
+				}
+
+				$options[$key] = $pca->contact->fullname.' ('.$type.', ';
+				if ($pca->site) {
+					$options[$key] .= $pca->site->name.')';
+				} else if ($pca->institution) {
+					$options[$key] .= $pca->institution->name.')';
+				} else {
+					$options[$key] .= str_replace(',','',$pca->contact->address->address1).')';
 				}
 			} else {
-				$options['contact'.$pca->contact_id] = $pca->contact->fullname.' ('.$pca->contact->parent_class.') - NO ADDRESS';
+				$options[$key] = $pca->contact->fullname.' ('.$type.') - NO ADDRESS';
 			}
 		}
 
