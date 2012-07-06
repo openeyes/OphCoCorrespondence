@@ -192,7 +192,7 @@ class ElementLetter extends BaseEventTypeElement
 				}
 			}
 
-			$this->re .= ', DofB: '.$patient->NHSDate('dob').', HosNum: '.$patient->hos_num;
+			$this->re .= ', DofB: '.$patient->NHSDate('dob').', HosNum: '.$patient->hos_num.', NHS no: '.$patient->nhs_num;
 
 			if ($contact = Yii::app()->session['user']->contact) {
 				$this->footer = "Yours sincerely\n\n\n\n\n".$contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications."\nConsultant Ophthalmic Surgeon";
