@@ -41,11 +41,40 @@ class DefaultController extends BaseEventTypeController {
 			} else {
 				$address = $contact->getLetterAddress();
 			}
+		} else if (preg_match('/^contact([0-9]+)_site([0-9]+)$/',@$_GET['address_id'],$m)) {
+			if (!$contact = Contact::model()->findByPk($m[1])) {
+				throw new Exception('Unknown contact id: '.$m[1]);
+			}
+			$pca = PatientContactAssignment::model()->find('patient_id=? and contact_id=? and site_id=?',array($patient->id,$contact->id,$m[2]));
+			$address = $pca->site->getLetterAddress();
+		} else if (preg_match('/^contact([0-9]+)_institution([0-9]+)$/',@$_GET['address_id'],$m)) {
+			if (!$contact = Contact::model()->findByPk($m[1])) {
+				throw new Exception('Unknown contact id: '.$m[1]);
+			}
+			$pca = PatientContactAssignment::model()->find('patient_id=? and contact_id=? and institution_id=?',array($patient->id,$contact->id,$m[2]));
+			$address = $pca->institution->getLetterAddress();
 		} else {
 			throw new Exception('Unknown or missing address_id value: '.@$_GET['address_id']);
 		}
 
-		$data['text_ElementLetter_address'] = $address;
+		$person = trim($contact->title.' '.$contact->first_name.' '.$contact->last_name);
+
+		if (isset($contact->parent_class)) {
+			if ($contact->parent_class == 'Specialist') {
+				$specialist = Specialist::model()->findByPk($contact->parent_id);
+				$person .= "\n".$specialist->specialist_type->name."\n";
+			} else if ($contact->parent_class == 'Consultant') {
+				$person .= "\nConsultant Ophthalmologist\n";
+			} else if ($contact->parent_class == 'Gp') {
+				$person = '';
+			} else {
+				$person .= "\n".$contact->parent_class."\n";
+			}
+		} else {
+			$person = '';
+		}
+
+		$data['text_ElementLetter_address'] = $person.$address;
 
 		if ($nickname && isset($contact->nick_name) && $contact->nick_name) {
 			$data['text_ElementLetter_introduction'] = "Dear ".$contact->nick_name.",";
@@ -120,7 +149,7 @@ class DefaultController extends BaseEventTypeController {
 		}
 
 		if ($macro->body) {
-			$data['textappend_ElementLetter_body'] = $macro->body;
+			$data['text_ElementLetter_body'] = $macro->body;
 		}
 
 		if ($macro->cc_patient) {
@@ -198,6 +227,18 @@ class DefaultController extends BaseEventTypeController {
 			} else {
 				$address = $contact->address;
 			}
+		} else if (preg_match('/^contact([0-9]+)_site([0-9]+)$/',@$_GET['contact_id'],$m)) {
+			if (!$contact = Contact::model()->findByPk($m[1])) {
+				throw new Exception('Unknown contact id: '.$m[1]);
+			}
+			$pca = PatientContactAssignment::model()->find('patient_id=? and contact_id=? and site_id=?',array($patient->id,$contact->id,$m[2]));
+			$address = $pca->site;
+		} else if (preg_match('/^contact([0-9]+)_institution([0-9]+)$/',@$_GET['contact_id'],$m)) {
+			if (!$contact = Contact::model()->findByPk($m[1])) {
+				throw new Exception('Unknown contact id: '.$m[1]);
+			}
+			$pca = PatientContactAssignment::model()->find('patient_id=? and contact_id=? and institution_id=?',array($patient->id,$contact->id,$m[2]));
+			$address = $pca->institution;
 		} else {
 			throw new Exception('Unknown or missing contact_id value: '.@$_GET['contact_id']);
 		}

@@ -77,9 +77,11 @@
 		<p>
 		<?php file_put_contents("/tmp/debug",$element->address);?>
 			To: <?php echo preg_replace('/[\r\n]+/',', ',$element->address)?><br/>
-			<?php foreach (explode("\n",trim($element->cc)) as $line) {
-				$line = preg_replace('/^cc:[\s\t]+/','',$line);?>
-				cc: <?php echo $line?><br />
+			<?php if (trim($element->cc)) {?>
+				<?php foreach (explode("\n",trim($element->cc)) as $line) {
+					$line = preg_replace('/^cc:[\s\t]+/','',$line);?>
+					cc: <?php echo $line?><br />
+				<?php }?>
 			<?php }?>
 		</p>
 

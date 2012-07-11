@@ -58,7 +58,7 @@ class ElementLetter extends BaseEventTypeElement
 		// will receive user inputs.
 		return array(
 			array('event_id, site_id, print, address, use_nickname, date, introduction, cc, re, body, footer, draft', 'safe'),
-			array('use_nickname, site_id, date, address, introduction, cc, body, footer', 'required'),
+			array('use_nickname, site_id, date, address, introduction, body, footer', 'required'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, event_id, site_id, use_nickname, date, introduction, re, body, footer, draft', 'safe', 'on' => 'search'),
@@ -137,17 +137,33 @@ class ElementLetter extends BaseEventTypeElement
 		}
 
 		foreach (PatientContactAssignment::model()->findAll('patient_id=?',array($patient->id)) as $pca) {
+			if ($pca->contact->parent_class == 'Specialist') {
+				$type = Specialist::model()->findByPk($pca->contact->parent_id)->specialist_type->name;
+			} else if ($pca->contact->parent_class == 'Consultant') {
+				$type = 'Consultant Ophthalmologist';
+			} else {
+				$type = $pca->contact->parent_class;
+			}
+
 			if ($pca->site || $pca->institution || $pca->contact->address) {
-				$options['contact'.$pca->contact_id] = $pca->contact->fullname.' ('.$pca->contact->parent_class.', ';
 				if ($pca->site) {
-					$options['contact'.$pca->contact_id] .= $pca->site->name.')';
+					$key = 'contact'.$pca->contact_id.'_site'.$pca->site->id;
 				} else if ($pca->institution) {
-					$options['contact'.$pca->contact_id] .= $pca->institution->name.')';
+					$key = 'contact'.$pca->contact_id.'_institution'.$pca->institution->id;
 				} else {
-					$options['contact'.$pca->contact_id] .= str_replace(',','',$pca->contact->address->address1).')';
+					$key = 'contact'.$pca->contact_id;
+				}
+
+				$options[$key] = $pca->contact->fullname.' ('.$type.', ';
+				if ($pca->site) {
+					$options[$key] .= $pca->site->name.')';
+				} else if ($pca->institution) {
+					$options[$key] .= $pca->institution->name.')';
+				} else {
+					$options[$key] .= str_replace(',','',$pca->contact->address->address1).')';
 				}
 			} else {
-				$options['contact'.$pca->contact_id] = $pca->contact->fullname.' ('.$pca->contact->parent_class.') - NO ADDRESS';
+				$options[$key] = $pca->contact->fullname.' ('.$type.') - NO ADDRESS';
 			}
 		}
 
@@ -171,12 +187,12 @@ class ElementLetter extends BaseEventTypeElement
 			$this->re = $patient->first_name.' '.$patient->last_name;
 
 			foreach (array('address1','address2','city','postcode') as $field) {
-				if ($patient->address->{$field}) {
+				if ($patient->address && $patient->address->{$field}) {
 					$this->re .= ', '.$patient->address->{$field};
 				}
 			}
 
-			$this->re .= ', DofB: '.date('d/m/Y',strtotime($patient->dob)).', HosNum: '.$patient->hos_num;
+			$this->re .= ', DofB: '.$patient->NHSDate('dob').', HosNum: '.$patient->hos_num.', NHS no: '.$patient->nhs_num;
 
 			if ($contact = Yii::app()->session['user']->contact) {
 				$this->footer = "Yours sincerely\n\n\n\n\n".$contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications."\nConsultant Ophthalmic Surgeon";
@@ -225,7 +241,7 @@ class ElementLetter extends BaseEventTypeElement
 
 		$this->body = $this->macro->substitute($patient);
 
-		if ($this->macro->cc_patient) {
+		if ($this->macro->cc_patient && $patient->address) {
 			$this->cc = "cc:\t".$patient->title.' '.$patient->last_name.', '.implode(', ',$patient->address->getLetterarray(false));
 			$this->cc_targets[] = 'patient';
 		}
