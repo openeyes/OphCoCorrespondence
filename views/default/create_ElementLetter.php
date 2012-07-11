@@ -32,7 +32,7 @@
 	<div class="row">
 		<span class="left"></span>
 		<span class="right">
-			<?php echo $form->dropDownList($element, 'site_id', CHtml::listData(Site::model()->findAll(array('order'=>'name asc')),'id','name'), array('nowrapper'=>true))?>
+			<?php echo $form->dropDownList($element, 'site_id', CHtml::listData(Institution::model()->find('code=?',array('RP6'))->sites,'id','name'), array('nowrapper'=>true))?>
 		</span>
 	</div>
 
