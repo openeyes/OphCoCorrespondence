@@ -1,0 +1,4 @@
+
+function printIframe() {
+	window.print();
+}

@@ -320,28 +320,33 @@ $(document).ready(function() {
 	});
 
 	if ($('#OphCoCorrespondence_printLetter').val() == 1) {
+		printLetter(true);
+	}
+
+	$('#et_print').unbind('click').click(function() {
+		printLetter();
+		return false;
+	});
+
+	function printLetter(all) {
+		$('#correspondence_out').removeClass('draft');
+
 		var m = window.location.href.match(/\/view\/([0-9]+)/);
 		$.ajax({
 			'type': 'GET',
 			'url': '/OphCoCorrespondence/Default/markPrinted/'+m[1],
 			'success': function(html) {
+				if (all) {
+					window.print_all_iframe.print();
+				} else {
+					window.print_iframe.print();
+				}
 			}
 		});
-		printUrl('/OphCoCorrespondence/Default/print/'+m[1]+'?all=1',null,$('#moduleCSSPath').val());
 	}
 
-	$('#et_print').unbind('click').click(function() {
-		var m = window.location.href.match(/\/view\/([0-9]+)/);
-		printUrl('/OphCoCorrespondence/Default/print/'+m[1],null,$('#moduleCSSPath').val());
-		$('#correspondence_out').removeClass('draft');
-		return false;
-	});
-
 	$('#et_print_all').unbind('click').click(function() {
-		var m = window.location.href.match(/\/view\/([0-9]+)/);
-		printUrl('/OphCoCorrespondence/Default/print/'+m[1]+'?all=1',null,$('#moduleCSSPath').val());
-		$('#correspondence_out').removeClass('draft');
-		return false;
+		printLetter(true);
 	});
 
 	$('#et_confirm_printed').unbind('click').click(function() {

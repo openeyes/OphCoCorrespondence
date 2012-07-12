@@ -20,4 +20,7 @@
 	<button type="submit" class="classy blue venti" id="et_print_all" name="printall"><span class="button-span button-span-blue">Print all</span></button>
 </div>
 
+<iframe id="print_iframe" name="print_iframe" style="display: none;" src="/OphCoCorrespondence/Default/print/<?php echo $this->event->id?>"></iframe>
+<iframe id="print_all_iframe" name="print_all_iframe" style="display: none;" src="/OphCoCorrespondence/Default/print/<?php echo $this->event->id?>?all=1"></iframe>
+
 <?php $this->footer() ?>
