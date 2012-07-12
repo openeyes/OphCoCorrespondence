@@ -57,7 +57,7 @@ class ElementLetterOld extends BaseEventTypeElement
 		// will receive user inputs.
 		return array(
 			array('letter_id, site_id, print, address, use_nickname, date, introduction, cc, re, body, footer, draft', 'safe'),
-			array('use_nickname, site_id, date, address, introduction, cc, body, footer', 'required'),
+			array('use_nickname, site_id, date, address, introduction, body, footer', 'required'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, event_id, site_id, use_nickname, date, introduction, re, body, footer, draft', 'safe', 'on' => 'search'),
