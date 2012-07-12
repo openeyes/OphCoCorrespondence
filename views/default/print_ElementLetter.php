@@ -49,6 +49,36 @@
 
 <?php if (@$_GET['all']) {?>
 	<div class="pageBreak"></div>
+	<?php $this->renderPartial("letter_start_print", array(
+		'site' => $element->site,
+		'toAddress' => str_replace("\n","<br/>",$element->address),
+		'patient' => $this->patient,
+		'date' => $element->date,
+	))?>
+
+	<br/><br/>
+
+	<p>
+		<?php echo str_replace("\n","<br/>",$element->introduction)?>
+		<br/><br/>
+		<strong>Re: <?php echo $element->re?></strong>
+		<br/><br/>
+		<?php echo str_replace("\n","<br/>",$element->body)?>
+	</p>
+
+	<p>
+		<?php echo str_replace("\n","<br/>",$element->footer)?>
+	</p>
+
+	<p>
+		To: <?php echo preg_replace('/[\r\n]+/',', ',$element->address)?><br/>
+		<?php foreach (explode("\n",trim($element->cc)) as $line) {
+			$line = preg_replace('/^cc:[\s\t]+/','',$line);?>
+			cc: <?php echo $line?><br />
+		<?php }?>
+	</p>
+
+	<div class="pageBreak"></div>
 	<?php foreach ($element->getCcTargets() as $cc) {?>
 		<?php $this->renderPartial("letter_start_print", array(
 			'site' => $element->site,
