@@ -105,6 +105,6 @@ class LetterMacro extends BaseEventTypeElement
 	}
 
 	public function substitute($patient) {
-		return $this->body = OphCoCorrespondence_Substitution::replace($this->body, $patient);
+		return OphCoCorrespondence_Substitution::replace($this->body, $patient);
 	}
 }
