@@ -42,8 +42,10 @@
 <p>
 	To: <?php echo preg_replace('/[\r\n]+/',', ',$element->address)?><br/>
 	<?php foreach (explode("\n",trim($element->cc)) as $line) {
-		$line = preg_replace('/^cc:[\s\t]+/','',$line);?>
-		cc: <?php echo $line?><br />
+		if (trim($line)) {
+			$line = preg_replace('/^cc:[\s\t]+/','',$line);?>
+			cc: <?php echo $line?><br />
+		<?php }?>
 	<?php }?>
 </p>
 
@@ -73,8 +75,10 @@
 	<p>
 		To: <?php echo preg_replace('/[\r\n]+/',', ',$element->address)?><br/>
 		<?php foreach (explode("\n",trim($element->cc)) as $line) {
-			$line = preg_replace('/^cc:[\s\t]+/','',$line);?>
-			cc: <?php echo $line?><br />
+			if (trim($line)) {
+				$line = preg_replace('/^cc:[\s\t]+/','',$line);?>
+				cc: <?php echo $line?><br />
+			<?php }?>
 		<?php }?>
 	</p>
 
@@ -109,8 +113,10 @@
 			To: <?php echo preg_replace('/[\r\n]+/',', ',$element->address)?><br/>
 			<?php if (trim($element->cc)) {?>
 				<?php foreach (explode("\n",trim($element->cc)) as $line) {
-					$line = preg_replace('/^cc:[\s\t]+/','',$line);?>
-					cc: <?php echo $line?><br />
+					if (trim($line)) {
+						$line = preg_replace('/^cc:[\s\t]+/','',$line);?>
+						cc: <?php echo $line?><br />
+					<?php }?>
 				<?php }?>
 			<?php }?>
 		</p>

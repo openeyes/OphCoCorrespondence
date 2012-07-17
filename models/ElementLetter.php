@@ -315,17 +315,19 @@ class ElementLetter extends BaseEventTypeElement
 	public function getCcTargets() {
 		$targets = array();
 
-		foreach (explode("\n",trim($this->cc)) as $cc) {
-			$cc = preg_replace('/^cc:[\s\t]+/','',trim($cc));
+		if (trim($this->cc)) {
+			foreach (explode("\n",trim($this->cc)) as $cc) {
+				$cc = preg_replace('/^cc:[\s\t]+/','',trim($cc));
 
-			$ex = explode(", ",$cc);
+				$ex = explode(", ",$cc);
 
-			if (ctype_digit($ex[1]) || is_int($ex[1])) {
-				$ex[1] .= ' '.$ex[2];
-				unset($ex[2]);
+				if (ctype_digit($ex[1]) || is_int($ex[1])) {
+					$ex[1] .= ' '.$ex[2];
+					unset($ex[2]);
+				}
+
+				$targets[] = explode(',',implode(',',$ex));
 			}
-
-			$targets[] = explode(',',implode(',',$ex));
 		}
 
 		return $targets;
