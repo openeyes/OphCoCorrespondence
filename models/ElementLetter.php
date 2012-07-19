@@ -239,7 +239,7 @@ class ElementLetter extends BaseEventTypeElement
 			}
 		}
 
-		$this->body = $this->macro->substitute($patient);
+		$this->macro->substitute($patient);
 
 		if ($this->macro->cc_patient && $patient->address) {
 			$this->cc = "cc:\t".$patient->title.' '.$patient->last_name.', '.implode(', ',$patient->address->getLetterarray(false));
