@@ -279,9 +279,12 @@ class DefaultController extends BaseEventTypeController {
 	}
 
 	public function actionMarkPrinted($id) {
-		if ($letter = ElementLetter::model()->find('event_id=? and print=1',array($id))) {
+		if ($letter = ElementLetter::model()->find('event_id=?',array($id))) {
 			$letter->print = 0;
-			$letter->save();
+			$letter->draft = 0;
+			if (!$letter->save()) {
+				throw new Exception('Unable to mark letter printed: '.print_r($letter->getErrors(),true));
+			}
 		}
 	}
 
@@ -294,10 +297,6 @@ class DefaultController extends BaseEventTypeController {
 			throw new Exception('Letter not found were event_id = '.$id);
 		}
 
-		$letter->draft = 0;
-		if (!$letter->save()) {
-			throw new Exception('Unable to save letter: '.print_r($letter->getErrors(),true));
-		}
 		$event = Event::model()->findByPk($id);
 
 		parent::actionPrint($id);
