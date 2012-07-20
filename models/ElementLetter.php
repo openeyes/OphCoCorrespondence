@@ -301,7 +301,7 @@ class ElementLetter extends BaseEventTypeElement
 		$this->event->deleteIssues();
 
 		if (!$this->draft) {
-			$this->event->addIssue("You have until {last_modified_date+24H:j M Y H:i} to edit this draft before it is locked");
+			$this->event->addIssue("You have until {last_modified_date+24H:j M Y H:i} to edit this letter before it is locked");
 		}
 
 		return parent::afterSave();
