@@ -18,12 +18,14 @@
  */
 ?>
 
-<?php $this->renderPartial("letter_start_print", array(
-	'site' => $element->site,
-	'toAddress' => str_replace("\n","<br/>",$element->address),
-	'patient' => $this->patient,
-	'date' => $element->date,
-))?>
+<div class="letter_header">
+	<?php $this->renderPartial("letter_start_print", array(
+		'site' => $element->site,
+		'toAddress' => str_replace("\n","<br/>",$element->address),
+		'patient' => $this->patient,
+		'date' => $element->date,
+	))?>
+</div>
 
 <br/><br/>
 
@@ -51,12 +53,14 @@
 
 <?php if (@$_GET['all']) {?>
 	<div class="pageBreak"></div>
-	<?php $this->renderPartial("letter_start_print", array(
-		'site' => $element->site,
-		'toAddress' => str_replace("\n","<br/>",$element->address),
-		'patient' => $this->patient,
-		'date' => $element->date,
-	))?>
+	<div class="letter_header">
+		<?php $this->renderPartial("letter_start_print", array(
+			'site' => $element->site,
+			'toAddress' => str_replace("\n","<br/>",$element->address),
+			'patient' => $this->patient,
+			'date' => $element->date,
+		))?>
+	</div>
 
 	<br/><br/>
 
@@ -84,12 +88,14 @@
 
 	<div class="pageBreak"></div>
 	<?php foreach ($element->getCcTargets() as $cc) {?>
-		<?php $this->renderPartial("letter_start_print", array(
-			'site' => $element->site,
-			'toAddress' => implode("<br/>",$cc),
-			'patient' => $this->patient,
-			'date' => $element->date,
-		))?>
+		<div class="letter_header">
+			<?php $this->renderPartial("letter_start_print", array(
+				'site' => $element->site,
+				'toAddress' => implode("<br/>",$cc),
+				'patient' => $this->patient,
+				'date' => $element->date,
+			))?>
+		</div>
 
 		<br/><br/><br/>
 

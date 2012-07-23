@@ -82,7 +82,7 @@ td {
 	text-align: left;
 	padding: 2px 4px;
 	vertical-align: top;
-	font-size: 10pt;
+	font-size: 14pt;
 }
 
 table.half {
@@ -120,7 +120,7 @@ html {
 
 body {
 	font-family: Helvetica, Arial, sans-serif;
-	font-size: 10pt;
+	font-size: 14pt;
 	display: block !important;
 	width: 1050px !important;
 }
@@ -171,6 +171,7 @@ body {
 	float: left !important;
 	text-align: left !important;
 	padding-left:10px;
+	font-size: 14pt;
 }
 
 .toAddress {
@@ -184,3 +185,6 @@ body {
 	color: #f00 !important;
 }
 
+.letter_header {
+	font-size: 10pt;
+}
