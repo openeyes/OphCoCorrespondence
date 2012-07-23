@@ -19,12 +19,14 @@
 ?>
 
 <div id="correspondence_out"<?php if ($element->draft){?> class="draft"<?php }?>>
-	<?php $this->renderPartial("letter_start", array(
-		'site' => $element->site,
-		'toAddress' => $element->address,
-		'patient' => $this->patient,
-		'date' => $element->date,
-	))?>
+	<div class="letter_header">
+		<?php $this->renderPartial("letter_start", array(
+			'site' => $element->site,
+			'toAddress' => $element->address,
+			'patient' => $this->patient,
+			'date' => $element->date,
+		))?>
+	</div>
 
 	<br/><br/>
 

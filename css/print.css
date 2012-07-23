@@ -180,6 +180,7 @@ body {
 	width:200px;
 	padding-left:5em;
 	padding-bottom: 20px;
+	margin-top: 8em;
 }
 
 .red {
@@ -187,6 +188,5 @@ body {
 }
 
 .letter_header {
-	margin-top: 6em;
 	font-size: 12pt;
 }
