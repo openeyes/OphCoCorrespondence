@@ -171,13 +171,14 @@ body {
 	float: left !important;
 	text-align: left !important;
 	padding-left:10px;
+	margin-left: 3.8em;
 	font-size: 14pt;
 }
 
 .toAddress {
 	padding-top:3em;
 	width:200px;
-	padding-left:10px;
+	padding-left:5em;
 	padding-bottom: 20px;
 }
 
@@ -186,5 +187,6 @@ body {
 }
 
 .letter_header {
-	font-size: 10pt;
+	margin-top: 6em;
+	font-size: 12pt;
 }
