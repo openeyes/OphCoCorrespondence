@@ -335,8 +335,6 @@ class ElementLetter extends BaseEventTypeElement
 	}
 
 	public function isEditable() {
-		return false;
-
 		if ($this->locked) return false;
 
 		if (!$this->draft && (time() - strtotime($this->last_modified_date)) >= ($this->lock_period_hours *60 *60)) {
