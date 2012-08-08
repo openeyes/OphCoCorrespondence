@@ -115,7 +115,6 @@
 		</p>
 
 		<p>
-		<?php file_put_contents("/tmp/debug",$element->address);?>
 			To: <?php echo preg_replace('/[\r\n]+/',', ',$element->address)?><br/>
 			<?php if (trim($element->cc)) {?>
 				<?php foreach (explode("\n",trim($element->cc)) as $line) {
