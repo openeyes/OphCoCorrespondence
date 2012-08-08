@@ -51,5 +51,11 @@
 		<?php }?>
 	</p>
 
+	<div class="patron">
+		Patron: Her Majesty The Queen<br/>
+		Chairman: Rudy Markham<br/>
+		Chief Executive: John Pelly
+	</div>
+
 	<input type="hidden" name="OphCoCorrespondence_printLetter" id="OphCoCorrespondence_printLetter" value="<?php echo $element->print?>" />
 </div>

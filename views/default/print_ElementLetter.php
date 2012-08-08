@@ -51,6 +51,12 @@
 	<?php }?>
 </p>
 
+<div class="right">
+	Patron: Her Majesty The Queen<br/>
+	Chairman: Rudy Markham<br/>
+	Chief Executive: John Pelly
+</div>
+
 <?php if (@$_GET['all']) {?>
 	<div class="pageBreak"></div>
 	<div class="letter_header">
@@ -85,6 +91,12 @@
 			<?php }?>
 		<?php }?>
 	</p>
+
+	<div class="right">
+		Patron: Her Majesty The Queen<br/>
+		Chairman: Rudy Markham<br/>
+		Chief Executive: John Pelly
+	</div>
 
 	<div class="pageBreak"></div>
 	<?php foreach ($element->getCcTargets() as $cc) {?>
@@ -125,6 +137,12 @@
 				<?php }?>
 			<?php }?>
 		</p>
+
+		<div class="right">
+			Patron: Her Majesty The Queen<br/>
+			Chairman: Rudy Markham<br/>
+			Chief Executive: John Pelly
+		</div>
 
 		<div class="pageBreak"></div>
 	<?php }?>
