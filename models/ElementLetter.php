@@ -297,16 +297,6 @@ class ElementLetter extends BaseEventTypeElement
 		return parent::beforeSave();
 	}
 
-	public function afterSave() {
-		$this->event->deleteIssues();
-
-		if (!$this->draft) {
-			$this->event->addIssue("You have until {last_modified_date+24H:j M Y H:i} to edit this letter before it is locked");
-		}
-
-		return parent::afterSave();
-	}
-
 	public function getInfotext() {
 		if ($this->draft) {
 			return 'Letter is being drafted';
@@ -335,19 +325,6 @@ class ElementLetter extends BaseEventTypeElement
 	}
 
 	public function isEditable() {
-		if ($this->locked) return false;
-
-		if (!$this->draft && (time() - strtotime($this->last_modified_date)) >= ($this->lock_period_hours *60 *60)) {
-			$this->locked = true;
-			$this->save();
-
-			$this->event->deleteIssues();
-			$this->event->info = 'Letter has been locked';
-			$this->event->save();
-
-			return false;
-		}
-
 		return true;
 	}
 
