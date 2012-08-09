@@ -322,7 +322,7 @@ class ElementLetter extends BaseEventTypeElement
 
 				$ex = explode(", ",$cc);
 
-				if (ctype_digit($ex[1]) || is_int($ex[1])) {
+				if (isset($ex[1]) && (ctype_digit($ex[1]) || is_int($ex[1]))) {
 					$ex[1] .= ' '.$ex[2];
 					unset($ex[2]);
 				}
