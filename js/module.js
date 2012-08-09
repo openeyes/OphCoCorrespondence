@@ -320,7 +320,9 @@ $(document).ready(function() {
 	});
 
 	if ($('#OphCoCorrespondence_printLetter').val() == 1) {
-		printLetter(true);
+		$('#print_all_iframe').bind('load',function() {
+			printLetter(true);
+		});
 	}
 
 	$('#et_print').unbind('click').click(function() {
