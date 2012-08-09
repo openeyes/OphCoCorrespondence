@@ -31,18 +31,18 @@
 	<br/><br/>
 
 	<p>
-		<?php echo str_replace("\n","<br/>",trim($element->introduction))?>
+		<?php echo $element->renderIntroduction()?>
 		<br/><br/>
 		<strong>Re: <?php echo $element->re?></strong>
 		<br/><br/>
-		<?php echo str_replace("\n","<br/>",$element->body)?>
+		<?php echo $element->renderBody()?>
 		<br/><br/>
-		<?php echo str_replace("\n","<br/>",$element->footer)?>
+		<?php echo $element->renderFooter()?>
 		<br/><br/>
 	</p>
 
 	<p>
-		To: <?php echo preg_replace('/[\r\n]+/',', ',$element->address)?><br/>
+		To: <?php echo $element->renderToAddress()?><br/>
 		<?php if (trim($element->cc)) {?>
 			<?php foreach (explode("\n",trim($element->cc)) as $line) {
 				$line = preg_replace('/^cc:[\s\t]+/','',$line);?>

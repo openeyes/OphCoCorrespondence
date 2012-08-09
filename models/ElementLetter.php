@@ -386,4 +386,33 @@ class ElementLetter extends BaseEventTypeElement
 
 		return $members;
 	}
+
+	public function renderIntroduction() {
+		return str_replace("\n","<br/>",trim($this->introduction));
+	}
+
+	public function renderBody() {
+		$body = '';
+
+		foreach (explode(chr(10),$this->body) as $line) {
+			if (preg_match('/^([\s]+)/',$line,$m)) {
+				for ($i=0; $i<strlen($m[1]); $i++) {
+					$body .= '&nbsp;';
+				}
+				$body .= preg_replace('/^[\s]+/','',$line)."\n";
+			} else {
+				$body .= $line."\n";
+			}
+		}
+
+		return str_replace("\n","<br/>",$body);
+	}
+
+	public function renderFooter() {
+		return str_replace("\n","<br/>",$this->footer);
+	}
+
+	public function renderToAddress() {
+		return preg_replace('/[\r\n]+/',', ',$this->address);
+	}
 }
