@@ -195,7 +195,7 @@ class ElementLetter extends BaseEventTypeElement
 			$this->re .= ', DOB: '.$patient->NHSDate('dob').', Hosp.No: '.$patient->hos_num.', NHS no: '.$patient->nhs_num;
 
 			if ($contact = Yii::app()->session['user']->contact) {
-				$this->footer = "Yours sincerely\n\n\n\n\n".$contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications."\nConsultant Ophthalmic Surgeon";
+				$this->footer = "Yours sincerely\n\n\n\n\n".trim($contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications)."\nConsultant Ophthalmic Surgeon";
 			}
 
 			// Look for a macro based on the episode_status

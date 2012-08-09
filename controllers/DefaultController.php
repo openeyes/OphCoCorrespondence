@@ -190,11 +190,15 @@ class DefaultController extends BaseEventTypeController {
 	}
 
 	public function actionGetFrom() {
-		if (!$contact = Contact::model()->findByPk(@$_GET['contact_id'])) {
-			throw new Exception('Contact not found: '.@$_GET['contact_id']);
+		if (!$user = User::model()->findByPk(@$_GET['user_id'])) {
+			throw new Exception('User not found: '.@$_GET['user_id']);
 		}
 
-		echo "Yours sincerely\n\n\n\n\n".$contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications."\nConsultant Ophthalmic Surgeon";
+		if (!($contact = $user->contact)) {
+			throw new Exception('User has no contact: '.@$_GET['user_id']);
+		}
+
+		echo "Yours sincerely\n\n\n\n\n".trim($contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications)."\nConsultant Ophthalmic Surgeon";
 	}
 
 	public function actionGetCc() {
