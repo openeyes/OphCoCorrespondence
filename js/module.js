@@ -237,13 +237,13 @@ $(document).ready(function() {
 	});
 
 	$('#from').change(function() {
-		var	contact_id = $(this).children('option:selected').val();
+		var	user_id = $(this).children('option:selected').val();
 		var obj = $(this);
 
-		if (contact_id != '') {
+		if (user_id != '') {
 			$.ajax({
 				'type': 'GET',
-				'url': '/OphCoCorrespondence/Default/getFrom?contact_id='+contact_id,
+				'url': '/OphCoCorrespondence/Default/getFrom?user_id='+user_id,
 				'success': function(text) {
 					$('#ElementLetter_footer').html(text);
 					obj.val('');
