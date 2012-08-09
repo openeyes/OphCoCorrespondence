@@ -27,8 +27,9 @@
 	))?>
 </div>
 
-<br/><br/>
+<br/>
 
+<div class="big">
 <p>
 	<?php echo $element->renderIntroduction()?>
 	<br/><br/>
@@ -40,6 +41,9 @@
 <p>
 	<?php echo $element->renderFooter()?>
 </p>
+</div>
+
+<br/>
 
 <p>
 	To: <?php echo $element->renderToAddress()?><br/>

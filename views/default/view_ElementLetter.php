@@ -28,8 +28,9 @@
 		))?>
 	</div>
 
-	<br/><br/>
-
+	<br/>
+	
+	<div class="big">
 	<p>
 		<?php echo $element->renderIntroduction()?>
 		<br/><br/>
@@ -40,7 +41,10 @@
 		<?php echo $element->renderFooter()?>
 		<br/><br/>
 	</p>
+	</div>
 
+	<br/>
+	
 	<p>
 		To: <?php echo $element->renderToAddress()?><br/>
 		<?php if (trim($element->cc)) {?>
