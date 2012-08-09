@@ -16,6 +16,8 @@
  * @copyright Copyright (c) 2011-2012, OpenEyes Foundation
  * @license http://www.gnu.org/licenses/gpl-3.0.html The GNU General Public License V3.0
  */
+$sites_that_should_reply_to_city_road = array(17);
+$cityroad = Site::model()->findByPk(1);
 ?>
 <div class="banner clearfix">
 	<div class="seal"><img src="/img/_print/letterhead_seal.jpg" alt="letterhead_seal" /></div>
@@ -28,6 +30,11 @@
 		<?php if($site->fax) { ?>
 		<br />Fax: <?php echo CHtml::encode($site->fax) ?>
 		<?php } ?>
+		<?php if (in_array($site->id,$sites_that_should_reply_to_city_road)) {?>
+			<br/><br/>
+			Please reply to:<br/><br/>
+			<?php echo $cityroad->letterhtml?>
+		<?php }?>
 	</div>
 <?php }?>
 <div class="toAddress"><?php echo str_replace("\n","<br/>",$toAddress)?></div>
