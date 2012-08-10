@@ -198,7 +198,7 @@ class DefaultController extends BaseEventTypeController {
 			throw new Exception('User has no contact: '.@$_GET['user_id']);
 		}
 
-		echo "Yours sincerely\n\n\n\n\n".trim($contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications)."\nConsultant Ophthalmic Surgeon";
+		echo "Yours sincerely\n\n\n\n\n".trim($contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications)."\n".$user->role;
 	}
 
 	public function actionGetCc() {
