@@ -20,134 +20,145 @@
 
 <div class="letter_header">
 	<?php $this->renderPartial("letter_start_print", array(
-		'site' => $element->site,
-		'toAddress' => str_replace("\n","<br/>",$element->address),
-		'patient' => $this->patient,
-		'date' => $element->date,
-	))?>
-</div>
-
-<br/>
-
-<div class="big">
-<p>
-	<?php echo $element->renderIntroduction()?>
-	<br/><br/>
-	<strong>Re: <?php echo $element->re?></strong>
-	<br/><br/>
-	<?php echo $element->renderBody()?>
-</p>
-
-<p>
-	<?php echo $element->renderFooter()?>
-</p>
-</div>
-
-<br/>
-
-<p>
-	To: <?php echo $element->renderToAddress()?><br/>
-	<?php foreach (explode("\n",trim($element->cc)) as $line) {
-		if (trim($line)) {
-			$line = preg_replace('/^cc:[\s\t]+/','',$line);?>
-			cc: <?php echo $line?><br />
-		<?php }?>
-	<?php }?>
-</p>
-
-<div class="right">
-	Patron: Her Majesty The Queen<br/>
-	Chairman: Rudy Markham<br/>
-	Chief Executive: John Pelly
-</div>
-
-<?php if (@$_GET['all']) {?>
-	<div class="pageBreak"></div>
-	<div class="letter_header">
-		<?php $this->renderPartial("letter_start_print", array(
 			'site' => $element->site,
 			'toAddress' => str_replace("\n","<br/>",$element->address),
 			'patient' => $this->patient,
 			'date' => $element->date,
-		))?>
-	</div>
+	))?>
+</div>
 
-	<br/><br/>
+<br />
 
+<div class="big">
 	<p>
 		<?php echo $element->renderIntroduction()?>
-		<br/><br/>
-		<strong>Re: <?php echo $element->re?></strong>
-		<br/><br/>
+		<br /> <br /> <strong>Re: <?php echo $element->re?>
+		</strong> <br /> <br />
 		<?php echo $element->renderBody()?>
 	</p>
 
 	<p>
 		<?php echo $element->renderFooter()?>
 	</p>
+</div>
 
+<br />
+
+<p>
+	To:
+	<?php echo $element->renderToAddress()?>
+	<br />
+	<?php foreach (explode("\n",trim($element->cc)) as $line) {
+		if (trim($line)) {
+			$line = preg_replace('/^cc:[\s\t]+/','',$line);?>
+	cc:
+	<?php echo $line?>
+	<br />
+	<?php }?>
+	<?php }?>
+</p>
+
+<div class="right">
+	Patron: Her Majesty The Queen<br /> Chairman: Rudy Markham<br /> Chief
+	Executive: John Pelly
+</div>
+
+<?php if (@$_GET['all']) {?>
+<div class="pageBreak"></div>
+<div class="letter_header">
+	<?php $this->renderPartial("letter_start_print", array(
+			'site' => $element->site,
+			'toAddress' => str_replace("\n","<br/>",$element->address),
+			'patient' => $this->patient,
+			'date' => $element->date,
+		))?>
+</div>
+
+<br />
+
+<div class="big">
 	<p>
-		To: <?php echo $element->renderToAddress()?><br/>
-		<?php foreach (explode("\n",trim($element->cc)) as $line) {
-			if (trim($line)) {
-				$line = preg_replace('/^cc:[\s\t]+/','',$line);?>
-				cc: <?php echo $line?><br />
-			<?php }?>
-		<?php }?>
+		<?php echo $element->renderIntroduction()?>
+		<br /> <br /> <strong>Re: <?php echo $element->re?>
+		</strong> <br /> <br />
+		<?php echo $element->renderBody()?>
 	</p>
 
-	<div class="right">
-		Patron: Her Majesty The Queen<br/>
-		Chairman: Rudy Markham<br/>
-		Chief Executive: John Pelly
-	</div>
+	<p>
+		<?php echo $element->renderFooter()?>
+	</p>
+</div>
 
-	<div class="pageBreak"></div>
-	<?php foreach ($element->getCcTargets() as $cc) {?>
-		<div class="letter_header">
-			<?php $this->renderPartial("letter_start_print", array(
-				'site' => $element->site,
-				'toAddress' => implode("<br/>",$cc),
-				'patient' => $this->patient,
-				'date' => $element->date,
-			))?>
-		</div>
+<br />
 
-		<br/><br/><br/>
-
-		<p>
-			<?php echo $element->renderIntroduction()?>
-			<br/><br/>
-			<strong>Re: <?php echo $element->re?></strong>
-		</p>
-
-		<p>
-			<?php echo $element->renderBody()?>
-		</p>
-
-		<p>
-			<?php echo $element->renderFooter()?>
-			<br/><br/>
-		</p>
-
-		<p>
-			To: <?php echo $element->renderToAddress()?><br/>
-			<?php if (trim($element->cc)) {?>
-				<?php foreach (explode("\n",trim($element->cc)) as $line) {
-					if (trim($line)) {
-						$line = preg_replace('/^cc:[\s\t]+/','',$line);?>
-						cc: <?php echo $line?><br />
-					<?php }?>
-				<?php }?>
-			<?php }?>
-		</p>
-
-		<div class="right">
-			Patron: Her Majesty The Queen<br/>
-			Chairman: Rudy Markham<br/>
-			Chief Executive: John Pelly
-		</div>
-
-		<div class="pageBreak"></div>
+<p>
+	To:
+	<?php echo $element->renderToAddress()?>
+	<br />
+	<?php foreach (explode("\n",trim($element->cc)) as $line) {
+		if (trim($line)) {
+				$line = preg_replace('/^cc:[\s\t]+/','',$line);?>
+	cc:
+	<?php echo $line?>
+	<br />
 	<?php }?>
+	<?php }?>
+</p>
+
+<div class="right">
+	Patron: Her Majesty The Queen<br /> Chairman: Rudy Markham<br /> Chief
+	Executive: John Pelly
+</div>
+
+<div class="pageBreak"></div>
+<?php foreach ($element->getCcTargets() as $cc) {?>
+<div class="letter_header">
+	<?php $this->renderPartial("letter_start_print", array(
+			'site' => $element->site,
+			'toAddress' => implode("<br/>",$cc),
+			'patient' => $this->patient,
+			'date' => $element->date,
+			))?>
+</div>
+
+<br />
+
+<div class="big">
+	<p>
+		<?php echo $element->renderIntroduction()?>
+		<br /> <br /> <strong>Re: <?php echo $element->re?>
+		</strong> <br /> <br />
+		<?php echo $element->renderBody()?>
+	</p>
+
+	<p>
+		<?php echo $element->renderFooter()?>
+	</p>
+</div>
+
+<br />
+
+<p>
+	To:
+	<?php echo $element->renderToAddress()?>
+	<br />
+	<?php if (trim($element->cc)) {?>
+	<?php foreach (explode("\n",trim($element->cc)) as $line) {
+		if (trim($line)) {
+						$line = preg_replace('/^cc:[\s\t]+/','',$line);?>
+	cc:
+	<?php echo $line?>
+	<br />
+	<?php }?>
+	<?php }?>
+	<?php }?>
+</p>
+
+<div class="right">
+	Patron: Her Majesty The Queen<br /> Chairman: Rudy Markham<br /> Chief
+	Executive: John Pelly
+</div>
+
+<div class="pageBreak"></div>
+<?php }?>
 <?php }?>

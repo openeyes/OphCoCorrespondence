@@ -161,15 +161,15 @@ body {
 }
 
 .toAddress {
-	width: 290px;
-	height: 100px;
+	width: 300px;
+	min-height: 100px;
 	float: left;
-	margin: 30px 0 0 30px;
+	margin: 30px 0 0 20px;
 	padding: 10px;
 }
 
 .date {
-	margin-top:15px;
+	padding-top:15px;
 	clear: both;
 }
 
