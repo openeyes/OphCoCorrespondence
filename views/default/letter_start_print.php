@@ -40,7 +40,7 @@ $site_replyto_remap = array(
 	),
 	2 => array(
 		'address' => array(
-			'Moofields at Bedford',
+			'Moorfields at Bedford',
 			'Bedford Hospital NHS Trust - South Wing',
 			'Kempston Road',
 			'Bedford',
