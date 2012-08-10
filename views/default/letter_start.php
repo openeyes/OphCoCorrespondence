@@ -16,8 +16,196 @@
  * @copyright Copyright (c) 2011-2012, OpenEyes Foundation
  * @license http://www.gnu.org/licenses/gpl-3.0.html The GNU General Public License V3.0
  */
-$sites_that_should_reply_to_city_road = array(17);
-$cityroad = Site::model()->findByPk(1);
+$site_replyto_remap = array(
+	10 => array(
+		'address' => array(
+			'Moorfields at St Georges',
+			'St George\'s NHS Trust',
+			'Blackshaw Road',
+			'Tooting',
+			'London SW17 0QT',
+		),
+		'telephone' => '020 8725 5877',
+	),
+	15 => array(
+		'address' => array(
+			'Moorfields at Barking',
+			'Satellite Service Office, 3rd floor',
+			'Moorfields Eye Hospital ',
+			'City Road',
+			'London',
+			'EC1V 2PD',
+		),
+		'telephone' => '020 7566 2744',
+	),
+	2 => array(
+		'address' => array(
+			'Moofields at Bedford',
+			'Bedford Hospital NHS Trust - South Wing',
+			'Kempston Road',
+			'Bedford',
+			'MK42 9DJ',
+		),
+		'telephone' => '01234 792 643',
+	),
+	11 => array(
+		'address' => array(
+			'Moorfields at Northwick Park',
+			'Northwick Park Hospital',
+			'Watford Road',
+			'Harrow',
+			'Middlesex',
+			'HA1 3UJ',
+		),
+		'telephone' => '020 3182 4000',
+	),
+	17 => array(
+		'address' => array(
+			'Moorfields at St Georges',
+			'St George\'s NHS Trust',
+			'Blackshaw Road',
+			'Tooting',
+			'London SW17 0QT',
+		),
+		'telephone' => '020 8401 3486',
+	),
+	3 => array(
+		'address' => array(
+			'Moorfields at Ealing Hospital',
+			'Uxbridge Road',
+			'Southall',
+			'Middlesex',
+			'UB1 3HW',
+		),
+		'telephone' => '020 8967 5766',
+	),
+	18 => array(
+		'address' => array(
+			'Moorfields Eye Hospital',
+			'162 City Road',
+			'London',
+			'EC1V 2PD',
+		),
+		'telephone' => '020 7566 2267',
+	),
+	12 => array(
+		'address' => array(
+			'Moorfields at Loxford',
+			'Satellite Service Office, 3rd floor',
+			'Moorfields Eye Hospital ',
+			'City Road',
+			'London',
+			'EC1V 2PD',
+		),
+		'telephone' => '020 7566 2744',
+	),
+	6 => array(
+		'address' => array(
+			'Moorfields at Mile End',
+			'Satellite service office, 3rd floor',
+			'Moorfields Eye Hospital',
+			'City Road',
+			'London',
+			'EC1V 2PD',
+		),
+		'telephone' => '020 7566 2020',
+	),
+	4 => array(
+		'address' => array(
+			'Moorfields at Northwick Park',
+			'Northwick Park Hospital',
+			'Watford Road',
+			'Harrow',
+			'Middlesex',
+			'HA1 3UJ',
+		),
+		'telephone' => '020 3182 4000',
+	),
+	7 => array(
+		'address' => array(
+			'Moorfields at Potters Bar',
+			'Satellite Service Office, 3rd floor',
+			'Moorfields Eye Hospital ',
+			'City Road',
+			'London',
+			'EC1V 2PD',
+		),
+		'telephone' => '020 7566 2339',
+	),
+	19 => array(
+		'address' => array(
+			'General Management Offices',
+			'Moorfields Eye Hospital',
+			'City Road',
+			'London',
+			'EC1V 2PD',
+		),
+		'telephone' => '020 7566 2267',
+	),
+	9 => array(
+		'address' => array(
+			'Moorfields at St Ann\'s',
+			'Satellite service office, 3rd floor',
+			'Moorfields Eye Hospital ',
+			'City Road',
+			'London',
+			'EC1V 2PD',
+		),
+		'telephone' => '020 7566 2841',
+	),
+	5 => array(
+		'address' => array(
+			'Moorfields at St Georges',
+			'St George\'s NHS Trust',
+			'Blackshaw Road',
+			'Tooting',
+			'London SW17 0QT',
+		),
+		'telephone' => '020 8725 5877',
+	),
+	14 => array(
+		'address' => array(
+			'Moorfields at St Georges',
+			'St George\'s NHS Trust',
+			'Blackshaw Road',
+			'Tooting',
+			'London SW17 0QT',
+		),
+		'telephone' => '020 87251794',
+	),
+	16 => array(
+		'address' => array(
+			'Moorfields at Northwick Park',
+			'Northwick Park Hospital',
+			'Watford Road',
+			'Harrow',
+			'Middlesex',
+			'HA1 3UJ',
+		),
+		'telephone' => '020 3182 4000',
+	),
+	20 => array(
+		'address' => array(
+			'Moorfields at Northwick Park',
+			'Northwick Park Hospital',
+			'Watford Road',
+			'Harrow',
+			'Middlesex',
+			'HA1 3UJ',
+		),
+		'telephone' => '020 3182 4000',
+	),
+	8 => array(
+		'address' => array(
+			'Moorfields at St Georges',
+			'St George\'s NHS Trust',
+			'Blackshaw Road',
+			'Tooting',
+			'London SW17 0QT',
+		),
+		'telephone' => '020 8725 5877',
+	),
+);
 ?>
 <div class="banner clearfix">
 	<div class="seal"><img src="/img/_print/letterhead_seal.jpg" alt="letterhead_seal" /></div>
@@ -30,10 +218,13 @@ $cityroad = Site::model()->findByPk(1);
 		<?php if($site->fax) { ?>
 		<br />Fax: <?php echo CHtml::encode($site->fax) ?>
 		<?php } ?>
-		<?php if (in_array($site->id,$sites_that_should_reply_to_city_road)) {?>
+		<?php if (isset($site_replyto_remap[$site->id])) {?>
 			<br/><br/>
 			Please reply to:<br/><br/>
-			<?php echo $cityroad->letterhtml?>
+			<?php echo implode('<br/>',$site_replyto_remap[$site->id]['address'])?>
+			<?php if (isset($site_replyto_remap[$site->id]['telephone'])) {?>
+				<br/>Tel: <?php echo $site_replyto_remap[$site->id]['telephone']?>
+			<?php }?>
 		<?php }?>
 	</div>
 <?php }?>
