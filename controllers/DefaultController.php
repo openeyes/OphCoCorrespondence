@@ -199,6 +199,13 @@ class DefaultController extends BaseEventTypeController {
 		}
 
 		echo "Yours sincerely\n\n\n\n\n".trim($contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications)."\n".$user->role;
+
+		$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
+		$ssa = $firm->serviceSubspecialtyAssignment;
+
+		if ($number = ElementLetter::getDirectNumber($user->id,$ssa->subspecialty_id)) {
+			echo "\nDirect line: $number";
+		}
 	}
 
 	public function actionGetCc() {
