@@ -183,3 +183,9 @@ body {
 .big {
 	font-size: 14pt;
 }
+
+.footer {
+	text-align: right;
+	font-size: 10pt;
+	margin-top: 40px;
+}
