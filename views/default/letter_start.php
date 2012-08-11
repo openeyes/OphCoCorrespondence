@@ -18,6 +18,7 @@
  */
 $site_replyto_remap = array(
 	10 => array(
+		'site_name' => 'Moorfields at Battersea',
 		'address' => array(
 			'Moorfields at St Georges',
 			'St George\'s NHS Trust',
@@ -28,6 +29,7 @@ $site_replyto_remap = array(
 		'telephone' => '020 8725 5877',
 	),
 	15 => array(
+		'site_name' => 'Moorfields at Barking',
 		'address' => array(
 			'Moorfields at Barking',
 			'Satellite Service Office, 3rd floor',
@@ -39,6 +41,7 @@ $site_replyto_remap = array(
 		'telephone' => '020 7566 2744',
 	),
 	2 => array(
+		'site_name' => 'Moorfields at Bedford Hospital',
 		'address' => array(
 			'Moorfields at Bedford',
 			'Bedford Hospital NHS Trust - South Wing',
@@ -49,6 +52,7 @@ $site_replyto_remap = array(
 		'telephone' => '01234 792 643',
 	),
 	11 => array(
+		'site_name' => 'Moorfields at Boots Opticians',
 		'address' => array(
 			'Moorfields at Northwick Park',
 			'Northwick Park Hospital',
@@ -60,6 +64,7 @@ $site_replyto_remap = array(
 		'telephone' => '020 3182 4000',
 	),
 	17 => array(
+		'site_name' => 'Moorfields at Croydon',
 		'address' => array(
 			'Moorfields at St Georges',
 			'St George\'s NHS Trust',
@@ -70,6 +75,7 @@ $site_replyto_remap = array(
 		'telephone' => '020 8401 3486',
 	),
 	3 => array(
+		'site_name' => 'Moorfields at Ealing Hospital',
 		'address' => array(
 			'Moorfields at Ealing Hospital',
 			'Uxbridge Road',
@@ -80,6 +86,7 @@ $site_replyto_remap = array(
 		'telephone' => '020 8967 5766',
 	),
 	18 => array(
+		'site_name' => 'Moorfields at Homerton Hospital',
 		'address' => array(
 			'Moorfields Eye Hospital',
 			'162 City Road',
@@ -89,6 +96,7 @@ $site_replyto_remap = array(
 		'telephone' => '020 7566 2267',
 	),
 	12 => array(
+		'site_name' => 'Moorfields at Loxford',
 		'address' => array(
 			'Moorfields at Loxford',
 			'Satellite Service Office, 3rd floor',
@@ -100,6 +108,7 @@ $site_replyto_remap = array(
 		'telephone' => '020 7566 2744',
 	),
 	6 => array(
+		'site_name' => 'Moorfields at Mile End Hospital',
 		'address' => array(
 			'Moorfields at Mile End',
 			'Satellite service office, 3rd floor',
@@ -111,6 +120,7 @@ $site_replyto_remap = array(
 		'telephone' => '020 7566 2020',
 	),
 	4 => array(
+		'site_name' => 'Moorfields at Northwick Park Hospital',
 		'address' => array(
 			'Moorfields at Northwick Park',
 			'Northwick Park Hospital',
@@ -122,6 +132,7 @@ $site_replyto_remap = array(
 		'telephone' => '020 3182 4000',
 	),
 	7 => array(
+		'site_name' => 'Moorfields at Potters Bar',
 		'address' => array(
 			'Moorfields at Potters Bar',
 			'Satellite Service Office, 3rd floor',
@@ -133,6 +144,7 @@ $site_replyto_remap = array(
 		'telephone' => '020 7566 2339',
 	),
 	19 => array(
+		'site_name' => 'Moorfields at Princess Alexandra Hospital',
 		'address' => array(
 			'General Management Offices',
 			'Moorfields Eye Hospital',
@@ -143,6 +155,7 @@ $site_replyto_remap = array(
 		'telephone' => '020 7566 2267',
 	),
 	9 => array(
+		'site_name' => 'Moorfields at St Ann\'s Hospital',
 		'address' => array(
 			'Moorfields at St Ann\'s',
 			'Satellite service office, 3rd floor',
@@ -154,6 +167,7 @@ $site_replyto_remap = array(
 		'telephone' => '020 7566 2841',
 	),
 	5 => array(
+		'site_name' => 'Moorfields at St George\'s Hospital',
 		'address' => array(
 			'Moorfields at St Georges',
 			'St George\'s NHS Trust',
@@ -164,6 +178,7 @@ $site_replyto_remap = array(
 		'telephone' => '020 8725 5877',
 	),
 	14 => array(
+		'site_name' => 'Moorfields at Teddington Memorial Hospital',
 		'address' => array(
 			'Moorfields at St Georges',
 			'St George\'s NHS Trust',
@@ -174,6 +189,7 @@ $site_replyto_remap = array(
 		'telephone' => '020 87251794',
 	),
 	16 => array(
+		'site_name' => 'Moorfields at Visioncare',
 		'address' => array(
 			'Moorfields at Northwick Park',
 			'Northwick Park Hospital',
@@ -185,6 +201,7 @@ $site_replyto_remap = array(
 		'telephone' => '020 3182 4000',
 	),
 	20 => array(
+		'site_name' => 'Moorfields at Watford',
 		'address' => array(
 			'Moorfields at Northwick Park',
 			'Northwick Park Hospital',
@@ -196,6 +213,7 @@ $site_replyto_remap = array(
 		'telephone' => '020 3182 4000',
 	),
 	8 => array(
+		'site_name' => 'Moorfields at Queen Mary\'s Hospital',
 		'address' => array(
 			'Moorfields at St Georges',
 			'St George\'s NHS Trust',
@@ -213,7 +231,11 @@ $site_replyto_remap = array(
 </div>
 <?php if (isset($site)) {?>
 	<div class="fromAddress">
-		<?php echo $site->letterhtml ?>
+		<?php
+		if (isset($site_replyto_remap[$site->id]['site_name'])) {
+			$site->name = $site_replyto_remap[$site->id]['site_name'];
+		}
+		echo $site->letterhtml ?>
 		<br />Tel: <?php echo CHtml::encode($site->telephone) ?>
 		<?php if($site->fax) { ?>
 		<br />Fax: <?php echo CHtml::encode($site->fax) ?>
