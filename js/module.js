@@ -22,7 +22,7 @@ $(document).ready(function() {
 		if (!$(this).hasClass('inactive')) {
 			$('#dialog-confirm-cancel').dialog({
 				resizable: false,
-				height: 140,
+				//height: 140,
 				modal: true,
 				buttons: {
 					"Yes, cancel": function() {
