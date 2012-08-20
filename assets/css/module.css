@@ -14,7 +14,7 @@ div.ElementLetter textarea,input { font-family: courier !important; }
 
 /* Correspondence OUT */
 #correspondence_out { width:80%; background:#fff; font-size: 12pt; border:1px solid #ccc; padding:30px; -moz-box-shadow: 4px 4px 4px 0 #CCC;	-webkit-box-shadow: 4px 4px 4px 0 #CCC;  box-shadow: 4px 4px 4px 0 #CCC; }
-#correspondence_out.draft {background:#fff url(/IMAGEASSETS/bg_draft.png) top center no-repeat;}
+#correspondence_out.draft {background:#fff url(../img/bg_draft.png) top center no-repeat;}
 #correspondence_out p { background:none !important; padding-left:0 !important;}
 #correspondence_out pre { margin: 0; padding:0; font-family: Helvetica, Arial, sans-serif;	}
 #correspondence_out .banner { background:#fff; padding-bottom:25px; }
