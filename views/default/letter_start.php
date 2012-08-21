@@ -240,6 +240,9 @@ $site_replyto_remap = array(
 		<?php if($site->fax) { ?>
 		<br />Fax: <?php echo CHtml::encode($site->fax) ?>
 		<?php } ?>
+		<?php if ($directLine) {?>
+		<br />Direct line: <?php echo $directLine?>
+		<?php }?>
 		<?php if (isset($site_replyto_remap[$site->id])) {?>
 			<br/><br/>
 			Please reply to:<br/><br/>

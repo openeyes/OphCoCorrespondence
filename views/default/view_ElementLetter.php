@@ -25,6 +25,7 @@
 			'toAddress' => $element->address,
 			'patient' => $this->patient,
 			'date' => $element->date,
+			'directLine' => $element->direct_line,
 		))?>
 	</div>
 
