@@ -81,12 +81,38 @@
 		</span>
 	</div>
 
-	<div class="row">
-		<span class="left">
-			<?php echo $form->dropDownListNoPost('from', $element->firm_members, '', array('empty' => '- From -', 'nowrapper' => true))?>
-		</span>
+	<div class="eventDetail row">
+		<div class="label OphCoCorrespondence_footerLabel">From:</div>
 		<span class="right">
-			<?php echo $form->textArea($element, 'footer', array('rows' => 8, 'cols' => 55, 'label' => false, 'nowrapper' => true))?>
+			<div>
+				<?php
+					$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
+						'id'=>'OphCoCorrespondence_footerAutoComplete',
+						'name'=>'OphCoCorrespondence_footerAutoComplete',
+						'value'=>'',
+						'sourceUrl'=>array('default/users'),
+						'options'=>array(
+							'minLength'=>'3',
+							'select'=>"js:function(event, ui) {
+								var value = ui.item.value;
+								var m = value.match(/\((.*?)\)/);
+								var role = m[1];
+								value = value.replace(/ \(.*\)$/,'');
+								$('#ElementLetter_footer').val(\"Yours sincerely\\n\\n\\n\\n\\n\"+value+\"\\n\"+role);
+								$('#OphCoCorrespondence_footerAutoComplete').val('');
+								return false;
+							}",
+						),
+						'htmlOptions'=>array(
+							'style'=>'width: 320px;',
+							'placeholder' => 'type to search for users'
+						),
+					));
+				?>
+			</div>
+			<div id="OphCoCorrespondence_footerDiv">
+				<?php echo $form->textArea($element, 'footer', array('rows' => 8, 'cols' => 55, 'label' => false, 'nowrapper' => true))?>
+			</div>
 		</span>
 	</div>
 

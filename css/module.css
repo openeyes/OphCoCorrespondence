@@ -25,5 +25,9 @@ div.ElementLetter textarea,input { font-family: courier !important; }
 #correspondence_out .date { float: left; display:inline-block; width:100%; padding-bottom:20px; }
 #correspondence_out .toAddress { margin-top: 4em; }
 #correspondence_out .big { font-size: 14pt; }
+#OphCoCorrespondence_footerDiv { margin-left: 13.4em; }
+div.OphCoCorrespondence_footerLabel { margin-top: 13px; }
 
 div.letter_header { display: inline-block; width: 100%; }
+
+#OphCoCorrespondence_footerAutoComplete { margin-left: 13px !important; }
