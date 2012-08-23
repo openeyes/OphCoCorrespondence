@@ -201,10 +201,6 @@ class ElementLetter extends BaseEventTypeElement
 
 				$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
 				$ssa = $firm->serviceSubspecialtyAssignment;
-
-				if ($number = ElementLetter::getDirectNumber($user->id,$ssa->subspecialty_id)) {
-					echo "\nDirect line: $number";
-				}
 			}
 
 			// Look for a macro based on the episode_status
@@ -402,141 +398,9 @@ class ElementLetter extends BaseEventTypeElement
 		return preg_replace('/[\r\n]+/',', ',$this->address);
 	}
 
-	static public function getDirectNumber($user_id, $subspecialty_id) {
-		$number_lookup = array();
-		$number_lookup[111][2] = '020 7566 2011'; // Yassir Abou-Rayyah, Adnexal
-		$number_lookup[21][2] = '020 7566 2577'; // Claire Daniel, Adnexal
-		$number_lookup[82][2] = '020 7566 2055'; // Myra Sloper, Adnexal
-		$number_lookup[678][2] = '020 7566 2034'; // Daniel Ezra, Adnexal
-		$number_lookup[73][2] = '020 7566 2034'; // Geoffrey Rose, Adnexal
-		$number_lookup[18][2] = '020 7566 2577'; // Richard Collin, Adnexal
-		$number_lookup[89][2] = '020 7566 2055'; // Jimmy Uddin, Adnexal
-		$number_lookup[10][2] = '020 7566 2010'; // Michele Beaconsfield, Adnexal
-		$number_lookup[101][2] = '020 7566 2577'; // Raja Das-Bhaumik, Adnexal
-		$number_lookup[2134][2] = '020 8725 2325'; // Sarah Osborne, Adnexal
-		$number_lookup[90][2] = '0207 566 2010'; // David Verity, Adnexal
-		$number_lookup[41][4] = '020 8725 2325'; // Alexander Ionides, Cataract
-		$number_lookup[707][4] = '020 8725 2325'; // Romesh Angunawela, Cataract
-		$number_lookup[3][4] = '020 7566 2320'; // Bruce Allan, Cataract
-		$number_lookup[49][4] = '020 7566 2255'; // Brian Little, Cataract
-		$number_lookup[19][4] = '020 3182 4030'; // Carol Cunningham, Cataract
-		$number_lookup[11][4] = '020 8967 5766'; // David Bessant, Cataract
-		$number_lookup[102][4] = '020 7566 2024'; // David Gartry, Cataract
-		$number_lookup[83][4] = '020 7566 2473'; // Julian D. Stevens, Cataract
-		$number_lookup[29][4] = '020 7566 2018'; // Linda Ficker, Cataract
-		$number_lookup[57][4] = '020 3182 4030'; // Michael Miller, Cataract
-		$number_lookup[58][4] = '020 7566 2039'; // Miriam Minihan, Cataract
-		$number_lookup[96][4] = '020 7566 2473'; // Mark Wilkins, Cataract
-		$number_lookup[78][4] = '020 7566 2018'; // Valerie Saw, Cataract
-		$number_lookup[91][4] = '020 7566 2621'; // Seema Verma, Cataract
-		$number_lookup[54][4] = '020 7566 2473'; // Vincenzo Maurino, Cataract
-		$number_lookup[753][4] = '020 8967 5766'; // Martin Watson, Cataract
-		$number_lookup[707][6] = '020 8725 2325'; // Romesh Angunawela, External
-		$number_lookup[3][6] = '020 7566 2320'; // Bruce Allan, External
-		$number_lookup[102][6] = '020 7566 2024'; // David Gartry, External
-		$number_lookup[47][6] = '0207 566 2045'; // Frank Larkin, External
-		$number_lookup[83][6] = '020 7566 2473'; // Julian D. Stevens, External
-		$number_lookup[23][6] = '020 7566 2320'; // John Dart, External
-		$number_lookup[29][6] = '020 7566 2018'; // Linda Ficker, External
-		$number_lookup[96][6] = '020 7566 2473'; // Mark Wilkins, External
-		$number_lookup[78][6] = '020 7566 2018'; // Valerie Saw, External
-		$number_lookup[88][6] = '0207 566 2045'; // Stephen Tuft, External
-		$number_lookup[54][6] = '020 7566 2473'; // Vincenzo Maurino, External
-		$number_lookup[753][6] = '020 8967 5766'; // Martin Watson, External
-		$number_lookup[41][12] = '020 7566 2576'; // Alexander Ionides, Primary Care
-		$number_lookup[82][12] = '020 7566 2621'; // Myra Sloper, Primary Care
-		$number_lookup[80][12] = '020 7566 2087'; // Dilani Siriwardena, Primary Care
-		$number_lookup[22][12] = '020 7566 2621'; // Rhodri Daniel, Primary Care
-		$number_lookup[91][12] = '020 7566 2621'; // Seema Verma, Primary Care
-		$number_lookup[92][7] = '020 8725 2325'; // Ananth Viswanathan, Glaucoma
-		$number_lookup[100][7] = '020 7566 2087'; // Jonathan Clarke, Glaucoma
-		$number_lookup[44][7] = '020 7566 2625'; // Deborah Kamal, Glaucoma
-		$number_lookup[103][7] = '020 7566 2087'; // David Garway-Heath, Glaucoma
-		$number_lookup[80][7] = '020 7566 2087'; // Dilani Siriwardena, Glaucoma
-		$number_lookup[34][7] = '020 8725 2325'; // Gus Gazzard, Glaucoma
-		$number_lookup[61][7] = '020 7566 2625'; // Ian Murdoch, Glaucoma
-		$number_lookup[12][7] = '020 7566 2989'; // John Brookes, Glaucoma
-		$number_lookup[106][7] = '020 7566 2625'; // Emma Jones, Glaucoma
-		$number_lookup[9][7] = '020 7566 2625'; // Keith Barton, Glaucoma
-		$number_lookup[65][7] = '020 7566 2989'; // Maria Papadopoulos, Glaucoma
-		$number_lookup[324][7] = '020 7566 2087'; // Nicolas Strouthidis, Glaucoma
-		$number_lookup[31][7] = '020 7566 2256'; // Paul Foster, Glaucoma
-		$number_lookup[387][7] = '020 8725 2325'; // Poornima Rai, Glaucoma
-		$number_lookup[45][7] = '020 7566 2989'; // Peng Khaw, Glaucoma
-		$number_lookup[97][7] = '020 7566 2256'; // Richard Wormald, Glaucoma
-		$number_lookup[32][7] = '020 7566 2087'; // Wendy Franks, Glaucoma
-		$number_lookup[62][7] = '020 8725 2325'; // Winifred Nolan, Glaucoma
-		$number_lookup[813][8] = '020 7566 2057'; // Peter Addison, Medical Retinal
-		$number_lookup[93][8] = '020 7566 2278'; // Andrew Webster, Medical Retinal
-		$number_lookup[87][8] = '020 7566 2576'; // Adnan Tufail, Medical Retinal
-		$number_lookup[60][8] = '020 7566 2011'; // Tony Moore, Medical Retinal
-		$number_lookup[64][8] = '020 7566 2419'; // Bishwanath Pal, Medical Retinal
-		$number_lookup[27][8] = '020 7566 2314'; // Catherine Egan, Medical Retinal
-		$number_lookup[67][8] = '020 7566 2016'; // Carlos Pavesio, Medical Retinal
-		$number_lookup[30][8] = '020 7566 2039'; // Declan Flanagan, Medical Retinal
-		$number_lookup[809][8] = '020 8725 2325'; // Ranjan Rajendram, Medical Retinal
-		$number_lookup[26][8] = '020 8725 2325'; // Jonathan Dowler, Medical Retinal
-		$number_lookup[20][8] = '020 7566 2251'; // Lyndon da Cruz, Medical Retinal
-		$number_lookup[95][8] = '020 7566 2278'; // Louisa Wickham, Medical Retinal
-		$number_lookup[56][8] = '020 7566 2255'; // Michel Michaelides, Medical Retinal
-		$number_lookup[94][8] = '020 7566 2016'; // Mark Westcott, Medical Retinal
-		$number_lookup[63][8] = '020 7566 2419'; // Narciss Okhravi, Medical Retinal
-		$number_lookup[25][8] = '020 7566 2255'; // Parul Desai, Medical Retinal
-		$number_lookup[40][8] = '020 8967 5766'; // Phil Hykin, Medical Retinal
-		$number_lookup[109][8] = '020 7566 2255'; // Praveen Patel, Medical Retinal
-		$number_lookup[6][8] = '020 7566 2255'; // Richard Andrews, Medical Retinal
-		$number_lookup[37][8] = '020 8967 5766'; // Robin Hamilton, Medical Retinal
-		$number_lookup[76][8] = '020 7566 2255'; // Mandeep Sagoo, Medical Retinal
-		$number_lookup[38][8] = '020 8725 2325'; // Simon Horgan, Medical Retinal
-		$number_lookup[108][8] = '020 7566 2252'; // Sue Lightman, Medical Retinal
-		$number_lookup[117][8] = '020 8725 2325'; // Dhanes Thomas, Medical Retinal
-		$number_lookup[869][8] = '020 7566 2314'; // Waheeda Rahman, Medical Retinal
-		$number_lookup[35][8] = '020 7566 2039'; // Zdenek Gregor, Medical Retinal
-		$number_lookup[111][11] = '020 7566 2011'; // Yassir Abou-Rayyah, Paediatrics
-		$number_lookup[24][11] = '020 7566 2344'; // Alison Davis, Paediatrics
-		$number_lookup[77][11] = '020 7566 2344'; // Alison Salt, Paediatrics
-		$number_lookup[72][11] = '020 7566 2011'; // Ashwin Reddy, Paediatrics
-		$number_lookup[60][11] = '020 7566 2011'; // Tony Moore, Paediatrics
-		$number_lookup[28][11] = '020 7566 2576'; // Eric Ezra, Paediatrics
-		$number_lookup[1][11] = '020 7566 2013'; // Gill Adams, Paediatrics
-		$number_lookup[66][11] = '020 7566 2624'; // Himanshu Patel, Paediatrics
-		$number_lookup[12][11] = '020 7566 2989'; // John Brookes, Paediatrics
-		$number_lookup[112][11] = '020 7566 2346'; // James Acheson, Paediatrics
-		$number_lookup[81][11] = '020 7566 2607'; // John Sloper, Paediatrics
-		$number_lookup[56][11] = '020 7566 2344'; // Michel Michaelides, Paediatrics
-		$number_lookup[65][11] = '020 7566 2989'; // Maria Papadopoulos, Paediatrics
-		$number_lookup[2][11] = '020 7566 2624'; // Nadeem Ali, Paediatrics
-		$number_lookup[45][11] = '020 7566 2989'; // Peng Khaw, Paediatrics
-		$number_lookup[79][11] = '020 7566 2344'; // Andrew Sawczenko, Paediatrics
-		$number_lookup[86][9] = '020 7566 2346'; // Ahmed Toosy, Neuro-ophthalmology
-		$number_lookup[110][9] = '020 7566 2017'; // Gordon Plant, Neuro-ophthalmology
-		$number_lookup[112][9] = '020 7566 2346'; // James Acheson, Neuro-ophthalmology
-		$number_lookup[2][9] = '020 7566 2624'; // Nadeem Ali, Neuro-ophthalmology
-		$number_lookup[1005][14] = '020 7566 2013'; // Annegret Dahlmann-Noor, Strabismus
-		$number_lookup[24][14] = '020 7566 2024'; // Alison Davis, Strabismus
-		$number_lookup[72][14] = '020 7566 2011'; // Ashwin Reddy, Strabismus
-		$number_lookup[60][14] = '020 7566 2011'; // Tony Moore, Strabismus
-		$number_lookup[1][14] = '020 7566 2013'; // Gill Adams, Strabismus
-		$number_lookup[66][14] = '020 7566 2624'; // Himanshu Patel, Strabismus
-		$number_lookup[811][14] = '020 7566 2344'; // Joanne Hancox, Strabismus
-		$number_lookup[112][14] = '020 7566 2346'; // James Acheson, Strabismus
-		$number_lookup[98][14] = '020 7566 2624'; // Jonathan Barnes, Strabismus
-		$number_lookup[81][14] = '020 7566 2607'; // John Sloper, Strabismus
-		$number_lookup[105][14] = '020 7566 2024'; // Melanie Hingorani, Strabismus
-		$number_lookup[2][14] = '020 7566 2624'; // Nadeem Ali, Strabismus
-		$number_lookup[85][14] = '020 8725 2325'; // Graham Thompson, Strabismus
-		$number_lookup[16][16] = '020 7566 2251'; // David Charteris, Vitreoretinal
-		$number_lookup[28][16] = '020 7566 2576'; // Eric Ezra, Vitreoretinal
-		$number_lookup[7][16] = '020 7566 2278'; // Bill Aylward, Vitreoretinal
-		$number_lookup[8][16] = '020 7566 2576'; // James Bainbridge, Vitreoretinal
-		$number_lookup[20][16] = '020 7566 2251'; // Lyndon da Cruz, Vitreoretinal
-		$number_lookup[95][16] = '020 8725 2325'; // Louisa Wickham, Vitreoretinal
-		$number_lookup[58][16] = '020 7566 2039'; // Miriam Minihan, Vitreoretinal
-		$number_lookup[84][16] = '020 7566 2039'; // Paul Sullivan, Vitreoretinal
-		$number_lookup[35][16] = '020 7566 2039'; // Zdenek Gregor, Vitreoretinal
-
-		if (isset($number_lookup[$user_id][$subspecialty_id])) {
-			return $number_lookup[$user_id][$subspecialty_id];
+	public function getDirect_line() {
+		if ($dl = FirmSiteSecretary::model()->find('firm_id=? and site_id=?',array($this->event->episode->firm_id,$this->site_id))) {
+			return $dl->direct_line;
 		}
 
 		return false;

@@ -202,10 +202,6 @@ class DefaultController extends BaseEventTypeController {
 
 		$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
 		$ssa = $firm->serviceSubspecialtyAssignment;
-
-		if ($number = ElementLetter::getDirectNumber($user->id,$ssa->subspecialty_id)) {
-			echo "\nDirect line: $number";
-		}
 	}
 
 	public function actionGetCc() {
@@ -311,5 +307,28 @@ class DefaultController extends BaseEventTypeController {
 		$event = Event::model()->findByPk($id);
 
 		parent::actionPrint($id);
+	}
+
+	public function actionUsers() {
+		$users = array();
+
+		$criteria = new CDbCriteria;
+
+		$criteria->addCondition(array("active = :active"));
+		$criteria->addCondition(array("LOWER(concat_ws(' ',first_name,last_name)) LIKE :term"));
+
+		$params[':active'] = 1;
+		$params[':term'] = '%' . strtolower(strtr($_GET['term'], array('%' => '\%'))) . '%';
+
+		$criteria->params = $params;
+		$criteria->order = 'first_name, last_name';
+
+		foreach (User::model()->findAll($criteria) as $user) {
+			if ($contact = $user->contact) {
+				$users[] = trim($contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications).' ('.$user->role.')';
+			}
+		}
+
+		echo json_encode($users);
 	}
 }

@@ -24,6 +24,7 @@
 			'toAddress' => str_replace("\n","<br/>",$element->address),
 			'patient' => $this->patient,
 			'date' => $element->date,
+			'directLine' => $element->direct_line,
 	))?>
 </div>
 
@@ -72,6 +73,7 @@
 			'toAddress' => str_replace("\n","<br/>",$element->address),
 			'patient' => $this->patient,
 			'date' => $element->date,
+			'directLine' => $element->direct_line,
 		))?>
 </div>
 
@@ -120,6 +122,7 @@
 			'toAddress' => implode("<br/>",$cc),
 			'patient' => $this->patient,
 			'date' => $element->date,
+			'directLine' => $element->direct_line,
 			))?>
 </div>
 
