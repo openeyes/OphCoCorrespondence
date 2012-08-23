@@ -29,8 +29,10 @@
 		))?>
 	</div>
 
-	<br/>
-	
+	<?php $this->renderPartial("reply_address", array(
+			'site' => $element->site,
+	))?>
+		
 	<div class="big">
 	<p>
 		<?php echo $element->renderIntroduction()?>
