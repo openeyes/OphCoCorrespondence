@@ -32,7 +32,7 @@
 	<div class="row">
 		<span class="left"></span>
 		<span class="right">
-			<?php echo $form->dropDownList($element, 'site_id', Site::model()->getListForCurrentInstitution('name'), array('nowrapper'=>true))?>
+			<?php echo $form->dropDownList($element, 'site_id', Site::model()->getLongListForCurrentInstitution(), array('nowrapper'=>true))?>
 		</span>
 	</div>
 
