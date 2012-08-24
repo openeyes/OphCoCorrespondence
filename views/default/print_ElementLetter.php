@@ -28,7 +28,9 @@
 	))?>
 </div>
 
-<br />
+<?php $this->renderPartial("reply_address", array(
+		'site' => $element->site,
+))?>
 
 <div class="big">
 	<p>
@@ -77,7 +79,9 @@
 		))?>
 </div>
 
-<br />
+<?php $this->renderPartial("reply_address", array(
+		'site' => $element->site,
+))?>
 
 <div class="big">
 	<p>
@@ -126,9 +130,11 @@
 			))?>
 </div>
 
-<br />
+<?php $this->renderPartial("reply_address", array(
+		'site' => $element->site,
+))?>
 
-<div class="big">
+		<div class="big">
 	<p>
 		<?php echo $element->renderIntroduction()?>
 		<br /> <br /> <strong>Re: <?php echo $element->re?>
