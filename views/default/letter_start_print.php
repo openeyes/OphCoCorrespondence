@@ -24,9 +24,7 @@
 <?php if (isset($site)) {?>
 	<div class="fromAddress">
 		<?php
-		if (isset($site_replyto_remap[$site->id]['site_name'])) {
-			$site->name = $site_replyto_remap[$site->id]['site_name'];
-		}
+		$site->name = $site->getCorrespondenceSiteName();
 		echo $site->letterhtml ?>
 		<br />Tel: <?php echo CHtml::encode($site->telephone) ?>
 		<?php if($site->fax) { ?>
