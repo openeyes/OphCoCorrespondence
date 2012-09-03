@@ -52,11 +52,11 @@ class FirmLetterMacro extends BaseEventTypeElement
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('firm_id, name, recipient_patient, recipient_doctor, use_nickname, body, cc_patient, display_order', 'safe'),
-			array('firm_id, name, recipient_patient, recipient_doctor, use_nickname, body, cc_patient', 'required'),
+			array('firm_id, name, recipient_patient, recipient_doctor, use_nickname, body, cc_patient, cc_doctor, display_order', 'safe'),
+			array('firm_id, name, recipient_patient, recipient_doctor, use_nickname, body, cc_patient, cc_doctor', 'required'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('firm_id, name, recipient_patient, recipient_doctor, use_nickname, body, cc_patient, display_order', 'safe', 'on' => 'search'),
+			array('firm_id, name, recipient_patient, recipient_doctor, use_nickname, body, cc_patient, cc_doctor, display_order', 'safe', 'on' => 'search'),
 		);
 	}
 	

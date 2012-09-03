@@ -251,6 +251,11 @@ class ElementLetter extends BaseEventTypeElement
 			$this->cc = "cc:\t".$patient->title.' '.$patient->last_name.', '.implode(', ',$patient->address->getLetterarray(false));
 			$this->cc_targets[] = 'patient';
 		}
+
+		if ($this->macro->cc_doctor && $this->patient->gp !== null && $this->patient->gp->contact !== null && $this->patient->gp->contact->address !== null) {
+			$this->cc = "cc:\t".$this->patient->gp->contact->title.' '.$this->patient->gp->contact->last_name.', '.implode(', ',$this->patient->gp->contact->address->getLetterarray(false));
+			$this->cc_targets[] = 'gp';
+		}
 	}
 
 	public function getLetter_macros() {
