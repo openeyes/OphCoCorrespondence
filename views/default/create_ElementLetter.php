@@ -94,11 +94,8 @@
 						'options'=>array(
 							'minLength'=>'3',
 							'select'=>"js:function(event, ui) {
-								var value = ui.item.value;
-								var m = value.match(/\(([a-z A-Z,\+]+)\)$/);
-								var role = m[1];
-								value = value.replace(/ \(.*\)$/,'');
-								$('#ElementLetter_footer').val(\"Yours sincerely\\n\\n\\n\\n\\n\"+value+\"\\n\"+role);
+								console.log(ui.item);
+								$('#ElementLetter_footer').val(\"Yours sincerely\\n\\n\\n\\n\\n\"+ui.item.fullname+\"\\n\"+ui.item.role+\"\\n\"+(ui.item.consultant?\"Consultant\\n\"+ui.item.consultant:''));
 								$('#OphCoCorrespondence_footerAutoComplete').val('');
 								return false;
 							}",
@@ -111,7 +108,7 @@
 				?>
 			</div>
 			<div id="OphCoCorrespondence_footerDiv">
-				<?php echo $form->textArea($element, 'footer', array('rows' => 8, 'cols' => 55, 'label' => false, 'nowrapper' => true))?>
+				<?php echo $form->textArea($element, 'footer', array('rows' => 9, 'cols' => 55, 'label' => false, 'nowrapper' => true))?>
 			</div>
 		</span>
 	</div>

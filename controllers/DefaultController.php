@@ -328,9 +328,25 @@ class DefaultController extends BaseEventTypeController {
 		$criteria->params = $params;
 		$criteria->order = 'first_name, last_name';
 
+		$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
+		$consultant = $firm->getConsultantUser();
+
 		foreach (User::model()->findAll($criteria) as $user) {
 			if ($contact = $user->contact) {
-				$users[] = trim($contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications).' ('.$user->role.')';
+
+				$consultant_name = false;
+
+				if ($user->id != $consultant->id) {
+					$consultant_name = trim($consultant->contact->title.' '.$consultant->contact->first_name.' '.$consultant->contact->last_name);
+				}
+
+				$users[] = array(
+					'id' => $user->id,
+					'value' => trim($contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications).' ('.$user->role.')',
+					'fullname' => trim($contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications),
+					'role' => $user->role,
+					'consultant' => $consultant_name,
+				);
 			}
 		}
 
