@@ -94,7 +94,6 @@
 						'options'=>array(
 							'minLength'=>'3',
 							'select'=>"js:function(event, ui) {
-								console.log(ui.item);
 								$('#ElementLetter_footer').val(\"Yours sincerely\\n\\n\\n\\n\\n\"+ui.item.fullname+\"\\n\"+ui.item.role+\"\\n\"+(ui.item.consultant?\"Consultant\\n\"+ui.item.consultant:''));
 								$('#OphCoCorrespondence_footerAutoComplete').val('');
 								return false;
