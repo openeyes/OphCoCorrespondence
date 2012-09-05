@@ -218,8 +218,13 @@ class DefaultController extends BaseEventTypeController {
 			$contact = $patient;
 			$address = $contact->address;
 		} else if (@$_GET['contact_id'] == 'gp') {
-			$contact = $patient->gp->contact;
-			$address = $contact->address;
+			if ($patient->gp && $patient->gp->contact && $patient->gp->contact->address) {
+				$contact = $patient->gp->contact;
+				$address = $contact->address;
+			} else {
+				echo "NO ADDRESS";
+				return;
+			}
 		} else if (preg_match('/^contact([0-9]+)$/',@$_GET['contact_id'],$m)) {
 			if (!$contact = Contact::model()->findByPk($m[1])) {
 				throw new Exception('Unknown contact id: '.$m[1]);
