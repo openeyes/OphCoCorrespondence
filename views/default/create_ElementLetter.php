@@ -95,7 +95,7 @@
 							'minLength'=>'3',
 							'select'=>"js:function(event, ui) {
 								var value = ui.item.value;
-								var m = value.match(/\(([a-z A-Z,]+)\)$/);
+								var m = value.match(/\(([a-z A-Z,\+]+)\)$/);
 								var role = m[1];
 								value = value.replace(/ \(.*\)$/,'');
 								$('#ElementLetter_footer').val(\"Yours sincerely\\n\\n\\n\\n\\n\"+value+\"\\n\"+role);
