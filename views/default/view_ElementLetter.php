@@ -49,11 +49,11 @@
 	<br/>
 	
 	<p>
-		To: <?php echo $element->renderToAddress()?><br/>
-		<?php if (trim($element->cc)) {?>
-			<?php foreach (explode("\n",trim($element->cc)) as $line) {
-				echo $line ?><br />
-			<?php }?>
+		To: <?php echo $element->renderToAddress()?>
+		<?php foreach (explode("\n",trim($element->cc)) as $line) {
+			if (trim($line)) { ?>
+			<br/>Cc: <?php echo $line ?>
+		<?php }?>
 		<?php }?>
 	</p>
 

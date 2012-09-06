@@ -48,13 +48,10 @@
 <br />
 
 <p>
-	To:
-	<?php echo $element->renderToAddress()?>
-	<br />
+	To: <?php echo $element->renderToAddress()?>
 	<?php foreach (explode("\n",trim($element->cc)) as $line) {
-		if (trim($line)) {
-			echo trim($line) ?>
-	<br />
+		if (trim($line)) { ?>
+		<br/>Cc: <?php echo $line ?>
 	<?php }?>
 	<?php }?>
 </p>
@@ -97,13 +94,10 @@
 <br />
 
 <p>
-	To:
-	<?php echo $element->renderToAddress()?>
-	<br />
+	To: <?php echo $element->renderToAddress()?>
 	<?php foreach (explode("\n",trim($element->cc)) as $line) {
-		if (trim($line)) {
-			echo $line?>
-	<br />
+		if (trim($line)) { ?>
+		<br/>Cc: <?php echo $line ?>
 	<?php }?>
 	<?php }?>
 </p>
@@ -146,15 +140,10 @@
 <br />
 
 <p>
-	To:
-	<?php echo $element->renderToAddress()?>
-	<br />
-	<?php if (trim($element->cc)) {?>
+	To: <?php echo $element->renderToAddress()?>
 	<?php foreach (explode("\n",trim($element->cc)) as $line) {
-		if (trim($line)) {
-			echo $line ?>
-	<br />
-	<?php }?>
+		if (trim($line)) { ?>
+		<br/>Cc: <?php echo $line ?>
 	<?php }?>
 	<?php }?>
 </p>
