@@ -110,10 +110,6 @@ $(document).ready(function() {
 												}
 											}
 
-											if (replace.length >0 && !replace.match(/^cc:/)) {
-												replace = "cc:\t"+replace;
-											}
-
 											$('#ElementLetter_cc').val(replace);
 										}
 									}
@@ -146,12 +142,12 @@ $(document).ready(function() {
 												cur += "\n";
 											}
 
-											$('#ElementLetter_cc').val(cur+"\t"+text);
+											$('#ElementLetter_cc').val(cur+text);
 											$('#cc_targets').append('<input type="hidden" name="CC_Targets[]" value="gp" />');
 										}
 
 									} else {
-										$('#ElementLetter_cc').val("cc:\t"+text);
+										$('#ElementLetter_cc').val(text);
 										$('#cc_targets').append('<input type="hidden" name="CC_Targets[]" value="gp" />');
 									}
 								} else {
@@ -174,12 +170,12 @@ $(document).ready(function() {
 												cur += "\n";
 											}
 
-											$('#ElementLetter_cc').val(cur+"\t"+text);
+											$('#ElementLetter_cc').val(cur+text);
 											$('#cc_targets').append('<input type="hidden" name="CC_Targets[]" value="patient" />');
 										}
 
 									} else {
-										$('#ElementLetter_cc').val("cc:\t"+text);
+										$('#ElementLetter_cc').val(text);
 										$('#cc_targets').append('<input type="hidden" name="CC_Targets[]" value="patient" />');
 									}
 								} else {
@@ -279,9 +275,9 @@ $(document).ready(function() {
 								cur += "\n";
 							}
 
-							$('#ElementLetter_cc').val(cur+"\t"+text+"\n");
+							$('#ElementLetter_cc').val(cur+text);
 						} else {
-							$('#ElementLetter_cc').val("cc:\t"+text+"\n");
+							$('#ElementLetter_cc').val(text);
 						}
 
 						$('#cc_targets').append('<input type="hidden" name="CC_Targets[]" value="'+contact_id+'" />');

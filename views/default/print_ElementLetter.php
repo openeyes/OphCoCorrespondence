@@ -53,9 +53,7 @@
 	<br />
 	<?php foreach (explode("\n",trim($element->cc)) as $line) {
 		if (trim($line)) {
-			$line = preg_replace('/^cc:[\s\t]+/','',$line);?>
-	cc:
-	<?php echo $line?>
+			echo trim($line) ?>
 	<br />
 	<?php }?>
 	<?php }?>
@@ -104,9 +102,7 @@
 	<br />
 	<?php foreach (explode("\n",trim($element->cc)) as $line) {
 		if (trim($line)) {
-				$line = preg_replace('/^cc:[\s\t]+/','',$line);?>
-	cc:
-	<?php echo $line?>
+			echo $line?>
 	<br />
 	<?php }?>
 	<?php }?>
@@ -156,9 +152,7 @@
 	<?php if (trim($element->cc)) {?>
 	<?php foreach (explode("\n",trim($element->cc)) as $line) {
 		if (trim($line)) {
-						$line = preg_replace('/^cc:[\s\t]+/','',$line);?>
-	cc:
-	<?php echo $line?>
+			echo $line ?>
 	<br />
 	<?php }?>
 	<?php }?>
