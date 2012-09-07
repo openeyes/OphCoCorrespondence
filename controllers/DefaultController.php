@@ -217,10 +217,13 @@ class DefaultController extends BaseEventTypeController {
 		if (@$_GET['contact_id'] == 'patient') {
 			$contact = $patient;
 			$address = $contact->address;
+			$prefix = 'Patient';
 		} else if (@$_GET['contact_id'] == 'gp') {
 			$contact = $patient->gp->contact;
 			$address = $contact->address;
+			$prefix = 'GP';
 		} else if (preg_match('/^contact([0-9]+)$/',@$_GET['contact_id'],$m)) {
+			$prefix = 'Consultant';
 			if (!$contact = Contact::model()->findByPk($m[1])) {
 				throw new Exception('Unknown contact id: '.$m[1]);
 			}
@@ -240,12 +243,14 @@ class DefaultController extends BaseEventTypeController {
 				$address = $contact->address;
 			}
 		} else if (preg_match('/^contact([0-9]+)_site([0-9]+)$/',@$_GET['contact_id'],$m)) {
+			$prefix = 'Consultant';
 			if (!$contact = Contact::model()->findByPk($m[1])) {
 				throw new Exception('Unknown contact id: '.$m[1]);
 			}
 			$pca = PatientContactAssignment::model()->find('patient_id=? and contact_id=? and site_id=?',array($patient->id,$contact->id,$m[2]));
 			$address = $pca->site;
 		} else if (preg_match('/^contact([0-9]+)_institution([0-9]+)$/',@$_GET['contact_id'],$m)) {
+			$prefix = 'Consultant';
 			if (!$contact = Contact::model()->findByPk($m[1])) {
 				throw new Exception('Unknown contact id: '.$m[1]);
 			}
@@ -257,9 +262,9 @@ class DefaultController extends BaseEventTypeController {
 
 		if ($address) {
 			if ($contact->title) {
-				echo $contact->title.' '.$contact->last_name.', ';
+				echo $prefix.': '.$contact->title.' '.$contact->first_name.' '.$contact->last_name.', ';
 			} else {
-				echo $contact->first_name.' ' .$contact->last_name.', ';
+				echo $prefix.': '.$contact->first_name.' ' .$contact->last_name.', ';
 			}
 			echo implode(', ',$address->getLetterarray(false));
 		} else {

@@ -111,7 +111,7 @@
 <div class="letter_header">
 	<?php $this->renderPartial("letter_start_print", array(
 			'site' => $element->site,
-			'toAddress' => implode("<br/>",$cc),
+			'toAddress' => implode("<br/>",preg_replace('/^[a-zA-Z]+: /','',$cc)),
 			'patient' => $this->patient,
 			'date' => $element->date,
 			'directLine' => $element->direct_line,

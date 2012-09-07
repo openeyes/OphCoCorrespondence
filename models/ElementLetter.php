@@ -255,12 +255,12 @@ class ElementLetter extends BaseEventTypeElement
 		$this->body = $this->macro->body;
 
 		if ($this->macro->cc_patient && $patient->address) {
-			$this->cc = $patient->title.' '.$patient->last_name.', '.implode(', ',$patient->address->getLetterarray(false));
+			$this->cc = 'Patient: '.$patient->title.' '.$patient->first_name.' '.$patient->last_name.', '.implode(', ',$patient->address->getLetterarray(false));
 			$this->cc_targets[] = 'patient';
 		}
 
 		if ($this->macro->cc_doctor && $this->patient->gp !== null && $this->patient->gp->contact !== null && $this->patient->gp->contact->address !== null) {
-			$this->cc = $this->patient->gp->contact->title.' '.$this->patient->gp->contact->last_name.', '.implode(', ',$this->patient->gp->contact->address->getLetterarray(false));
+			$this->cc = 'GP: '.$this->patient->gp->contact->title.' '.$this->patient->gp->contact->first_name.' '.$this->patient->gp->contact->last_name.', '.implode(', ',$this->patient->gp->contact->address->getLetterarray(false));
 			$this->cc_targets[] = 'gp';
 		}
 	}
