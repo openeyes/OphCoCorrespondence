@@ -37,7 +37,7 @@
 	<p>
 		<?php echo $element->renderIntroduction()?>
 		<br/><br/>
-		<strong>Re: <?php echo $element->re?></strong>
+			<strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",$element->re)?></strong>
 		<br/><br/>
 		<?php echo $element->renderBody()?>
 		<br/><br/>
