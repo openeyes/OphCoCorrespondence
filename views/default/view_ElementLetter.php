@@ -37,7 +37,7 @@
 	<p>
 		<?php echo $element->renderIntroduction()?>
 		<br/><br/>
-		<strong>Re: <?php echo $element->re?></strong>
+			<strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",$element->re)?></strong>
 		<br/><br/>
 		<?php echo $element->renderBody()?>
 		<br/><br/>
@@ -49,12 +49,11 @@
 	<br/>
 	
 	<p>
-		To: <?php echo $element->renderToAddress()?><br/>
-		<?php if (trim($element->cc)) {?>
-			<?php foreach (explode("\n",trim($element->cc)) as $line) {
-				$line = preg_replace('/^cc:[\s\t]+/','',$line);?>
-				cc: <?php echo $line?><br />
-			<?php }?>
+		To: <?php echo $element->renderToAddress()?>
+		<?php foreach (explode("\n",trim($element->cc)) as $line) {
+			if (trim($line)) { ?>
+			<br/>Cc: <?php echo $line ?>
+		<?php }?>
 		<?php }?>
 	</p>
 

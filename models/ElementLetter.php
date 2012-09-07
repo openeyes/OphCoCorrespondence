@@ -197,7 +197,14 @@ class ElementLetter extends BaseEventTypeElement
 			$user = Yii::app()->session['user'];
 
 			if ($contact = $user->contact) {
+				$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
+				$consultant = $firm->getConsultantUser();
+
 				$this->footer = "Yours sincerely\n\n\n\n\n".trim($contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications)."\n".$user->role;
+
+				if ($consultant->id != $user->id) {
+					$this->footer .= "\nConsultant\n{$consultant->contact->title} {$consultant->contact->first_name} {$consultant->contact->last_name}";
+				}
 
 				$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
 				$ssa = $firm->serviceSubspecialtyAssignment;
@@ -248,12 +255,12 @@ class ElementLetter extends BaseEventTypeElement
 		$this->body = $this->macro->body;
 
 		if ($this->macro->cc_patient && $patient->address) {
-			$this->cc = "cc:\t".$patient->title.' '.$patient->last_name.', '.implode(', ',$patient->address->getLetterarray(false));
+			$this->cc = 'Patient: '.$patient->title.' '.$patient->first_name.' '.$patient->last_name.', '.implode(', ',$patient->address->getLetterarray(false));
 			$this->cc_targets[] = 'patient';
 		}
 
 		if ($this->macro->cc_doctor && $this->patient->gp !== null && $this->patient->gp->contact !== null && $this->patient->gp->contact->address !== null) {
-			$this->cc = "cc:\t".$this->patient->gp->contact->title.' '.$this->patient->gp->contact->last_name.', '.implode(', ',$this->patient->gp->contact->address->getLetterarray(false));
+			$this->cc = 'GP: '.$this->patient->gp->contact->title.' '.$this->patient->gp->contact->first_name.' '.$this->patient->gp->contact->last_name.', '.implode(', ',$this->patient->gp->contact->address->getLetterarray(false));
 			$this->cc_targets[] = 'gp';
 		}
 	}
@@ -318,9 +325,7 @@ class ElementLetter extends BaseEventTypeElement
 
 		if (trim($this->cc)) {
 			foreach (explode("\n",trim($this->cc)) as $cc) {
-				$cc = preg_replace('/^cc:[\s\t]+/','',trim($cc));
-
-				$ex = explode(", ",$cc);
+				$ex = explode(", ",trim($cc));
 
 				if (isset($ex[1]) && (ctype_digit($ex[1]) || is_int($ex[1]))) {
 					$ex[1] .= ' '.$ex[2];

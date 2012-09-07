@@ -153,12 +153,12 @@ class DefaultController extends BaseEventTypeController {
 		}
 
 		if ($macro->cc_patient) {
-			$data['textappend_ElementLetter_cc'] = "cc:\t".$patient->title.' '.$patient->last_name.', '.implode(', ',$patient->address->getLetterarray(false));
+			$data['textappend_ElementLetter_cc'] = $patient->title.' '.$patient->last_name.', '.implode(', ',$patient->address->getLetterarray(false));
 			$data['elementappend_cc_targets'] = '<input type="hidden" name="CC_Targets[]" value="patient" />';
 		}
 
 		if ($macro->cc_doctor && $patient->gp !== null && $patient->gp->contact !== null && $patient->gp->contact->address !== null) {
-			$data['textappend_ElementLetter_cc'] = "cc:\t".$patient->gp->contact->title.' '.$patient->gp->contact->last_name.', '.implode(', ',$patient->gp->contact->address->getLetterarray(false));
+			$data['textappend_ElementLetter_cc'] = $patient->gp->contact->title.' '.$patient->gp->contact->last_name.', '.implode(', ',$patient->gp->contact->address->getLetterarray(false));
 			$data['elementappend_cc_targets'] = '<input type="hidden" name="CC_Targets[]" value="gp" />';
 		}
 
@@ -217,15 +217,18 @@ class DefaultController extends BaseEventTypeController {
 		if (@$_GET['contact_id'] == 'patient') {
 			$contact = $patient;
 			$address = $contact->address;
+			$prefix = 'Patient';
 		} else if (@$_GET['contact_id'] == 'gp') {
 			if ($patient->gp && $patient->gp->contact && $patient->gp->contact->address) {
 				$contact = $patient->gp->contact;
 				$address = $contact->address;
+				$prefix = 'GP';
 			} else {
 				echo "NO ADDRESS";
 				return;
 			}
 		} else if (preg_match('/^contact([0-9]+)$/',@$_GET['contact_id'],$m)) {
+			$prefix = 'Consultant';
 			if (!$contact = Contact::model()->findByPk($m[1])) {
 				throw new Exception('Unknown contact id: '.$m[1]);
 			}
@@ -245,12 +248,14 @@ class DefaultController extends BaseEventTypeController {
 				$address = $contact->address;
 			}
 		} else if (preg_match('/^contact([0-9]+)_site([0-9]+)$/',@$_GET['contact_id'],$m)) {
+			$prefix = 'Consultant';
 			if (!$contact = Contact::model()->findByPk($m[1])) {
 				throw new Exception('Unknown contact id: '.$m[1]);
 			}
 			$pca = PatientContactAssignment::model()->find('patient_id=? and contact_id=? and site_id=?',array($patient->id,$contact->id,$m[2]));
 			$address = $pca->site;
 		} else if (preg_match('/^contact([0-9]+)_institution([0-9]+)$/',@$_GET['contact_id'],$m)) {
+			$prefix = 'Consultant';
 			if (!$contact = Contact::model()->findByPk($m[1])) {
 				throw new Exception('Unknown contact id: '.$m[1]);
 			}
@@ -262,9 +267,9 @@ class DefaultController extends BaseEventTypeController {
 
 		if ($address) {
 			if ($contact->title) {
-				echo $contact->title.' '.$contact->last_name.', ';
+				echo $prefix.': '.$contact->title.' '.$contact->first_name.' '.$contact->last_name.', ';
 			} else {
-				echo $contact->first_name.' ' .$contact->last_name.', ';
+				echo $prefix.': '.$contact->first_name.' ' .$contact->last_name.', ';
 			}
 			echo implode(', ',$address->getLetterarray(false));
 		} else {
@@ -333,9 +338,25 @@ class DefaultController extends BaseEventTypeController {
 		$criteria->params = $params;
 		$criteria->order = 'first_name, last_name';
 
+		$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
+		$consultant = $firm->getConsultantUser();
+
 		foreach (User::model()->findAll($criteria) as $user) {
 			if ($contact = $user->contact) {
-				$users[] = trim($contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications).' ('.$user->role.')';
+
+				$consultant_name = false;
+
+				if ($user->id != $consultant->id) {
+					$consultant_name = trim($consultant->contact->title.' '.$consultant->contact->first_name.' '.$consultant->contact->last_name);
+				}
+
+				$users[] = array(
+					'id' => $user->id,
+					'value' => trim($contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications).' ('.$user->role.')',
+					'fullname' => trim($contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications),
+					'role' => $user->role,
+					'consultant' => $consultant_name,
+				);
 			}
 		}
 

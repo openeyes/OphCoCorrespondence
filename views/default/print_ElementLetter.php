@@ -35,8 +35,7 @@
 <div class="big">
 	<p>
 		<?php echo $element->renderIntroduction()?>
-		<br /> <br /> <strong>Re: <?php echo $element->re?>
-		</strong> <br /> <br />
+		<br /><br /> <strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",$element->re)?></strong><br /><br />
 		<?php echo $element->renderBody()?>
 	</p>
 
@@ -48,15 +47,10 @@
 <br />
 
 <p>
-	To:
-	<?php echo $element->renderToAddress()?>
-	<br />
+	To: <?php echo $element->renderToAddress()?>
 	<?php foreach (explode("\n",trim($element->cc)) as $line) {
-		if (trim($line)) {
-			$line = preg_replace('/^cc:[\s\t]+/','',$line);?>
-	cc:
-	<?php echo $line?>
-	<br />
+		if (trim($line)) { ?>
+		<br/>Cc: <?php echo $line ?>
 	<?php }?>
 	<?php }?>
 </p>
@@ -86,8 +80,7 @@
 <div class="big">
 	<p>
 		<?php echo $element->renderIntroduction()?>
-		<br /> <br /> <strong>Re: <?php echo $element->re?>
-		</strong> <br /> <br />
+		<br /><br /> <strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",$element->re)?></strong><br /><br />
 		<?php echo $element->renderBody()?>
 	</p>
 
@@ -99,15 +92,10 @@
 <br />
 
 <p>
-	To:
-	<?php echo $element->renderToAddress()?>
-	<br />
+	To: <?php echo $element->renderToAddress()?>
 	<?php foreach (explode("\n",trim($element->cc)) as $line) {
-		if (trim($line)) {
-				$line = preg_replace('/^cc:[\s\t]+/','',$line);?>
-	cc:
-	<?php echo $line?>
-	<br />
+		if (trim($line)) { ?>
+		<br/>Cc: <?php echo $line ?>
 	<?php }?>
 	<?php }?>
 </p>
@@ -123,7 +111,7 @@
 <div class="letter_header">
 	<?php $this->renderPartial("letter_start_print", array(
 			'site' => $element->site,
-			'toAddress' => implode("<br/>",$cc),
+			'toAddress' => implode("<br/>",preg_replace('/^[a-zA-Z]+: /','',$cc)),
 			'patient' => $this->patient,
 			'date' => $element->date,
 			'directLine' => $element->direct_line,
@@ -137,8 +125,7 @@
 		<div class="big">
 	<p>
 		<?php echo $element->renderIntroduction()?>
-		<br /> <br /> <strong>Re: <?php echo $element->re?>
-		</strong> <br /> <br />
+		<br /><br /> <strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",$element->re)?></strong><br /><br />
 		<?php echo $element->renderBody()?>
 	</p>
 
@@ -150,17 +137,10 @@
 <br />
 
 <p>
-	To:
-	<?php echo $element->renderToAddress()?>
-	<br />
-	<?php if (trim($element->cc)) {?>
+	To: <?php echo $element->renderToAddress()?>
 	<?php foreach (explode("\n",trim($element->cc)) as $line) {
-		if (trim($line)) {
-						$line = preg_replace('/^cc:[\s\t]+/','',$line);?>
-	cc:
-	<?php echo $line?>
-	<br />
-	<?php }?>
+		if (trim($line)) { ?>
+		<br/>Cc: <?php echo $line ?>
 	<?php }?>
 	<?php }?>
 </p>
