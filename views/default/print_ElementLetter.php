@@ -35,7 +35,11 @@
 <div class="big">
 	<p>
 		<?php echo $element->renderIntroduction()?>
-		<br /><br /> <strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",$element->re)?></strong><br /><br />
+		<br /><br />
+		<?php if ($element->re) {?>
+			<strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",$element->re)?></strong>
+			<br /><br />
+		<?php }?>
 		<?php echo $element->renderBody()?>
 	</p>
 
@@ -80,7 +84,11 @@
 <div class="big">
 	<p>
 		<?php echo $element->renderIntroduction()?>
-		<br /><br /> <strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",$element->re)?></strong><br /><br />
+		<br /><br />
+		<?php if ($element->re) {?>
+			<strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",$element->re)?></strong>
+			<br /><br />
+		<?php }?>
 		<?php echo $element->renderBody()?>
 	</p>
 
@@ -125,7 +133,11 @@
 		<div class="big">
 	<p>
 		<?php echo $element->renderIntroduction()?>
-		<br /><br /> <strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",$element->re)?></strong><br /><br />
+		<br /><br />
+		<?php if ($element->re) {?>
+			<strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",$element->re)?></strong>
+			<br /><br />
+		<?php }?>
 		<?php echo $element->renderBody()?>
 	</p>
 
