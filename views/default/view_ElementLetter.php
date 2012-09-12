@@ -63,5 +63,11 @@
 		Chief Executive: John Pelly
 	</div>
 
+	<div class="correspondence_footer">
+		Created on <?php echo $element->event->NHSDate('created_date')?> at <?php echo substr($element->event->created_date,11,5)?><br/>
+		<?php if ($element->event->last_modified_date != $element->event->created_date) {?>
+			Last modified on <?php echo $element->event->NHSDate('last_modified_date')?> at <?php echo substr($element->event->last_modified_date,11,5)?>
+		<?php }?>
+	</div>
 	<input type="hidden" name="OphCoCorrespondence_printLetter" id="OphCoCorrespondence_printLetter" value="<?php echo $element->print?>" />
 </div>
