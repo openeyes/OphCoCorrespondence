@@ -202,7 +202,7 @@ $site_replyto_remap = array(
 		),
 		'telephone' => '020 3182 4000',
 	),
-	20 => array(
+	/*20 => array(
 		'site_name' => 'Moorfields at Watford',
 		'address' => array(
 			'Moorfields at Northwick Park',
@@ -213,7 +213,7 @@ $site_replyto_remap = array(
 			'HA1 3UJ',
 		),
 		'telephone' => '020 3182 4000',
-	),
+	),*/
 	8 => array(
 		'site_name' => 'Moorfields at Queen Mary\'s Hospital',
 		'address' => array(
