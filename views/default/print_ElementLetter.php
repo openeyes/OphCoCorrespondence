@@ -50,14 +50,16 @@
 
 <br />
 
-<p>
-	To: <?php echo $element->renderToAddress()?>
-	<?php foreach (explode("\n",trim($element->cc)) as $line) {
-		if (trim($line)) { ?>
-		<br/>Cc: <?php echo $line ?>
-	<?php }?>
-	<?php }?>
-</p>
+<?php if ($element->cc) {?>
+	<p>
+		To: <?php echo $element->renderToAddress()?>
+		<?php foreach (explode("\n",trim($element->cc)) as $line) {
+			if (trim($line)) { ?>
+			<br/>Cc: <?php echo $line ?>
+		<?php }?>
+		<?php }?>
+	</p>
+<?php }?>
 
 <div class="footer">
 	Patron: Her Majesty The Queen<br />
@@ -99,14 +101,16 @@
 
 <br />
 
-<p>
-	To: <?php echo $element->renderToAddress()?>
-	<?php foreach (explode("\n",trim($element->cc)) as $line) {
-		if (trim($line)) { ?>
-		<br/>Cc: <?php echo $line ?>
-	<?php }?>
-	<?php }?>
-</p>
+<?php if ($element->cc) {?>
+	<p>
+		To: <?php echo $element->renderToAddress()?>
+		<?php foreach (explode("\n",trim($element->cc)) as $line) {
+			if (trim($line)) { ?>
+			<br/>Cc: <?php echo $line ?>
+		<?php }?>
+		<?php }?>
+	</p>
+<?php }?>
 
 <div class="footer">
 	Patron: Her Majesty The Queen<br />
@@ -148,14 +152,16 @@
 
 <br />
 
-<p>
-	To: <?php echo $element->renderToAddress()?>
-	<?php foreach (explode("\n",trim($element->cc)) as $line) {
-		if (trim($line)) { ?>
-		<br/>Cc: <?php echo $line ?>
-	<?php }?>
-	<?php }?>
-</p>
+<?php if ($element->cc) {?>
+	<p>
+		To: <?php echo $element->renderToAddress()?>
+		<?php foreach (explode("\n",trim($element->cc)) as $line) {
+			if (trim($line)) { ?>
+			<br/>Cc: <?php echo $line ?>
+		<?php }?>
+		<?php }?>
+	</p>
+<?php }?>
 
 <div class="footer">
 	Patron: Her Majesty The Queen<br />
