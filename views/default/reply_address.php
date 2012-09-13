@@ -35,7 +35,7 @@ $site_replyto_remap = array(
 		'address' => array(
 			'Moorfields at Barking',
 			'Satellite Service Office, 3rd floor',
-			'Moorfields Eye Hospital ',
+			'Moorfields Eye Hospital',
 			'City Road',
 			'London',
 			'EC1V 2PD',
@@ -202,18 +202,16 @@ $site_replyto_remap = array(
 		),
 		'telephone' => '020 3182 4000',
 	),
-	/*20 => array(
+	20 => array(
 		'site_name' => 'Moorfields at Watford',
 		'address' => array(
-			'Moorfields at Northwick Park',
-			'Northwick Park Hospital',
-			'Watford Road',
-			'Harrow',
-			'Middlesex',
-			'HA1 3UJ',
+			'Moorfields Eye Hospital',
+			'162 City Road',
+			'London',
+			'EC1V 2PD',
 		),
 		'telephone' => '020 3182 4000',
-	),*/
+	),
 	8 => array(
 		'site_name' => 'Moorfields at Queen Mary\'s Hospital',
 		'address' => array(
