@@ -31,3 +31,5 @@ div.OphCoCorrespondence_footerLabel { margin-top: 13px; }
 div.letter_header { display: inline-block; width: 100%; }
 
 #OphCoCorrespondence_footerAutoComplete { margin-left: 13px !important; }
+
+div.correspondence_footer { font-size: 11px; }

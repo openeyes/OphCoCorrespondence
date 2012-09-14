@@ -35,7 +35,11 @@
 <div class="big">
 	<p>
 		<?php echo $element->renderIntroduction()?>
-		<br /><br /> <strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",$element->re)?></strong><br /><br />
+		<br /><br />
+		<?php if ($element->re) {?>
+			<strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",$element->re)?></strong>
+			<br /><br />
+		<?php }?>
 		<?php echo $element->renderBody()?>
 	</p>
 
@@ -46,14 +50,16 @@
 
 <br />
 
-<p>
-	To: <?php echo $element->renderToAddress()?>
-	<?php foreach (explode("\n",trim($element->cc)) as $line) {
-		if (trim($line)) { ?>
-		<br/>Cc: <?php echo $line ?>
-	<?php }?>
-	<?php }?>
-</p>
+<?php if ($element->cc) {?>
+	<p>
+		To: <?php echo $element->renderToAddress()?>
+		<?php foreach (explode("\n",trim($element->cc)) as $line) {
+			if (trim($line)) { ?>
+			<br/>Cc: <?php echo $line ?>
+		<?php }?>
+		<?php }?>
+	</p>
+<?php }?>
 
 <div class="footer">
 	Patron: Her Majesty The Queen<br />
@@ -80,7 +86,11 @@
 <div class="big">
 	<p>
 		<?php echo $element->renderIntroduction()?>
-		<br /><br /> <strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",$element->re)?></strong><br /><br />
+		<br /><br />
+		<?php if ($element->re) {?>
+			<strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",$element->re)?></strong>
+			<br /><br />
+		<?php }?>
 		<?php echo $element->renderBody()?>
 	</p>
 
@@ -91,14 +101,16 @@
 
 <br />
 
-<p>
-	To: <?php echo $element->renderToAddress()?>
-	<?php foreach (explode("\n",trim($element->cc)) as $line) {
-		if (trim($line)) { ?>
-		<br/>Cc: <?php echo $line ?>
-	<?php }?>
-	<?php }?>
-</p>
+<?php if ($element->cc) {?>
+	<p>
+		To: <?php echo $element->renderToAddress()?>
+		<?php foreach (explode("\n",trim($element->cc)) as $line) {
+			if (trim($line)) { ?>
+			<br/>Cc: <?php echo $line ?>
+		<?php }?>
+		<?php }?>
+	</p>
+<?php }?>
 
 <div class="footer">
 	Patron: Her Majesty The Queen<br />
@@ -125,7 +137,11 @@
 		<div class="big">
 	<p>
 		<?php echo $element->renderIntroduction()?>
-		<br /><br /> <strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",$element->re)?></strong><br /><br />
+		<br /><br />
+		<?php if ($element->re) {?>
+			<strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",$element->re)?></strong>
+			<br /><br />
+		<?php }?>
 		<?php echo $element->renderBody()?>
 	</p>
 
@@ -136,14 +152,16 @@
 
 <br />
 
-<p>
-	To: <?php echo $element->renderToAddress()?>
-	<?php foreach (explode("\n",trim($element->cc)) as $line) {
-		if (trim($line)) { ?>
-		<br/>Cc: <?php echo $line ?>
-	<?php }?>
-	<?php }?>
-</p>
+<?php if ($element->cc) {?>
+	<p>
+		To: <?php echo $element->renderToAddress()?>
+		<?php foreach (explode("\n",trim($element->cc)) as $line) {
+			if (trim($line)) { ?>
+			<br/>Cc: <?php echo $line ?>
+		<?php }?>
+		<?php }?>
+	</p>
+<?php }?>
 
 <div class="footer">
 	Patron: Her Majesty The Queen<br />

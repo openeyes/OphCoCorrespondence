@@ -37,8 +37,10 @@
 	<p>
 		<?php echo $element->renderIntroduction()?>
 		<br/><br/>
+		<?php if ($element->re) {?>
 			<strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",$element->re)?></strong>
-		<br/><br/>
+			<br/><br/>
+		<?php }?>
 		<?php echo $element->renderBody()?>
 		<br/><br/>
 		<?php echo $element->renderFooter()?>
@@ -49,11 +51,13 @@
 	<br/>
 	
 	<p>
-		To: <?php echo $element->renderToAddress()?>
-		<?php foreach (explode("\n",trim($element->cc)) as $line) {
-			if (trim($line)) { ?>
-			<br/>Cc: <?php echo $line ?>
-		<?php }?>
+		<?php if ($element->cc) {?>
+			To: <?php echo $element->renderToAddress()?>
+			<?php foreach (explode("\n",trim($element->cc)) as $line) {
+				if (trim($line)) { ?>
+				<br/>Cc: <?php echo $line ?>
+			<?php }?>
+			<?php }?>
 		<?php }?>
 	</p>
 
@@ -63,5 +67,9 @@
 		Chief Executive: John Pelly
 	</div>
 
+	<div class="correspondence_footer">
+		Created on <?php echo $element->event->NHSDate('created_date')?> at <?php echo substr($element->event->created_date,11,5)?> by <?php echo User::model()->findByPk($element->event->created_user_id)->fullnameandtitle?><br/>
+		Last modified on <?php echo $element->event->NHSDate('last_modified_date')?> at <?php echo substr($element->event->last_modified_date,11,5)?> by <?php echo User::model()->findByPk($element->event->last_modified_user_id)->fullnameandtitle?><br/>
+	</div>
 	<input type="hidden" name="OphCoCorrespondence_printLetter" id="OphCoCorrespondence_printLetter" value="<?php echo $element->print?>" />
 </div>
