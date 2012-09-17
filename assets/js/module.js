@@ -49,7 +49,7 @@ $(document).ready(function() {
 	$('#et_deleteevent').unbind('click').click(function() {
 		if (!$(this).hasClass('inactive')) {
 			disableButtons();
-			$('#deleteForm').submit();
+			return true;
 		}
 		return false;
 	});
