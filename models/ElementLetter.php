@@ -90,7 +90,7 @@ class ElementLetter extends BaseEventTypeElement
 		return array(
 			'use_nickname' => 'Nickname',
 			'date' => 'Date',
-			'introduction' => 'Introduction',
+			'introduction' => 'Salutation',
 			're' => 'Re',
 			'body' => 'Body',
 			'footer' => 'Footer',
