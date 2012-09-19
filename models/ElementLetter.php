@@ -202,7 +202,7 @@ class ElementLetter extends BaseEventTypeElement
 
 				$this->footer = "Yours sincerely\n\n\n\n\n".trim($contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications)."\n".$user->role;
 
-				if ($consultant->id != $user->id) {
+				if ($consultant && $consultant->id != $user->id) {
 					$this->footer .= "\nConsultant\n{$consultant->contact->title} {$consultant->contact->first_name} {$consultant->contact->last_name}";
 				}
 
