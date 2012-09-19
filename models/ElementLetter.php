@@ -409,7 +409,7 @@ class ElementLetter extends BaseEventTypeElement
 	}
 
 	public function getDirect_line() {
-		if ($dl = FirmSiteSecretary::model()->find('firm_id=? and site_id=?',array($this->event->episode->firm_id,$this->site_id))) {
+		if ($dl = FirmSiteSecretary::model()->find('firm_id=? and site_id=?',array(Yii::app()->session['selected_firm_id'],$this->site_id))) {
 			return $dl->direct_line;
 		}
 
