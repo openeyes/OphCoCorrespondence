@@ -67,8 +67,6 @@ $(document).ready(function() {
 		return false;
 	});
 
-	var re_field = null;
-
 	$('#address_target').change(function() {
 		var nickname = $('input[id="ElementLetter_use_nickname"][type="checkbox"]').is(':checked') ? '1' : '0';
 
@@ -383,12 +381,24 @@ $(document).ready(function() {
 });
 
 var et_oph_correspondence_body_cursor_position = 0;
+var re_field = null;
 
 function correspondence_load_data(data) {
 	for (var i in data) {
 		if (m = i.match(/^text_(.*)$/)) {
 			$('#'+m[1]).val(data[i]);
 		} else if (m = i.match(/^sel_(.*)$/)) {
+			if (m[1] == 'address_target') {
+				if (data[i] == 'patient') {
+					$('#ElementLetter_re').val('');
+					$('#ElementLetter_re').parent().parent().hide();
+				} else {
+					if (re_field != null) {
+						$('#ElementLetter_re').val(re_field);
+						$('#ElementLetter_re').parent().parent().show();
+					}
+				}
+			}
 			$('#'+m[1]).val(data[i]);
 		} else if (m = i.match(/^check_(.*)$/)) {
 			$('input[id="'+m[1]+'"][type="checkbox"]').attr('checked',(parseInt(data[i]) == 1 ? true : false));
@@ -400,8 +410,6 @@ function correspondence_load_data(data) {
 			$('#'+m[1]).append(data[i]);
 		}
 	}
-
-	$('#address_target').change();
 }
 
 function correspondence_append_body(text) {
