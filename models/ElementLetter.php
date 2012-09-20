@@ -142,7 +142,11 @@ class ElementLetter extends BaseEventTypeElement
 			} else if ($pca->contact->parent_class == 'Consultant') {
 				$type = 'Consultant Ophthalmologist';
 			} else {
-				$type = $pca->contact->parent_class;
+				if ($uca = UserContactAssignment::model()->find('contact_id=?',array($pca->contact_id))) {
+					$type = $uca->user->role ? $uca->user->role : 'Staff';
+				} else {
+					$type = $pca->contact->parent_class;
+				}
 			}
 
 			if ($pca->site || $pca->institution || $pca->contact->address) {

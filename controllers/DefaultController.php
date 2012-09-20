@@ -68,7 +68,11 @@ class DefaultController extends BaseEventTypeController {
 			} else if ($contact->parent_class == 'Gp') {
 				$person = '';
 			} else {
-				$person .= "\n".$contact->parent_class."\n";
+				if ($uca = UserContactAssignment::model()->find('contact_id=?',array($contact->id))) {
+					$person .= "\n".($uca->user->role ? $uca->user->role : 'Staff')."\n";
+				} else {
+					$person .= "\n".$contact->parent_class."\n";
+				}
 			}
 		} else {
 			$person = '';
