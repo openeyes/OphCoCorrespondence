@@ -364,6 +364,8 @@ $(document).ready(function() {
 	});
 
 	var selected_recipient = $('#address_target').val();
+
+	$('#ElementLetter_body').tabby();
 });
 
 var et_oph_correspondence_body_cursor_position = 0;

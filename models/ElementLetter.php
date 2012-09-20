@@ -387,6 +387,8 @@ class ElementLetter extends BaseEventTypeElement
 		$body = '';
 
 		foreach (explode(chr(10),$this->body) as $line) {
+			$line = str_replace(chr(9),"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",$line);
+
 			if (preg_match('/^([\s]+)/',$line,$m)) {
 				for ($i=0; $i<strlen($m[1]); $i++) {
 					$body .= '&nbsp;';
