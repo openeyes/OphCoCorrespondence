@@ -207,7 +207,7 @@ class ElementLetter extends BaseEventTypeElement
 				$this->footer = "Yours sincerely\n\n\n\n\n".trim($contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications)."\n".$user->role;
 
 				if ($consultant && $consultant->id != $user->id) {
-					$this->footer .= "\nConsultant\n{$consultant->contact->title} {$consultant->contact->first_name} {$consultant->contact->last_name}";
+					$this->footer .= "\nConsultant: {$consultant->contact->title} {$consultant->contact->first_name} {$consultant->contact->last_name}";
 				}
 
 				$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
