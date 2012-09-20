@@ -57,11 +57,11 @@ class ElementLetter extends BaseEventTypeElement
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('event_id, site_id, print, address, use_nickname, date, introduction, cc, re, body, footer, draft', 'safe'),
+			array('event_id, site_id, print, address, use_nickname, date, introduction, cc, re, body, footer, draft, direct_line', 'safe'),
 			array('use_nickname, site_id, date, address, introduction, body, footer', 'required'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, event_id, site_id, use_nickname, date, introduction, re, body, footer, draft', 'safe', 'on' => 'search'),
+			array('id, event_id, site_id, use_nickname, date, introduction, re, body, footer, draft, direct_line', 'safe', 'on' => 'search'),
 		);
 	}
 	
@@ -311,6 +311,12 @@ class ElementLetter extends BaseEventTypeElement
 			}
 		}
 
+		if (Yii::app()->getController()->getAction()->id == 'create') {
+			if ($dl = FirmSiteSecretary::model()->find('firm_id=? and site_id=?',array(Yii::app()->session['selected_firm_id'],$this->site_id))) {
+				$this->direct_line = $dl->direct_line;
+			}
+		}
+
 		return parent::beforeSave();
 	}
 
@@ -406,13 +412,5 @@ class ElementLetter extends BaseEventTypeElement
 
 	public function renderToAddress() {
 		return preg_replace('/[\r\n]+/',', ',$this->address);
-	}
-
-	public function getDirect_line() {
-		if ($dl = FirmSiteSecretary::model()->find('firm_id=? and site_id=?',array(Yii::app()->session['selected_firm_id'],$this->site_id))) {
-			return $dl->direct_line;
-		}
-
-		return false;
 	}
 }
