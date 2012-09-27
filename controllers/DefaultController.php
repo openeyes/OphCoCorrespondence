@@ -1,6 +1,8 @@
 <?php
 
 class DefaultController extends BaseEventTypeController {
+	public $print_css = false;
+
 	public function actionCreate() {
 		parent::actionCreate();
 	}
@@ -311,13 +313,52 @@ class DefaultController extends BaseEventTypeController {
 	}
 
 	public function actionPrint($id) {
-		if (!$event = Event::model()->findByPk($id)) {
+		if (!$this->event = Event::model()->findByPk($id)) {
 			throw new Exception('Event not found: '.$id);
 		}
 
 		if (!$letter = ElementLetter::model()->find('event_id=?',array($id))) {
 			throw new Exception('Letter not found were event_id = '.$id);
 		}
+
+		$this->patient = $this->event->episode->patient;
+
+		$this->event_type = EventType::model()->findByPk($this->event->event_type_id);
+
+		$elements = $this->getDefaultElements('view');
+
+		$this->layout = '//layouts/pdf';
+		$pdf_print = new OEPDFPrint('Openeyes', 'Correspondence letters', 'Correspondence letters');
+
+		$this->site = Site::model()->findByPk(Yii::app()->request->cookies['site_id']->value);
+
+		$body = $this->renderPartial(
+			'print', array(
+			'elements' => $elements,
+			'eventId' => $id,
+		), true, true);
+
+		$from_address = $this->site->getCorrespondenceSiteName()."\n".implode("\n",$this->site->letterarray)."\nTel: ".CHtml::encode($this->site->telephone).($this->site->fax ? "\nFax: ".CHtml::encode($this->site->fax) : '').($letter->direct_line ? "\nDirect line: ".$letter->direct_line : '');
+
+		$oeletter = new OELetter($letter->address,$from_address);
+		$oeletter->setFont('helvetica','10');
+		$oeletter->addBody($body);
+		$pdf_print->addLetter($oeletter);
+
+		if (@$_GET['all']) {
+			$pdf_print->addLetter($oeletter);
+
+			foreach ($letter->getCcTargets() as $cc) {
+				$ccletter = new OELetter(implode("\n",preg_replace('/^[a-zA-Z]+: /','',$cc)),$from_address);
+				$ccletter->setFont('helvetica','10');
+				$ccletter->addBody($body);
+				$pdf_print->addLetter($ccletter);
+			}
+		}
+
+		$pdf_print->output();
+
+		return;
 
 		$event = Event::model()->findByPk($id);
 

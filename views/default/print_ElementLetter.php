@@ -18,21 +18,11 @@
  */
 ?>
 
-<div class="letter_header">
-	<?php $this->renderPartial("letter_start_print", array(
-			'site' => $element->site,
-			'toAddress' => str_replace("\n","<br/>",$element->address),
-			'patient' => $this->patient,
-			'date' => $element->date,
-			'directLine' => $element->direct_line,
-	))?>
-</div>
-
 <?php $this->renderPartial("reply_address", array(
 		'site' => $element->site,
 ))?>
 
-<div class="big">
+<div style="font-size: 14pt;">
 	<p>
 		<?php echo $element->renderIntroduction()?>
 		<br /><br />
@@ -42,7 +32,6 @@
 		<?php }?>
 		<?php echo $element->renderBody()?>
 	</p>
-
 	<p>
 		<?php echo $element->renderFooter()?>
 	</p>
@@ -59,115 +48,4 @@
 		<?php }?>
 		<?php }?>
 	</p>
-<?php }?>
-
-<div class="footer">
-	Patron: Her Majesty The Queen<br />
-	Chairman: Rudy Markham<br />
-	Chief	Executive: John Pelly
-</div>
-
-<?php if (@$_GET['all']) {?>
-<div class="pageBreak"></div>
-<div class="letter_header">
-	<?php $this->renderPartial("letter_start_print", array(
-			'site' => $element->site,
-			'toAddress' => str_replace("\n","<br/>",$element->address),
-			'patient' => $this->patient,
-			'date' => $element->date,
-			'directLine' => $element->direct_line,
-		))?>
-</div>
-
-<?php $this->renderPartial("reply_address", array(
-		'site' => $element->site,
-))?>
-
-<div class="big">
-	<p>
-		<?php echo $element->renderIntroduction()?>
-		<br /><br />
-		<?php if ($element->re) {?>
-			<strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",$element->re)?></strong>
-			<br /><br />
-		<?php }?>
-		<?php echo $element->renderBody()?>
-	</p>
-
-	<p>
-		<?php echo $element->renderFooter()?>
-	</p>
-</div>
-
-<br />
-
-<?php if ($element->cc) {?>
-	<p>
-		To: <?php echo $element->renderToAddress()?>
-		<?php foreach (explode("\n",trim($element->cc)) as $line) {
-			if (trim($line)) { ?>
-			<br/>Cc: <?php echo $line ?>
-		<?php }?>
-		<?php }?>
-	</p>
-<?php }?>
-
-<div class="footer">
-	Patron: Her Majesty The Queen<br />
-	Chairman: Rudy Markham<br />
-	Chief	Executive: John Pelly
-</div>
-
-<?php foreach ($element->getCcTargets() as $cc) {?>
-<div class="pageBreak"></div>
-<div class="letter_header">
-	<?php $this->renderPartial("letter_start_print", array(
-			'site' => $element->site,
-			'toAddress' => implode("<br/>",preg_replace('/^[a-zA-Z]+: /','',$cc)),
-			'patient' => $this->patient,
-			'date' => $element->date,
-			'directLine' => $element->direct_line,
-			))?>
-</div>
-
-<?php $this->renderPartial("reply_address", array(
-		'site' => $element->site,
-))?>
-
-		<div class="big">
-	<p>
-		<?php echo $element->renderIntroduction()?>
-		<br /><br />
-		<?php if ($element->re) {?>
-			<strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",$element->re)?></strong>
-			<br /><br />
-		<?php }?>
-		<?php echo $element->renderBody()?>
-	</p>
-
-	<p>
-		<?php echo $element->renderFooter()?>
-	</p>
-</div>
-
-<br />
-
-<?php if ($element->cc) {?>
-	<p>
-		To: <?php echo $element->renderToAddress()?>
-		<?php foreach (explode("\n",trim($element->cc)) as $line) {
-			if (trim($line)) { ?>
-			<br/>Cc: <?php echo $line ?>
-		<?php }?>
-		<?php }?>
-	</p>
-<?php }?>
-
-<div class="footer">
-	Patron: Her Majesty The Queen<br />
-	Chairman: Rudy Markham<br />
-	Chief	Executive: John Pelly
-</div>
-
-<?php }?>
 <?php }?>

@@ -330,14 +330,15 @@ $(document).ready(function() {
 		$('#correspondence_out').removeClass('draft');
 
 		var m = window.location.href.match(/\/view\/([0-9]+)/);
+
 		$.ajax({
 			'type': 'GET',
 			'url': baseUrl+'/OphCoCorrespondence/Default/markPrinted/'+m[1],
 			'success': function(html) {
 				if (all) {
-					window.print_all_iframe.print();
+					printPDF(baseUrl+'/OphCoCorrespondence/Default/print/'+m[1],{"all":1});
 				} else {
-					window.print_iframe.print();
+					printPDF(baseUrl+'/OphCoCorrespondence/Default/print/'+m[1],{});
 				}
 			}
 		});
