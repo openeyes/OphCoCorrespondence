@@ -61,7 +61,7 @@ class ElementLetter extends BaseEventTypeElement
 			array('use_nickname, site_id, date, address, introduction, body, footer, re', 'required'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, event_id, site_id, use_nickname, date, introduction, re, body, footer, draft', 'safe', 'on' => 'search'),
+			array('id, event_id, site_id, use_nickname, date, introduction, re, body, footer, draft, direct_line', 'safe', 'on' => 'search'),
 		);
 	}
 	
@@ -142,7 +142,11 @@ class ElementLetter extends BaseEventTypeElement
 			} else if ($pca->contact->parent_class == 'Consultant') {
 				$type = 'Consultant Ophthalmologist';
 			} else {
-				$type = $pca->contact->parent_class;
+				if ($uca = UserContactAssignment::model()->find('contact_id=?',array($pca->contact_id))) {
+					$type = $uca->user->role ? $uca->user->role : 'Staff';
+				} else {
+					$type = $pca->contact->parent_class;
+				}
 			}
 
 			if ($pca->site || $pca->institution || $pca->contact->address) {
@@ -202,8 +206,8 @@ class ElementLetter extends BaseEventTypeElement
 
 				$this->footer = "Yours sincerely\n\n\n\n\n".trim($contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications)."\n".$user->role;
 
-				if ($consultant->id != $user->id) {
-					$this->footer .= "\nConsultant\n{$consultant->contact->title} {$consultant->contact->first_name} {$consultant->contact->last_name}";
+				if ($consultant && $consultant->id != $user->id) {
+					$this->footer .= "\nConsultant: {$consultant->contact->title} {$consultant->contact->first_name} {$consultant->contact->last_name}";
 				}
 
 				$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
@@ -311,7 +315,38 @@ class ElementLetter extends BaseEventTypeElement
 			}
 		}
 
+		if (Yii::app()->getController()->getAction()->id == 'create') {
+			if ($dl = FirmSiteSecretary::model()->find('firm_id=? and site_id=?',array(Yii::app()->session['selected_firm_id'],$this->site_id))) {
+				$this->direct_line = $dl->direct_line;
+			}
+		}
+
+		$this->address = htmlentities($this->address);
+		$this->introduction = htmlentities($this->introduction);
+		$this->re = htmlentities($this->re);
+		$this->body = htmlentities($this->body);
+		$this->footer = htmlentities($this->footer);
+		$this->cc = htmlentities($this->cc);
+
 		return parent::beforeSave();
+	}
+
+	public function afterSave() {
+		$this->address = html_entity_decode($this->address);
+		$this->introduction = html_entity_decode($this->introduction);
+		$this->re = html_entity_decode($this->re);
+		$this->body = html_entity_decode($this->body);
+		$this->footer = html_entity_decode($this->footer);
+		$this->cc = html_entity_decode($this->cc);
+	}
+
+	public function afterFind() {
+		$this->address = html_entity_decode($this->address);
+		$this->introduction = html_entity_decode($this->introduction);
+		$this->re = html_entity_decode($this->re);
+		$this->body = html_entity_decode($this->body);
+		$this->footer = html_entity_decode($this->footer);
+		$this->cc = html_entity_decode($this->cc);
 	}
 
 	public function getInfotext() {
@@ -380,13 +415,13 @@ class ElementLetter extends BaseEventTypeElement
 	}
 
 	public function renderIntroduction() {
-		return str_replace("\n","<br/>",trim($this->introduction));
+		return str_replace("\n","<br/>",trim(htmlentities($this->introduction)));
 	}
 
 	public function renderBody() {
 		$body = '';
 
-		foreach (explode(chr(10),$this->body) as $line) {
+		foreach (explode(chr(10),htmlentities($this->body)) as $line) {
 			if (preg_match('/^([\s]+)/',$line,$m)) {
 				for ($i=0; $i<strlen($m[1]); $i++) {
 					$body .= '&nbsp;';
@@ -401,18 +436,10 @@ class ElementLetter extends BaseEventTypeElement
 	}
 
 	public function renderFooter() {
-		return str_replace("\n","<br/>",$this->footer);
+		return str_replace("\n","<br/>",htmlentities($this->footer));
 	}
 
 	public function renderToAddress() {
-		return preg_replace('/[\r\n]+/',', ',$this->address);
-	}
-
-	public function getDirect_line() {
-		if ($dl = FirmSiteSecretary::model()->find('firm_id=? and site_id=?',array($this->event->episode->firm_id,$this->site_id))) {
-			return $dl->direct_line;
-		}
-
-		return false;
+		return preg_replace('/[\r\n]+/',', ',htmlentities($this->address));
 	}
 }

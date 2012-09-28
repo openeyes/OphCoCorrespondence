@@ -68,7 +68,11 @@ class DefaultController extends BaseEventTypeController {
 			} else if ($contact->parent_class == 'Gp') {
 				$person = '';
 			} else {
-				$person .= "\n".$contact->parent_class."\n";
+				if ($uca = UserContactAssignment::model()->find('contact_id=?',array($contact->id))) {
+					$person .= "\n".($uca->user->role ? $uca->user->role : 'Staff')."\n";
+				} else {
+					$person .= "\n".$contact->parent_class."\n";
+				}
 			}
 		} else {
 			$person = '';
@@ -153,12 +157,12 @@ class DefaultController extends BaseEventTypeController {
 		}
 
 		if ($macro->cc_patient) {
-			$data['textappend_ElementLetter_cc'] = $patient->title.' '.$patient->last_name.', '.implode(', ',$patient->address->getLetterarray(false));
+			$data['textappend_ElementLetter_cc'] = 'Patient: '.$patient->title.' '.$patient->last_name.', '.implode(', ',$patient->address->getLetterarray(false));
 			$data['elementappend_cc_targets'] = '<input type="hidden" name="CC_Targets[]" value="patient" />';
 		}
 
 		if ($macro->cc_doctor && $patient->gp !== null && $patient->gp->contact !== null && $patient->gp->contact->address !== null) {
-			$data['textappend_ElementLetter_cc'] = $patient->gp->contact->title.' '.$patient->gp->contact->last_name.', '.implode(', ',$patient->gp->contact->address->getLetterarray(false));
+			$data['textappend_ElementLetter_cc'] = 'GP: '.$patient->gp->contact->title.' '.$patient->gp->contact->last_name.', '.implode(', ',$patient->gp->contact->address->getLetterarray(false));
 			$data['elementappend_cc_targets'] = '<input type="hidden" name="CC_Targets[]" value="gp" />';
 		}
 
@@ -247,6 +251,11 @@ class DefaultController extends BaseEventTypeController {
 			} else {
 				$address = $contact->address;
 			}
+			if ($uca = UserContactAssignment::model()->find('contact_id=?',array($contact->id))) {
+				if ($contact->parent_class != 'Consultant') {
+					$prefix = '';
+				}
+			}
 		} else if (preg_match('/^contact([0-9]+)_site([0-9]+)$/',@$_GET['contact_id'],$m)) {
 			$prefix = 'Consultant';
 			if (!$contact = Contact::model()->findByPk($m[1])) {
@@ -254,6 +263,11 @@ class DefaultController extends BaseEventTypeController {
 			}
 			$pca = PatientContactAssignment::model()->find('patient_id=? and contact_id=? and site_id=?',array($patient->id,$contact->id,$m[2]));
 			$address = $pca->site;
+			if ($uca = UserContactAssignment::model()->find('contact_id=?',array($contact->id))) {
+				if ($contact->parent_class != 'Consultant') {
+					$prefix = '';
+				}
+			}
 		} else if (preg_match('/^contact([0-9]+)_institution([0-9]+)$/',@$_GET['contact_id'],$m)) {
 			$prefix = 'Consultant';
 			if (!$contact = Contact::model()->findByPk($m[1])) {
@@ -261,15 +275,23 @@ class DefaultController extends BaseEventTypeController {
 			}
 			$pca = PatientContactAssignment::model()->find('patient_id=? and contact_id=? and institution_id=?',array($patient->id,$contact->id,$m[2]));
 			$address = $pca->institution;
+			if ($uca = UserContactAssignment::model()->find('contact_id=?',array($contact->id))) {
+				if ($contact->parent_class != 'Consultant') {
+					$prefix = '';
+				}
+			}
 		} else {
 			throw new Exception('Unknown or missing contact_id value: '.@$_GET['contact_id']);
 		}
 
 		if ($address) {
+			if ($prefix) {
+				echo $prefix.': ';
+			}
 			if ($contact->title) {
-				echo $prefix.': '.$contact->title.' '.$contact->first_name.' '.$contact->last_name.', ';
+				echo $contact->title.' '.$contact->first_name.' '.$contact->last_name.', ';
 			} else {
-				echo $prefix.': '.$contact->first_name.' ' .$contact->last_name.', ';
+				echo $contact->first_name.' ' .$contact->last_name.', ';
 			}
 			echo implode(', ',$address->getLetterarray(false));
 		} else {
