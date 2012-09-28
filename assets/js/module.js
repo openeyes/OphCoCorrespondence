@@ -79,6 +79,20 @@ $(document).ready(function() {
 
 			var val = $(this).children('option:selected').val();
 
+			if (re_field == null) {
+				re_field = $('#ElementLetter_re').val();
+			}
+
+			if (val == 'patient') {
+				$('#ElementLetter_re').val('');
+				$('#ElementLetter_re').parent().parent().hide();
+			} else {
+				if (re_field != null) {
+					$('#ElementLetter_re').val(re_field);
+					$('#ElementLetter_re').parent().parent().show();
+				}
+			}
+
 			$.ajax({
 				'type': 'GET',
 				'dataType': 'json',
@@ -369,12 +383,24 @@ $(document).ready(function() {
 });
 
 var et_oph_correspondence_body_cursor_position = 0;
+var re_field = null;
 
 function correspondence_load_data(data) {
 	for (var i in data) {
 		if (m = i.match(/^text_(.*)$/)) {
 			$('#'+m[1]).val(data[i]);
 		} else if (m = i.match(/^sel_(.*)$/)) {
+			if (m[1] == 'address_target') {
+				if (data[i] == 'patient') {
+					$('#ElementLetter_re').val('');
+					$('#ElementLetter_re').parent().parent().hide();
+				} else {
+					if (re_field != null) {
+						$('#ElementLetter_re').val(re_field);
+						$('#ElementLetter_re').parent().parent().show();
+					}
+				}
+			}
 			$('#'+m[1]).val(data[i]);
 		} else if (m = i.match(/^check_(.*)$/)) {
 			$('input[id="'+m[1]+'"][type="checkbox"]').attr('checked',(parseInt(data[i]) == 1 ? true : false));
