@@ -330,7 +330,7 @@ class DefaultController extends BaseEventTypeController {
 		$this->layout = '//layouts/pdf';
 		$pdf_print = new OEPDFPrint('Openeyes', 'Correspondence letters', 'Correspondence letters');
 
-		$this->site = Site::model()->findByPk(Yii::app()->request->cookies['site_id']->value);
+		$this->site = $letter->site;
 
 		$body = $this->renderPartial(
 			'print', array(
@@ -343,6 +343,11 @@ class DefaultController extends BaseEventTypeController {
 		$oeletter = new OELetter($letter->address,$from_address);
 		$oeletter->setFont('helvetica','10');
 		$oeletter->addBody($body);
+
+		if ($this->site->replyto) {
+			$oeletter->addReplyToAddress($this->site->getReplyToAddress().($this->site->replyto->primary_phone ? ', Tel: '.$this->site->replyto->primary_phone : ''));
+		}
+
 		$pdf_print->addLetter($oeletter);
 
 		if (@$_GET['all']) {
@@ -352,17 +357,16 @@ class DefaultController extends BaseEventTypeController {
 				$ccletter = new OELetter(implode("\n",preg_replace('/^[a-zA-Z]+: /','',$cc)),$from_address);
 				$ccletter->setFont('helvetica','10');
 				$ccletter->addBody($body);
+
+				if ($this->site->replyto) {
+					$ccletter->addReplyToAddress($this->site->getReplyToAddress().($this->site->replyto->primary_phone ? ', Tel: '.$this->site->replyto->primary_phone : ''));
+				}
+
 				$pdf_print->addLetter($ccletter);
 			}
 		}
 
 		$pdf_print->output();
-
-		return;
-
-		$event = Event::model()->findByPk($id);
-
-		parent::actionPrint($id);
 	}
 
 	public function actionUsers() {

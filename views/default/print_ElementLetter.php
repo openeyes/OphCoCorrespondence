@@ -18,10 +18,6 @@
  */
 ?>
 
-<?php $this->renderPartial("reply_address", array(
-		'site' => $element->site,
-))?>
-
 <div style="font-size: 14pt;">
 	<p>
 		<?php echo $element->renderIntroduction()?>
