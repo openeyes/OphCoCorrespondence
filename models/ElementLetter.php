@@ -321,32 +321,7 @@ class ElementLetter extends BaseEventTypeElement
 			}
 		}
 
-		$this->address = htmlentities($this->address);
-		$this->introduction = htmlentities($this->introduction);
-		$this->re = htmlentities($this->re);
-		$this->body = htmlentities($this->body);
-		$this->footer = htmlentities($this->footer);
-		$this->cc = htmlentities($this->cc);
-
 		return parent::beforeSave();
-	}
-
-	public function afterSave() {
-		$this->address = html_entity_decode($this->address);
-		$this->introduction = html_entity_decode($this->introduction);
-		$this->re = html_entity_decode($this->re);
-		$this->body = html_entity_decode($this->body);
-		$this->footer = html_entity_decode($this->footer);
-		$this->cc = html_entity_decode($this->cc);
-	}
-
-	public function afterFind() {
-		$this->address = html_entity_decode($this->address);
-		$this->introduction = html_entity_decode($this->introduction);
-		$this->re = html_entity_decode($this->re);
-		$this->body = html_entity_decode($this->body);
-		$this->footer = html_entity_decode($this->footer);
-		$this->cc = html_entity_decode($this->cc);
 	}
 
 	public function getInfotext() {
@@ -415,13 +390,13 @@ class ElementLetter extends BaseEventTypeElement
 	}
 
 	public function renderIntroduction() {
-		return str_replace("\n","<br/>",trim(htmlentities($this->introduction)));
+		return str_replace("\n","<br/>",trim(CHtml::encode($this->introduction)));
 	}
 
 	public function renderBody() {
 		$body = '';
 
-		foreach (explode(chr(10),htmlentities($this->body)) as $line) {
+		foreach (explode(chr(10),CHtml::encode($this->body)) as $line) {
 			if (preg_match('/^([\s]+)/',$line,$m)) {
 				for ($i=0; $i<strlen($m[1]); $i++) {
 					$body .= '&nbsp;';
@@ -436,10 +411,10 @@ class ElementLetter extends BaseEventTypeElement
 	}
 
 	public function renderFooter() {
-		return str_replace("\n","<br/>",htmlentities($this->footer));
+		return str_replace("\n","<br/>",CHtml::encode($this->footer));
 	}
 
 	public function renderToAddress() {
-		return preg_replace('/[\r\n]+/',', ',htmlentities($this->address));
+		return preg_replace('/[\r\n]+/',', ',CHtml::encode($this->address));
 	}
 }

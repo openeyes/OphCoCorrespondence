@@ -21,7 +21,7 @@
 <div class="letter_header">
 	<?php $this->renderPartial("letter_start_print", array(
 			'site' => $element->site,
-			'toAddress' => str_replace("\n","<br/>",$element->address),
+			'toAddress' => str_replace("\n","<br/>",CHtml::encode($element->address)),
 			'patient' => $this->patient,
 			'date' => $element->date,
 			'directLine' => $element->direct_line,
@@ -37,7 +37,7 @@
 		<?php echo $element->renderIntroduction()?>
 		<br /><br />
 		<?php if ($element->re) {?>
-			<strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",$element->re)?></strong>
+			<strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",CHtml::encode($element->re))?></strong>
 			<br /><br />
 		<?php }?>
 		<?php echo $element->renderBody()?>
@@ -53,7 +53,7 @@
 <?php if ($element->cc) {?>
 	<p>
 		To: <?php echo $element->renderToAddress()?>
-		<?php foreach (explode("\n",trim($element->cc)) as $line) {
+		<?php foreach (explode("\n",trim(CHtml::encode($element->cc))) as $line) {
 			if (trim($line)) { ?>
 			<br/>Cc: <?php echo $line ?>
 		<?php }?>
@@ -72,7 +72,7 @@
 <div class="letter_header">
 	<?php $this->renderPartial("letter_start_print", array(
 			'site' => $element->site,
-			'toAddress' => str_replace("\n","<br/>",$element->address),
+			'toAddress' => str_replace("\n","<br/>",CHtml::encode($element->address)),
 			'patient' => $this->patient,
 			'date' => $element->date,
 			'directLine' => $element->direct_line,
@@ -88,7 +88,7 @@
 		<?php echo $element->renderIntroduction()?>
 		<br /><br />
 		<?php if ($element->re) {?>
-			<strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",$element->re)?></strong>
+			<strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",CHtml::encode($element->re))?></strong>
 			<br /><br />
 		<?php }?>
 		<?php echo $element->renderBody()?>
@@ -104,7 +104,7 @@
 <?php if ($element->cc) {?>
 	<p>
 		To: <?php echo $element->renderToAddress()?>
-		<?php foreach (explode("\n",trim($element->cc)) as $line) {
+		<?php foreach (explode("\n",trim(CHtml::encode($element->cc))) as $line) {
 			if (trim($line)) { ?>
 			<br/>Cc: <?php echo $line ?>
 		<?php }?>
@@ -123,7 +123,7 @@
 <div class="letter_header">
 	<?php $this->renderPartial("letter_start_print", array(
 			'site' => $element->site,
-			'toAddress' => implode("<br/>",preg_replace('/^[a-zA-Z]+: /','',$cc)),
+			'toAddress' => CHtml::encode(implode("<br/>",preg_replace('/^[a-zA-Z]+: /','',$cc))),
 			'patient' => $this->patient,
 			'date' => $element->date,
 			'directLine' => $element->direct_line,
@@ -139,7 +139,7 @@
 		<?php echo $element->renderIntroduction()?>
 		<br /><br />
 		<?php if ($element->re) {?>
-			<strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",$element->re)?></strong>
+			<strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",CHtml::encode($element->re))?></strong>
 			<br /><br />
 		<?php }?>
 		<?php echo $element->renderBody()?>
@@ -155,7 +155,7 @@
 <?php if ($element->cc) {?>
 	<p>
 		To: <?php echo $element->renderToAddress()?>
-		<?php foreach (explode("\n",trim($element->cc)) as $line) {
+		<?php foreach (explode("\n",trim(CHtml::encode($element->cc))) as $line) {
 			if (trim($line)) { ?>
 			<br/>Cc: <?php echo $line ?>
 		<?php }?>
