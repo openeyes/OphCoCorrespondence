@@ -390,13 +390,13 @@ class ElementLetter extends BaseEventTypeElement
 	}
 
 	public function renderIntroduction() {
-		return str_replace("\n","<br/>",trim(htmlspecialchars($this->introduction)));
+		return str_replace("\n","<br/>",trim(CHtml::encode($this->introduction)));
 	}
 
 	public function renderBody() {
 		$body = '';
 
-		foreach (explode(chr(10),htmlspecialchars($this->body)) as $line) {
+		foreach (explode(chr(10),CHtml::encode($this->body)) as $line) {
 			if (preg_match('/^([\s]+)/',$line,$m)) {
 				for ($i=0; $i<strlen($m[1]); $i++) {
 					$body .= '&nbsp;';
@@ -411,10 +411,10 @@ class ElementLetter extends BaseEventTypeElement
 	}
 
 	public function renderFooter() {
-		return str_replace("\n","<br/>",htmlspecialchars($this->footer));
+		return str_replace("\n","<br/>",CHtml::encode($this->footer));
 	}
 
 	public function renderToAddress() {
-		return preg_replace('/[\r\n]+/',', ',htmlspecialchars($this->address));
+		return preg_replace('/[\r\n]+/',', ',CHtml::encode($this->address));
 	}
 }
