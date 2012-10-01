@@ -123,7 +123,7 @@
 <div class="letter_header">
 	<?php $this->renderPartial("letter_start_print", array(
 			'site' => $element->site,
-			'toAddress' => CHtml::encode(implode("<br/>",preg_replace('/^[a-zA-Z]+: /','',$cc))),
+			'toAddress' => implode("<br/>",preg_replace('/^[a-zA-Z]+: /','',CHtml::encode($cc))),
 			'patient' => $this->patient,
 			'date' => $element->date,
 			'directLine' => $element->direct_line,
