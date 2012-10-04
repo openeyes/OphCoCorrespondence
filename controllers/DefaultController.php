@@ -19,11 +19,10 @@ class DefaultController extends BaseEventTypeController {
 		}
 
 		$nickname = (boolean)@$_GET['nickname'];
-
 		$data = array();
 
 		if (@$_GET['address_id'] == 'patient') {
-			$contact = $patient;
+			$contact = null;
 			$address = $patient->getLetterAddress();
 		} else if (@$_GET['address_id'] == 'gp') {
 			if($patient->getGpName()) {
@@ -296,7 +295,7 @@ class DefaultController extends BaseEventTypeController {
 			if ($prefix) {
 				echo $prefix.': ';
 			}
-			echo $address_name . $address;
+			echo $address_name . ', ' . $address;
 		} else {
 			echo "NO ADDRESS";
 		}
