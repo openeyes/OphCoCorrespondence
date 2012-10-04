@@ -121,44 +121,47 @@ class DefaultController extends BaseEventTypeController {
 
 		if ($macro->recipient_patient) {
 			$data['sel_address_target'] = 'patient';
-			$contact = $patient;
+			$contact = $patient->contact;
+			$address = $patient->contact->getLetterAddress();
 		}
 
 		if ($macro->recipient_doctor) {
 			$data['sel_address_target'] = 'gp';
-			if ($patient->gp) {
-				$contact = $patient->gp->contact;
+			if ($patient->getPracticeAddress()) {
+				if($patient->getGpName()) {
+					$contact = $patient->gp->contact;
+					$address_name = $patient->getGpName();
+				} else {
+					$contact = null;
+					$address_name = 'The General Practitioner';
+				}
+				$address = $patient->practice->getLetterAddress($address_name);
 			}
 		}
 
-		if (isset($contact)) {
-			$data['text_ElementLetter_address'] = $contact->getLetterAddress();
+		if (isset($address)) {
+			$data['text_ElementLetter_address'] = $address;
 		}
 
-		if ($macro->use_nickname) {
-			$data['check_ElementLetter_use_nickname'] = 1;
-
-			if (isset($contact)) {
+		$data['check_ElementLetter_use_nickname'] = 0;
+		if (isset($contact)) {
+			$data['text_ElementLetter_introduction'] = "Dear ".$contact->title." ".$contact->last_name.",";
+			if ($macro->use_nickname) {
+				$data['check_ElementLetter_use_nickname'] = 1;
 				if (isset($contact->nick_name) && $contact->nick_name) {
 					$data['text_ElementLetter_introduction'] = "Dear ".$contact->nick_name.",";
-				} else {
-					$data['text_ElementLetter_introduction'] = "Dear ".$contact->title." ".$contact->last_name.",";
 				}
 			}
-		} else {
-			$data['check_ElementLetter_use_nickname'] = 0;
-
-			if (isset($contact)) {
-				$data['text_ElementLetter_introduction'] = "Dear ".$contact->title." ".$contact->last_name.",";
-			}
+		} else if(isset($salutation)) {
+			$data['text_ElementLetter_introduction'] = "Dear " . $salutation . ",";
 		}
-
+			
 		if ($macro->body) {
 			$data['text_ElementLetter_body'] = $macro->body;
 		}
 
 		if ($macro->cc_patient) {
-			$data['textappend_ElementLetter_cc'] = 'Patient: '.$patient->title.' '.$patient->last_name.', '.implode(', ',$patient->address->getLetterarray(false));
+			$data['textappend_ElementLetter_cc'] = 'Patient: '.$patient->getSalutationName().', '.implode(', ',$patient->address->getLetterarray(false));
 			$data['elementappend_cc_targets'] = '<input type="hidden" name="CC_Targets[]" value="patient" />';
 		}
 
