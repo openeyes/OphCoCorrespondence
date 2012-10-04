@@ -130,10 +130,11 @@ class ElementLetter extends BaseEventTypeElement
 
 		if ($patient->getPracticeAddress()) {
 			if($gp = $patient->getGpName()) {
-				$options['gp'] = $gp . ' (GP)';
+				$options['gp'] = $gp;
 			} else {
-				$options['gp'] = 'The General Practitioner (GP)';
+				$options['gp'] = Gp::UNKNOWN_NAME;
 			}
+			$options['gp'] .= ' (GP)';
 		}
 
 		foreach (PatientContactAssignment::model()->findAll('patient_id=?',array($patient->id)) as $pca) {
@@ -254,8 +255,8 @@ class ElementLetter extends BaseEventTypeElement
 					$this->introduction = "Dear " . $patient->gp->contact->getSalutationName() . ",";
 				}
 			} else {
-				$gp_name = 'The General Practitioner';
-				$this->introduction = "Dear Doctor,";
+				$gp_name = Gp::UNKNOWN_NAME;
+				$this->introduction = "Dear " . Gp::UNKNOWN_SALUTATION . ",";
 			}
 			$this->address = $patient->practice->getLetterAddress();
 			$this->address_target = 'gp';
@@ -271,7 +272,7 @@ class ElementLetter extends BaseEventTypeElement
 
 		if ($this->macro->cc_doctor && $this->patient->getPracticeAddress()) {
 			if(!$gp_name =$this->patient->getGpName()) {
-				$gp_name = 'The General Practitioner';
+				$gp_name = Gp::UNKNOWN_NAME;
 			}
 			$this->cc = 'GP: ' . $gp_name . ', ' . $this->patient->getPracticeAddress();
 			$this->cc_targets[] = 'gp';

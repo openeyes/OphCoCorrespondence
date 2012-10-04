@@ -31,7 +31,7 @@ class DefaultController extends BaseEventTypeController {
 				$letter_name = $contact->fullName . ' ' . $contact->qualifications;
 			} else {
 				$contact = null;
-				$letter_name = 'The General Practitioner';
+				$letter_name = Gp::UNKNOWN_NAME;
 			}
 			$address = $patient->practice->getLetterAddress($letter_name);
 		} else if (preg_match('/^contact([0-9]+)$/',@$_GET['address_id'],$m)) {
@@ -134,7 +134,7 @@ class DefaultController extends BaseEventTypeController {
 					$address_name = $patient->getGpName();
 				} else {
 					$contact = null;
-					$address_name = 'The General Practitioner';
+					$address_name = Gp::UNKNOWN_NAME;
 				}
 				$address = $patient->practice->getLetterAddress($address_name);
 			}
