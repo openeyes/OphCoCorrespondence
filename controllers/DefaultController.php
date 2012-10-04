@@ -24,7 +24,7 @@ class DefaultController extends BaseEventTypeController {
 
 		if (@$_GET['address_id'] == 'patient') {
 			$contact = $patient;
-			$address = $contact->getLetterAddress();
+			$address = $patient->getLetterAddress();
 		} else if (@$_GET['address_id'] == 'gp') {
 			if($patient->getGpName()) {
 				$contact = $patient->gp->contact;
@@ -224,33 +224,38 @@ class DefaultController extends BaseEventTypeController {
 		}
 
 		if (@$_GET['contact_id'] == 'patient') {
-			$contact = $patient;
-			$address = $contact->address;
+			$address = ($patient->address) ? $patient->address->getLetterLine(false) : null;
+			$address_name = $patient->addressName;
 			$prefix = 'Patient';
 		} else if (@$_GET['contact_id'] == 'gp') {
-			// FIXME: Need to deal with case of no GP
-			$contact = $patient->gp->contact;
-			$address = $patient->practice->address;
+			if($patient->getGpName()) {
+				$contact = $patient->gp->contact;
+				$address_name = $contact->fullName . ' ' . $contact->qualifications;
+			} else {
+				$address_name = Gp::UNKNOWN_NAME;
+			}
+			$address = $patient->getPracticeAddress(false);
 			$prefix = 'GP';
 		} else if (preg_match('/^contact([0-9]+)$/',@$_GET['contact_id'],$m)) {
 			$prefix = 'Consultant';
 			if (!$contact = Contact::model()->findByPk($m[1])) {
 				throw new Exception('Unknown contact id: '.$m[1]);
 			}
+			$address_name = $contact->fullName;
 			$pca = PatientContactAssignment::model()->find('patient_id=? and contact_id=?',array($patient->id,$contact->id));
 
 			$address = null;
 
 			if ($pca->site) {
 				if ($pca->site) {
-					$address = $pca->site;
+					$address = implode(',',$pca->site->getLetterArray());
 				}
 			} else if ($pca->institution) {
 				if ($pca->institution->address) {
-					$address = $pca->institution->address;
+					$address = $pca->institution->address->getLetterLine(false);
 				}
 			} else {
-				$address = $contact->address;
+				$address = $contact->address->getLetterLine(false);
 			}
 			if ($uca = UserContactAssignment::model()->find('contact_id=?',array($contact->id))) {
 				if ($contact->parent_class != 'Consultant') {
@@ -262,8 +267,9 @@ class DefaultController extends BaseEventTypeController {
 			if (!$contact = Contact::model()->findByPk($m[1])) {
 				throw new Exception('Unknown contact id: '.$m[1]);
 			}
+			$address_name = $contact->fullName;
 			$pca = PatientContactAssignment::model()->find('patient_id=? and contact_id=? and site_id=?',array($patient->id,$contact->id,$m[2]));
-			$address = $pca->site;
+			$address = implode(',',$pca->site->getLetterArray());
 			if ($uca = UserContactAssignment::model()->find('contact_id=?',array($contact->id))) {
 				if ($contact->parent_class != 'Consultant') {
 					$prefix = '';
@@ -274,8 +280,9 @@ class DefaultController extends BaseEventTypeController {
 			if (!$contact = Contact::model()->findByPk($m[1])) {
 				throw new Exception('Unknown contact id: '.$m[1]);
 			}
+			$address_name = $contact->fullName;
 			$pca = PatientContactAssignment::model()->find('patient_id=? and contact_id=? and institution_id=?',array($patient->id,$contact->id,$m[2]));
-			$address = $pca->institution;
+			$address = implode(',',$pca->institution->getLetterArray());
 			if ($uca = UserContactAssignment::model()->find('contact_id=?',array($contact->id))) {
 				if ($contact->parent_class != 'Consultant') {
 					$prefix = '';
@@ -289,12 +296,7 @@ class DefaultController extends BaseEventTypeController {
 			if ($prefix) {
 				echo $prefix.': ';
 			}
-			if ($contact->title) {
-				echo $contact->title.' '.$contact->first_name.' '.$contact->last_name.', ';
-			} else {
-				echo $contact->first_name.' ' .$contact->last_name.', ';
-			}
-			echo implode(', ',$address->getLetterarray(false));
+			echo $address_name . $address;
 		} else {
 			echo "NO ADDRESS";
 		}
