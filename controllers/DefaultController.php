@@ -122,10 +122,8 @@ class DefaultController extends BaseEventTypeController {
 		if ($macro->recipient_patient) {
 			$data['sel_address_target'] = 'patient';
 			$contact = $patient->contact;
-			$address = $patient->contact->getLetterAddress();
-		}
-
-		if ($macro->recipient_doctor) {
+			$address = $patient->getLetterAddress();
+		} else if ($macro->recipient_doctor) {
 			$data['sel_address_target'] = 'gp';
 			if ($patient->getPracticeAddress()) {
 				if($patient->getGpName()) {
