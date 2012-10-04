@@ -26,6 +26,7 @@ class DefaultController extends BaseEventTypeController {
 			$contact = $patient;
 			$address = $contact->getLetterAddress();
 		} else if (@$_GET['address_id'] == 'gp') {
+			// FIXME: Need to deal with case of no GP
 			$contact = $patient->gp->contact;
 			$address = $patient->practice->getLetterAddress($contact->fullName . ' ' . $contact->qualifications);
 		} else if (preg_match('/^contact([0-9]+)$/',@$_GET['address_id'],$m)) {
@@ -223,6 +224,7 @@ class DefaultController extends BaseEventTypeController {
 			$address = $contact->address;
 			$prefix = 'Patient';
 		} else if (@$_GET['contact_id'] == 'gp') {
+			// FIXME: Need to deal with case of no GP
 			$contact = $patient->gp->contact;
 			$address = $patient->practice->address;
 			$prefix = 'GP';
