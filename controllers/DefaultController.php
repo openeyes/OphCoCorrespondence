@@ -26,9 +26,14 @@ class DefaultController extends BaseEventTypeController {
 			$contact = $patient;
 			$address = $contact->getLetterAddress();
 		} else if (@$_GET['address_id'] == 'gp') {
-			// FIXME: Need to deal with case of no GP
-			$contact = $patient->gp->contact;
-			$address = $patient->practice->getLetterAddress($contact->fullName . ' ' . $contact->qualifications);
+			if($patient->getGpName()) {
+				$contact = $patient->gp->contact;
+				$letter_name = $contact->fullName . ' ' . $contact->qualifications;
+			} else {
+				$contact = null;
+				$letter_name = 'The General Practitioner';
+			}
+			$address = $patient->practice->getLetterAddress($letter_name);
 		} else if (preg_match('/^contact([0-9]+)$/',@$_GET['address_id'],$m)) {
 			if (!$contact = Contact::model()->findByPk($m[1])) {
 				throw new Exception('Unknown contact id: '.$m[1]);
@@ -57,35 +62,33 @@ class DefaultController extends BaseEventTypeController {
 		} else {
 			throw new Exception('Unknown or missing address_id value: '.@$_GET['address_id']);
 		}
-
-		$person = trim($contact->title.' '.$contact->first_name.' '.$contact->last_name);
-
-		if (isset($contact->parent_class)) {
-			if ($contact->parent_class == 'Specialist') {
-				$specialist = Specialist::model()->findByPk($contact->parent_id);
-				$person .= "\n".$specialist->specialist_type->name."\n";
-			} else if ($contact->parent_class == 'Consultant') {
-				$person .= "\nConsultant Ophthalmologist\n";
-			} else if ($contact->parent_class == 'Gp') {
-				$person = '';
-			} else {
-				if ($uca = UserContactAssignment::model()->find('contact_id=?',array($contact->id))) {
-					$person .= "\n".($uca->user->role ? $uca->user->role : 'Staff')."\n";
+		
+		$person = '';
+		if($contact) {
+			$person = trim($contact->title.' '.$contact->first_name.' '.$contact->last_name);
+			if (isset($contact->parent_class)) {
+				if ($contact->parent_class == 'Specialist') {
+					$specialist = Specialist::model()->findByPk($contact->parent_id);
+					$person .= "\n".$specialist->specialist_type->name."\n";
+				} else if ($contact->parent_class == 'Consultant') {
+					$person .= "\nConsultant Ophthalmologist\n";
+				} else if ($contact->parent_class == 'Gp') {
+					$person = '';
 				} else {
-					$person .= "\n".$contact->parent_class."\n";
+					if ($uca = UserContactAssignment::model()->find('contact_id=?',array($contact->id))) {
+						$person .= "\n".($uca->user->role ? $uca->user->role : 'Staff')."\n";
+					} else {
+						$person .= "\n".$contact->parent_class."\n";
+					}
 				}
 			}
-		} else {
-			$person = '';
+			if ($nickname && isset($contact->nick_name) && $contact->nick_name) {
+				$data['text_ElementLetter_introduction'] = "Dear ".$contact->nick_name.",";
+			} else {
+				$data['text_ElementLetter_introduction'] = "Dear ".$contact->title." ".$contact->last_name.",";
+			}
 		}
-
 		$data['text_ElementLetter_address'] = $person.$address;
-
-		if ($nickname && isset($contact->nick_name) && $contact->nick_name) {
-			$data['text_ElementLetter_introduction'] = "Dear ".$contact->nick_name.",";
-		} else {
-			$data['text_ElementLetter_introduction'] = "Dear ".$contact->title." ".$contact->last_name.",";
-		}
 
 		echo json_encode($data);
 	}
