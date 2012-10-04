@@ -128,11 +128,11 @@ class ElementLetter extends BaseEventTypeElement
 
 		$options = array('patient' => $patient->fullname.' (Patient)');
 
-		if ($gp = Gp::model()->findByPk($patient->gp_id)) {
-			if ($gp->contact->address) {
-				$options['gp'] = $gp->contact->fullname.' (GP)';
+		if ($gp = $patient->getGpName()) {
+			if ($patient->getPracticeAddress()) {
+				$options['gp'] = $gp . ' (GP)';
 			} else {
-				$options['gp'] = $gp->contact->fullname.' (GP) - NO ADDRESS';
+				$options['gp'] = $gp . ' (GP) - NO ADDRESS';
 			}
 		}
 

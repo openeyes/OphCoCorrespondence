@@ -27,7 +27,7 @@ class DefaultController extends BaseEventTypeController {
 			$address = $contact->getLetterAddress();
 		} else if (@$_GET['address_id'] == 'gp') {
 			$contact = $patient->gp->contact;
-			$address = $contact->getLetterAddress();
+			$address = $patient->practice->getLetterAddress($contact->fullName . ' ' . $contact->qualifications);
 		} else if (preg_match('/^contact([0-9]+)$/',@$_GET['address_id'],$m)) {
 			if (!$contact = Contact::model()->findByPk($m[1])) {
 				throw new Exception('Unknown contact id: '.$m[1]);
@@ -161,8 +161,8 @@ class DefaultController extends BaseEventTypeController {
 			$data['elementappend_cc_targets'] = '<input type="hidden" name="CC_Targets[]" value="patient" />';
 		}
 
-		if ($macro->cc_doctor && $patient->gp !== null && $patient->gp->contact !== null && $patient->gp->contact->address !== null) {
-			$data['textappend_ElementLetter_cc'] = 'GP: '.$patient->gp->contact->title.' '.$patient->gp->contact->last_name.', '.implode(', ',$patient->gp->contact->address->getLetterarray(false));
+		if ($macro->cc_doctor && $patient->practice && $patient->practice->address) {
+			$data['textappend_ElementLetter_cc'] = 'GP: ' . $patient->getGpName() . ', ' . $patient->getPracticeAddress(false);
 			$data['elementappend_cc_targets'] = '<input type="hidden" name="CC_Targets[]" value="gp" />';
 		}
 
@@ -224,7 +224,7 @@ class DefaultController extends BaseEventTypeController {
 			$prefix = 'Patient';
 		} else if (@$_GET['contact_id'] == 'gp') {
 			$contact = $patient->gp->contact;
-			$address = $contact->address;
+			$address = $patient->practice->address;
 			$prefix = 'GP';
 		} else if (preg_match('/^contact([0-9]+)$/',@$_GET['contact_id'],$m)) {
 			$prefix = 'Consultant';
