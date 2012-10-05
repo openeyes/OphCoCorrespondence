@@ -321,6 +321,10 @@ class ElementLetter extends BaseEventTypeElement
 			}
 		}
 
+		foreach (array('address','introduction','re','body','footer','cc') as $field) {
+			$this->$field = trim($this->$field);
+		}
+
 		return parent::beforeSave();
 	}
 
