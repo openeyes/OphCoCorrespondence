@@ -128,13 +128,12 @@ class ElementLetter extends BaseEventTypeElement
 
 		$options = array('patient' => $patient->fullname.' (Patient)');
 
-		if ($patient->getPracticeAddress()) {
-			if($gp = $patient->getGpName()) {
-				$options['gp'] = $gp;
+		if ($gp = Gp::model()->findByPk($patient->gp_id)) {
+			if ($gp->contact->address) {
+				$options['gp'] = $gp->contact->fullname.' (GP)';
 			} else {
-				$options['gp'] = Gp::UNKNOWN_NAME;
+				$options['gp'] = $gp->contact->fullname.' (GP) - NO ADDRESS';
 			}
-			$options['gp'] .= ' (GP)';
 		}
 
 		foreach (PatientContactAssignment::model()->findAll('patient_id=?',array($patient->id)) as $pca) {
@@ -246,20 +245,14 @@ class ElementLetter extends BaseEventTypeElement
 			} else {
 				$this->introduction = "Dear ".$patient->title." ".$patient->last_name.",";
 			}
-		} else if ($this->macro->recipient_doctor && $patient->getPracticeAddress()) {
-			if($patient->getGpName()) {
-				$gp_name = $patient->getGpName();
-				if ($this->macro->use_nickname && $patient->gp->contact->nick_name) {
-					$this->introduction = "Dear " . $patient->gp->contact->nick_name . ",";
-				} else {
-					$this->introduction = "Dear " . $patient->gp->contact->getSalutationName() . ",";
-				}
-			} else {
-				$gp_name = Gp::UNKNOWN_NAME;
-				$this->introduction = "Dear " . Gp::UNKNOWN_SALUTATION . ",";
-			}
-			$this->address = $patient->practice->getLetterAddress();
+		} else if ($this->macro->recipient_doctor && $patient->gp) {
+			$this->address = $patient->gp->contact->getLetterAddress();
 			$this->address_target = 'gp';
+			if ($this->macro->use_nickname && $patient->gp->contact->nick_name) {
+				$this->introduction = "Dear ".$patient->gp->contact->nick_name.",";
+			} else {
+				$this->introduction = "Dear ".$patient->gp->contact->title." ".$patient->gp->contact->last_name.",";
+			}
 		}
 
 		$this->macro->substitute($patient);
@@ -270,11 +263,8 @@ class ElementLetter extends BaseEventTypeElement
 			$this->cc_targets[] = 'patient';
 		}
 
-		if ($this->macro->cc_doctor && $this->patient->getPracticeAddress()) {
-			if(!$gp_name =$this->patient->getGpName()) {
-				$gp_name = Gp::UNKNOWN_NAME;
-			}
-			$this->cc = 'GP: ' . $gp_name . ', ' . $this->patient->getPracticeAddress();
+		if ($this->macro->cc_doctor && $this->patient->gp !== null && $this->patient->gp->contact !== null && $this->patient->gp->contact->address !== null) {
+			$this->cc = 'GP: '.$this->patient->gp->contact->title.' '.$this->patient->gp->contact->first_name.' '.$this->patient->gp->contact->last_name.', '.implode(', ',$this->patient->gp->contact->address->getLetterarray(false));
 			$this->cc_targets[] = 'gp';
 		}
 	}
@@ -330,7 +320,7 @@ class ElementLetter extends BaseEventTypeElement
 				$this->direct_line = $dl->direct_line;
 			}
 		}
-
+		
 		foreach (array('address','introduction','re','body','footer','cc') as $field) {
 			$this->$field = trim($this->$field);
 		}
