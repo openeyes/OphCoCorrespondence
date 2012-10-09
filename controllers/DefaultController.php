@@ -24,8 +24,12 @@ class DefaultController extends BaseEventTypeController {
 			$contact = $patient;
 			$address = $contact->getLetterAddress();
 		} else if (@$_GET['address_id'] == 'gp') {
-			$contact = ($patient->gp) ? $patient->gp->contact : null;
-			$address = ($patient->practice && $patient->practice->address) ? $patient->practice->getLetterAddress($contact->fullName) : null;
+			if($contact = @$patient->gp->contact) {
+				$address_name = $contact->fullName;
+			} else {
+				$address_name = Gp::UNKNOWN_NAME;
+			}
+			$address = ($patient->practice && $patient->practice->address) ? $patient->practice->getLetterAddress($address_name) : null;
 			$salutation = ($contact) ? $contact->salutationName : Gp::UNKNOWN_SALUTATION;
 			$nickname = ($contact) ? $contact->nick_name : Gp::UNKNOWN_NAME;
 		} else if (preg_match('/^contact([0-9]+)$/',@$_GET['address_id'],$m)) {
