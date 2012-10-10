@@ -14,6 +14,12 @@
 		));
 	?>
 
+		<?php if(!$this->patient->practice || !$this->patient->practice->address) { ?>
+		<div id="no-practice-address" class="alertBox">
+			Patient has no GP practice address, please correct in PAS before creating GP letter.
+		</div>
+		<?php } ?>
+
 		<?php $this->displayErrors($errors)?>
 
 		<div class="elements">
