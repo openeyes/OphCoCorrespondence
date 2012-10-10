@@ -18,16 +18,20 @@ class DefaultController extends BaseEventTypeController {
 			throw new Exception('Patient not found: '.@$_GET['patient_id']);
 		}
 
-		$nickname = (boolean)@$_GET['nickname'];
-
 		$data = array();
 
 		if (@$_GET['address_id'] == 'patient') {
 			$contact = $patient;
 			$address = $contact->getLetterAddress();
 		} else if (@$_GET['address_id'] == 'gp') {
-			$contact = $patient->gp->contact;
-			$address = $contact->getLetterAddress();
+			if($contact = @$patient->gp->contact) {
+				$address_name = $contact->fullName;
+			} else {
+				$address_name = Gp::UNKNOWN_NAME;
+			}
+			$address = ($patient->practice && $patient->practice->address) ? $patient->practice->getLetterAddress($address_name) : null;
+			$salutation = ($contact) ? $contact->salutationName : Gp::UNKNOWN_SALUTATION;
+			$nickname = ($contact) ? $contact->nick_name : Gp::UNKNOWN_NAME;
 		} else if (preg_match('/^contact([0-9]+)$/',@$_GET['address_id'],$m)) {
 			if (!$contact = Contact::model()->findByPk($m[1])) {
 				throw new Exception('Unknown contact id: '.$m[1]);
@@ -57,7 +61,7 @@ class DefaultController extends BaseEventTypeController {
 			throw new Exception('Unknown or missing address_id value: '.@$_GET['address_id']);
 		}
 
-		$person = trim($contact->title.' '.$contact->first_name.' '.$contact->last_name);
+		$person = @$contact->fullName;
 
 		if (isset($contact->parent_class)) {
 			if ($contact->parent_class == 'Specialist') {
@@ -80,10 +84,19 @@ class DefaultController extends BaseEventTypeController {
 
 		$data['text_ElementLetter_address'] = $person.$address;
 
-		if ($nickname && isset($contact->nick_name) && $contact->nick_name) {
-			$data['text_ElementLetter_introduction'] = "Dear ".$contact->nick_name.",";
+		$data['text_ElementLetter_introduction'] = 'Dear Sir/Madam,';
+		if((boolean)@$_GET['nickname']) {
+			if(isset($nickname)) {
+				$data['text_ElementLetter_introduction'] = "Dear ".$nickname.",";
+			} else if($contact) {
+				$data['text_ElementLetter_introduction'] = "Dear ".$contact->nick_name.",";
+			}
 		} else {
-			$data['text_ElementLetter_introduction'] = "Dear ".$contact->title." ".$contact->last_name.",";
+			if(isset($salutation)) {
+				$data['text_ElementLetter_introduction'] = "Dear ".$salutation.",";
+			} else if($contact) {
+				$data['text_ElementLetter_introduction'] = "Dear ".$contact->salutationName.",";
+			}
 		}
 
 		echo json_encode($data);
@@ -125,30 +138,43 @@ class DefaultController extends BaseEventTypeController {
 
 		if ($macro->recipient_doctor) {
 			$data['sel_address_target'] = 'gp';
-			if ($patient->gp) {
-				$contact = $patient->gp->contact;
+			if (@$patient->practice->address) {
+				if(@$patient->gp->contact) {
+					$address_name = $patient->gp->contact->fullName;
+					$address_salutation = ($macro->use_nickname && $patient->gp->contact->nick_name) ? $patient->gp->contact->nick_name : $patient->gp->contact->salutationName;
+				} else {
+					$address_name = Gp::UNKNOWN_NAME;
+					$address_salutation = Gp::UNKNOWN_SALUTATION;
+				}
+				$address = $patient->practice->getLetterAddress($address_name);
 			}
 		}
 
-		if (isset($contact)) {
+		if(isset($address)) {
+			$data['text_ElementLetter_address'] = $address;
+		} else if (isset($contact)) {
 			$data['text_ElementLetter_address'] = $contact->getLetterAddress();
 		}
 
 		if ($macro->use_nickname) {
 			$data['check_ElementLetter_use_nickname'] = 1;
 
-			if (isset($contact)) {
+			if(isset($address_salutation)) {
+				$data['text_ElementLetter_introduction'] = "Dear ".$address_salutation.",";
+			} else if (isset($contact)) {
 				if (isset($contact->nick_name) && $contact->nick_name) {
 					$data['text_ElementLetter_introduction'] = "Dear ".$contact->nick_name.",";
 				} else {
-					$data['text_ElementLetter_introduction'] = "Dear ".$contact->title." ".$contact->last_name.",";
+					$data['text_ElementLetter_introduction'] = "Dear ".$contact->salutationName.",";
 				}
 			}
 		} else {
 			$data['check_ElementLetter_use_nickname'] = 0;
 
-			if (isset($contact)) {
-				$data['text_ElementLetter_introduction'] = "Dear ".$contact->title." ".$contact->last_name.",";
+			if(isset($address_salutation)) {
+				$data['text_ElementLetter_introduction'] = "Dear ".$address_salutation.",";
+			} else if (isset($contact)) {
+				$data['text_ElementLetter_introduction'] = "Dear ".$contact->salutationName.",";
 			}
 		}
 
@@ -157,12 +183,16 @@ class DefaultController extends BaseEventTypeController {
 		}
 
 		if ($macro->cc_patient) {
-			$data['textappend_ElementLetter_cc'] = 'Patient: '.$patient->title.' '.$patient->last_name.', '.implode(', ',$patient->address->getLetterarray(false));
+			$data['textappend_ElementLetter_cc'] = 'Patient: '.$patient->addressName.', '.implode(', ',$patient->address->getLetterarray(false));
 			$data['elementappend_cc_targets'] = '<input type="hidden" name="CC_Targets[]" value="patient" />';
 		}
 
-		if ($macro->cc_doctor && $patient->gp !== null && $patient->gp->contact !== null && $patient->gp->contact->address !== null) {
-			$data['textappend_ElementLetter_cc'] = 'GP: '.$patient->gp->contact->title.' '.$patient->gp->contact->last_name.', '.implode(', ',$patient->gp->contact->address->getLetterarray(false));
+		if ($macro->cc_doctor && @$patient->practice->address) {
+			if(@$patient->gp->contact) {
+				$data['textappend_ElementLetter_cc'] = 'GP: '.$patient->gp->contact->fullName.', '.implode(', ',$patient->practice->address->getLetterarray(false));
+			} else {
+				$data['textappend_ElementLetter_cc'] = 'GP: '.Gp::UNKNOWN_NAME.', '.implode(', ',$patient->practice->address->getLetterarray(false));
+			}
 			$data['elementappend_cc_targets'] = '<input type="hidden" name="CC_Targets[]" value="gp" />';
 		}
 
@@ -220,17 +250,15 @@ class DefaultController extends BaseEventTypeController {
 
 		if (@$_GET['contact_id'] == 'patient') {
 			$contact = $patient;
+			$address_name = $patient->addressName;
 			$address = $contact->address;
 			$prefix = 'Patient';
 		} else if (@$_GET['contact_id'] == 'gp') {
-			if ($patient->gp && $patient->gp->contact && $patient->gp->contact->address) {
-				$contact = $patient->gp->contact;
-				$address = $contact->address;
-				$prefix = 'GP';
-			} else {
-				echo "NO ADDRESS";
-				return;
+			if(!$contact = @$patient->gp->contact) {
+				$address_name = Gp::UNKNOWN_NAME;
 			}
+			$address = @$patient->practice->address;
+			$prefix = 'GP';
 		} else if (preg_match('/^contact([0-9]+)$/',@$_GET['contact_id'],$m)) {
 			$prefix = 'Consultant';
 			if (!$contact = Contact::model()->findByPk($m[1])) {
@@ -288,10 +316,10 @@ class DefaultController extends BaseEventTypeController {
 			if ($prefix) {
 				echo $prefix.': ';
 			}
-			if ($contact->title) {
-				echo $contact->title.' '.$contact->first_name.' '.$contact->last_name.', ';
-			} else {
-				echo $contact->first_name.' ' .$contact->last_name.', ';
+			if(isset($address_name)) {
+				echo $address_name . ', ';
+			} else if($contact) {
+				echo $contact->fullName.', ';
 			}
 			echo implode(', ',$address->getLetterarray(false));
 		} else {

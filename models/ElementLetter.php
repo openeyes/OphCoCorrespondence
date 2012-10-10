@@ -128,14 +128,15 @@ class ElementLetter extends BaseEventTypeElement
 
 		$options = array('patient' => $patient->fullname.' (Patient)');
 
-		if ($gp = Gp::model()->findByPk($patient->gp_id)) {
-			if ($gp->contact && $gp->contact->address) {
-				$options['gp'] = $gp->contact->fullname.' (GP)';
-			} else {
-				$options['gp'] = $gp->contact->fullname.' (GP) - NO ADDRESS';
-			}
+		if ($patient->gp && $patient->gp->contact) {
+			$options['gp'] = $patient->gp->contact->fullname.' (GP)';
+		} else {
+			$options['gp'] = Gp::UNKNOWN_NAME.' (GP)';
 		}
-
+		if(!$patient->practice || !$patient->practice->address) {
+			$options['gp'] .= ' - NO ADDRESS';
+		}
+		
 		foreach (PatientContactAssignment::model()->findAll('patient_id=?',array($patient->id)) as $pca) {
 			if ($pca->contact->parent_class == 'Specialist') {
 				$type = Specialist::model()->findByPk($pca->contact->parent_id)->specialist_type->name;
@@ -245,13 +246,20 @@ class ElementLetter extends BaseEventTypeElement
 			} else {
 				$this->introduction = "Dear ".$patient->title." ".$patient->last_name.",";
 			}
-		} else if ($this->macro->recipient_doctor && $patient->gp) {
-			$this->address = $patient->gp->contact->getLetterAddress();
-			$this->address_target = 'gp';
-			if ($this->macro->use_nickname && $patient->gp->contact->nick_name) {
-				$this->introduction = "Dear ".$patient->gp->contact->nick_name.",";
+		} else if ($this->macro->recipient_doctor && @$patient->practice->address) {
+			if($patient->gp && $patient->gp->contact) {
+				$gp_name = $patient->gp->contact->fullName;
 			} else {
-				$this->introduction = "Dear ".$patient->gp->contact->title." ".$patient->gp->contact->last_name.",";
+				$gp_name = Gp::UNKNOWN_NAME;
+			}
+			$this->address = $patient->practice->getLetterAddress($gp_name);
+			$this->address_target = 'gp';
+			if ($this->macro->use_nickname && @$patient->gp->contact->nick_name) {
+				$this->introduction = "Dear ".$patient->gp->contact->nick_name.",";
+			} else if(@$patient->gp->contact->salutationName) {
+				$this->introduction = "Dear ".$patient->gp->contact->salutationName.",";
+			} else {
+				$this->introduction = "Dear " . Gp::UNKNOWN_SALUTATION . ",";
 			}
 		}
 
@@ -263,8 +271,12 @@ class ElementLetter extends BaseEventTypeElement
 			$this->cc_targets[] = 'patient';
 		}
 
-		if ($this->macro->cc_doctor && $this->patient->gp !== null && $this->patient->gp->contact !== null && $this->patient->gp->contact->address !== null) {
-			$this->cc = 'GP: '.$this->patient->gp->contact->title.' '.$this->patient->gp->contact->first_name.' '.$this->patient->gp->contact->last_name.', '.implode(', ',$this->patient->gp->contact->address->getLetterarray(false));
+		if ($this->macro->cc_doctor && @$patient->practice->address) {
+			if(@$patient->gp->contact) {
+				$this->cc = 'GP: '.$patient->gp->contact->title.' '.$patient->gp->contact->first_name.' '.$patient->gp->contact->last_name.', '.implode(', ',$patient->gp->contact->address->getLetterarray(false));
+			} else {
+				$this->cc = 'GP: '.Gp::UNKNOWN_NAME.', '.implode(', ',$patient->practice->address->getLetterarray(false));
+			}
 			$this->cc_targets[] = 'gp';
 		}
 	}
@@ -319,6 +331,10 @@ class ElementLetter extends BaseEventTypeElement
 			if ($dl = FirmSiteSecretary::model()->find('firm_id=? and site_id=?',array(Yii::app()->session['selected_firm_id'],$this->site_id))) {
 				$this->direct_line = $dl->direct_line;
 			}
+		}
+		
+		foreach (array('address','introduction','re','body','footer','cc') as $field) {
+			$this->$field = trim($this->$field);
 		}
 
 		return parent::beforeSave();
