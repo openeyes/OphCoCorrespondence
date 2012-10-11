@@ -22,7 +22,7 @@
 	<div class="letter_header">
 		<?php $this->renderPartial("letter_start", array(
 			'site' => $element->site,
-			'toAddress' => $element->address,
+			'toAddress' => CHtml::encode($element->address),
 			'patient' => $this->patient,
 			'date' => $element->date,
 			'directLine' => $element->direct_line,
@@ -38,7 +38,7 @@
 		<?php echo $element->renderIntroduction()?>
 		<br/><br/>
 		<?php if ($element->re) {?>
-			<strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",$element->re)?></strong>
+			<strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",CHtml::encode($element->re))?></strong>
 			<br/><br/>
 		<?php }?>
 		<?php echo $element->renderBody()?>
@@ -53,7 +53,7 @@
 	<p>
 		<?php if ($element->cc) {?>
 			To: <?php echo $element->renderToAddress()?>
-			<?php foreach (explode("\n",trim($element->cc)) as $line) {
+			<?php foreach (explode("\n",trim(CHtml::encode($element->cc))) as $line) {
 				if (trim($line)) { ?>
 				<br/>Cc: <?php echo $line ?>
 			<?php }?>
