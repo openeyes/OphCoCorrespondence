@@ -32,31 +32,13 @@ class DefaultController extends BaseEventTypeController {
 			$address = ($patient->practice && $patient->practice->address) ? $patient->practice->getLetterAddress($address_name) : null;
 			$salutation = ($contact) ? $contact->salutationName : Gp::UNKNOWN_SALUTATION;
 			$nickname = ($contact) ? $contact->nick_name : Gp::UNKNOWN_NAME;
-		} else if (preg_match('/^contact([0-9]+)$/',@$_GET['address_id'],$m)) {
+		} else if (preg_match('/^contact([0-9]+)_?(site|institution)?([0-9]+)?$/',@$_GET['address_id'],$m)) {
 			if (!$contact = Contact::model()->findByPk($m[1])) {
 				throw new Exception('Unknown contact id: '.$m[1]);
 			}
-			$pca = PatientContactAssignment::model()->find('patient_id=? and contact_id=?',array($patient->id,$contact->id));
-
-			if ($pca->site) {
-				$address = $pca->site->getLetterAddress();
-			} else if ($pca->institution) {
-				$address = $pca->institution->getLetterAddress();
-			} else {
-				$address = $contact->getLetterAddress();
+			if ($address = $patient->getContactAddress($contact->id, @$m[2], @$m[3])) {
+				$address = $address->getLetterAddress();
 			}
-		} else if (preg_match('/^contact([0-9]+)_site([0-9]+)$/',@$_GET['address_id'],$m)) {
-			if (!$contact = Contact::model()->findByPk($m[1])) {
-				throw new Exception('Unknown contact id: '.$m[1]);
-			}
-			$pca = PatientContactAssignment::model()->find('patient_id=? and contact_id=? and site_id=?',array($patient->id,$contact->id,$m[2]));
-			$address = $pca->site->getLetterAddress();
-		} else if (preg_match('/^contact([0-9]+)_institution([0-9]+)$/',@$_GET['address_id'],$m)) {
-			if (!$contact = Contact::model()->findByPk($m[1])) {
-				throw new Exception('Unknown contact id: '.$m[1]);
-			}
-			$pca = PatientContactAssignment::model()->find('patient_id=? and contact_id=? and institution_id=?',array($patient->id,$contact->id,$m[2]));
-			$address = $pca->institution->getLetterAddress();
 		} else {
 			throw new Exception('Unknown or missing address_id value: '.@$_GET['address_id']);
 		}
@@ -259,57 +241,16 @@ class DefaultController extends BaseEventTypeController {
 			}
 			$address = @$patient->practice->address;
 			$prefix = 'GP';
-		} else if (preg_match('/^contact([0-9]+)$/',@$_GET['contact_id'],$m)) {
-			$prefix = 'Consultant';
-			if (!$contact = Contact::model()->findByPk($m[1])) {
-				throw new Exception('Unknown contact id: '.$m[1]);
-			}
-			$pca = PatientContactAssignment::model()->find('patient_id=? and contact_id=?',array($patient->id,$contact->id));
+		} else if (preg_match('/^contact([0-9]+)_?(site|institution)?([0-9]+)?$/',@$_GET['contact_id'],$m)) {
 
-			$address = null;
+			if (!$contact = Contact::model()->findByPk($m[1])) {
+				throw new Exception('Unknown contact id: '.$m[1]);
+			}
 
-			if ($pca->site) {
-				if ($pca->site) {
-					$address = $pca->site;
-				}
-			} else if ($pca->institution) {
-				if ($pca->institution->address) {
-					$address = $pca->institution->address;
-				}
-			} else {
-				$address = $contact->address;
-			}
-			if ($uca = UserContactAssignment::model()->find('contact_id=?',array($contact->id))) {
-				if ($contact->parent_class != 'Consultant') {
-					$prefix = '';
-				}
-			}
-		} else if (preg_match('/^contact([0-9]+)_site([0-9]+)$/',@$_GET['contact_id'],$m)) {
-			$prefix = 'Consultant';
-			if (!$contact = Contact::model()->findByPk($m[1])) {
-				throw new Exception('Unknown contact id: '.$m[1]);
-			}
-			$pca = PatientContactAssignment::model()->find('patient_id=? and contact_id=? and site_id=?',array($patient->id,$contact->id,$m[2]));
-			$address = $pca->site;
-			if ($uca = UserContactAssignment::model()->find('contact_id=?',array($contact->id))) {
-				if ($contact->parent_class != 'Consultant') {
-					$prefix = '';
-				}
-			}
-		} else if (preg_match('/^contact([0-9]+)_institution([0-9]+)$/',@$_GET['contact_id'],$m)) {
-			$prefix = 'Consultant';
-			if (!$contact = Contact::model()->findByPk($m[1])) {
-				throw new Exception('Unknown contact id: '.$m[1]);
-			}
-			$pca = PatientContactAssignment::model()->find('patient_id=? and contact_id=? and institution_id=?',array($patient->id,$contact->id,$m[2]));
-			$address = $pca->institution;
-			if ($uca = UserContactAssignment::model()->find('contact_id=?',array($contact->id))) {
-				if ($contact->parent_class != 'Consultant') {
-					$prefix = '';
-				}
-			}
+			$address = $patient->getContactAddress($contact->id, @$m[2], @$m[3]);
+
 		} else {
-			throw new Exception('Unknown or missing contact_id value: '.@$_GET['contact_id']);
+			throw new Exception('Invalid or missing contact_id value: '.@$_GET['contact_id']);
 		}
 
 		if ($address) {
