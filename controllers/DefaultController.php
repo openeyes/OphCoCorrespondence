@@ -68,8 +68,8 @@ class DefaultController extends BaseEventTypeController {
 
 		$data['text_ElementLetter_introduction'] = 'Dear Sir/Madam,';
 
-		if ((boolean)@$_GET['nickname']) {
-			if (isset($nickname)) {
+		if ((boolean)@$_GET['nickname'] && (isset($nickname) || ($contact && $contact->nick_name))) {
+			if(isset($nickname)) {
 				$data['text_ElementLetter_introduction'] = "Dear ".$nickname.",";
 			} else if($contact) {
 				$data['text_ElementLetter_introduction'] = "Dear ".$contact->nick_name.",";
