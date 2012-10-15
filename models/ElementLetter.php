@@ -197,7 +197,7 @@ class ElementLetter extends BaseEventTypeElement
 				}
 			}
 
-			$this->re .= ', DOB: '.$patient->NHSDate('dob').', Hosp.No: '.$patient->hos_num.', NHS no: '.$patient->nhsnum;
+			$this->re .= ', DOB: '.$patient->NHSDate('dob').', Hosp No: '.$patient->hos_num.', NHS No: '.$patient->nhsnum;
 
 			$user = Yii::app()->session['user'];
 
