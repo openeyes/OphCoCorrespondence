@@ -201,6 +201,10 @@ class DefaultController extends BaseEventTypeController {
 				if (!$firm = FirmLetterString::model()->findByPk(@$_GET['string_id'])) {
 					throw new Exception('Firm letter string not found: '.@$_GET['string_id']);
 				}
+				break;
+			case 'examination':
+				echo $this->process_examination_findings($_GET['patient_id'],$_GET['string_id']);
+				return;
 			default:
 				throw new Exception('Unknown letter string type: '.@$_GET['string_type']);
 		}
@@ -352,5 +356,24 @@ class DefaultController extends BaseEventTypeController {
 		}
 
 		echo json_encode($users);
+	}
+
+	public function process_examination_findings($patient_id, $element_type_id) {
+		if (!$patient = Patient::model()->findByPk($patient_id)) {
+			throw new Exception('Unable to find patient: '.$patient_id);
+		}
+
+		$event_type = EventType::model()->find('class_name=?',array('OphCiExamination'));
+
+		$element_type = ElementType::model()->findByPk($element_type_id);
+
+		if ($episode = $patient->getEpisodeForCurrentSubspecialty()) {
+			if ($event = $episode->getMostRecentEventByType($event_type->id)) {
+
+				if ($element = ModuleAPI::getmodel('OphCiExamination',$element_type->class_name)->find('event_id=?',array($event->id))) {
+					return $element->letter_string;
+				}
+			}
+		}
 	}
 }

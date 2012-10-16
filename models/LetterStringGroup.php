@@ -108,6 +108,30 @@ class LetterStringGroup extends BaseEventTypeElement
 		$strings = array();
 		$string_names = array();
 
+		$patient = Patient::model()->findByPk($_GET['patient_id']);
+
+		if ($this->name == 'Findings') {
+			if ($event_type = EventType::model()->find('class_name=?',array('OphCiExamination'))) {
+				if ($episode = $patient->getEpisodeForCurrentSubspecialty()) {
+					if ($event = $episode->getMostRecentEventByType($event_type->id)) {
+						$criteria = new CDbCriteria;
+						$criteria->compare('event_type_id',$event_type->id);
+						$criteria->order = 'display_order asc';
+
+						foreach (ElementType::model()->findAll($criteria) as $element_type) {
+							if ($element_type->class_name != 'Element_OphCiExamination_Management') {
+								if ($element = ModuleAPI::getmodel('OphCiExamination',$element_type->class_name)->find('event_id=?',array($event->id))) {
+									$strings['examination'.$element_type->id] = $element_type->name;
+								}
+							}
+						}
+					}
+				}
+			}
+
+			return $strings;
+		}
+
 		$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
 
 		$criteria = new CDbCriteria;
