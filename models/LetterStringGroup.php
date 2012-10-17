@@ -108,7 +108,11 @@ class LetterStringGroup extends BaseEventTypeElement
 		$strings = array();
 		$string_names = array();
 
-		$patient = Patient::model()->findByPk($_GET['patient_id']);
+		if (isset($_GET['patient_id'])) {
+			$patient = Patient::model()->findByPk($_GET['patient_id']);
+		} else {
+			$patient = Yii::app()->getController()->patient;
+		}
 
 		if ($this->name == 'Findings') {
 			if ($event_type = EventType::model()->find('class_name=?',array('OphCiExamination'))) {
