@@ -258,7 +258,7 @@ class DefaultController extends BaseEventTypeController {
 		}
 
 		if ($address) {
-			if ($prefix) {
+			if (@$prefix) {
 				echo $prefix.': ';
 			}
 			if(isset($address_name)) {
