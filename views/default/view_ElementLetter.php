@@ -40,6 +40,9 @@
 		<?php if ($element->re) {?>
 			<strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",CHtml::encode($element->re))?></strong>
 			<br/><br/>
+		<?php }else{?>
+			<strong>Hosp No: <?php echo $element->event->episode->patient->hos_num?>, NHS No: <?php echo $element->event->episode->patient->nhsnum?></strong>
+			<br/><br/>
 		<?php }?>
 		<?php echo $element->renderBody()?>
 		<br/><br/>
