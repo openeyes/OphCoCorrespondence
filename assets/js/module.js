@@ -420,7 +420,7 @@ function correspondence_append_body(text) {
 
 	text = ucfirst(text);
 
-	if (!text.match(/\.$/)) {
+	if (!text.match(/\.$/) && !text.match(/\n$/)) {
 		text += '. ';
 	}
 
