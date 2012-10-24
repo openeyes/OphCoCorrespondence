@@ -108,34 +108,6 @@ class LetterStringGroup extends BaseEventTypeElement
 		$strings = array();
 		$string_names = array();
 
-		if (isset($_GET['patient_id'])) {
-			$patient = Patient::model()->findByPk($_GET['patient_id']);
-		} else {
-			$patient = Yii::app()->getController()->patient;
-		}
-
-		if ($this->name == 'Findings') {
-			if ($event_type = EventType::model()->find('class_name=?',array('OphCiExamination'))) {
-				if ($episode = $patient->getEpisodeForCurrentSubspecialty()) {
-					if ($event = $episode->getMostRecentEventByType($event_type->id)) {
-						$criteria = new CDbCriteria;
-						$criteria->compare('event_type_id',$event_type->id);
-						$criteria->order = 'display_order asc';
-
-						foreach (ElementType::model()->findAll($criteria) as $element_type) {
-							if ($element_type->class_name != 'Element_OphCiExamination_Management') {
-								if ($element = ModuleAPI::getmodel('OphCiExamination',$element_type->class_name)->find('event_id=?',array($event->id))) {
-									$strings['examination'.$element_type->id] = $element_type->name;
-								}
-							}
-						}
-					}
-				}
-			}
-
-			return $strings;
-		}
-
 		$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
 
 		$criteria = new CDbCriteria;
@@ -145,7 +117,9 @@ class LetterStringGroup extends BaseEventTypeElement
 		
 		foreach (FirmLetterString::model()->findAll($criteria) as $flm) {
 			if (!in_array($flm->name, $string_names)) {
-				$strings['firm'.$flm->id] = $string_names[] = $flm->name;
+				if ($flm->shouldShow()) {
+					$strings['firm'.$flm->id] = $string_names[] = $flm->name;
+				}
 			}
 		}
 
@@ -156,7 +130,9 @@ class LetterStringGroup extends BaseEventTypeElement
 
 		foreach (SubspecialtyLetterString::model()->findAll($criteria) as $slm) {
 			if (!in_array($slm->name, $string_names)) {
-				$strings['subspecialty'.$slm->id] = $string_names[] = $slm->name;
+				if ($slm->shouldShow()) {
+					$strings['subspecialty'.$slm->id] = $string_names[] = $slm->name;
+				}
 			}
 		}
 
@@ -167,7 +143,9 @@ class LetterStringGroup extends BaseEventTypeElement
 
 		foreach (LetterString::model()->findAll($criteria) as $slm) {
 			if (!in_array($slm->name, $string_names)) {
-				$strings['site'.$slm->id] = $string_names[] = $slm->name;
+				if ($slm->shouldShow()) {
+					$strings['site'.$slm->id] = $string_names[] = $slm->name;
+				}
 			}
 		}
 
