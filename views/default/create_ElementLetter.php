@@ -73,7 +73,7 @@
 	<div class="row">
 		<span class="left">
 			<?php foreach ($element->stringgroups as $string_group) {?>
-				<?php echo $form->dropDownListNoPost(strtolower($string_group->name), $string_group->strings, '', array('empty' => '- '.$string_group->name.' -', 'nowrapper' => true, 'class' => 'stringgroup'))?>
+				<?php echo $form->dropDownListNoPost(strtolower($string_group->name), $string_group->strings, '', array('empty' => '- '.$string_group->name.' -', 'nowrapper' => true, 'class' => 'stringgroup', 'disabled' => empty($string_group->strings)))?>
 			<?php }?>
 		</span>
 		<span class="right">
