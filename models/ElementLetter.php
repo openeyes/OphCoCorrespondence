@@ -58,7 +58,7 @@ class ElementLetter extends BaseEventTypeElement
 		// will receive user inputs.
 		return array(
 			array('event_id, site_id, print, address, use_nickname, date, introduction, cc, re, body, footer, draft', 'safe'),
-			array('use_nickname, site_id, date, address, introduction, body, footer, re', 'required'),
+			array('use_nickname, site_id, date, address, introduction, body, footer', 'required'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, event_id, site_id, use_nickname, date, introduction, re, body, footer, draft, direct_line', 'safe', 'on' => 'search'),
@@ -197,7 +197,7 @@ class ElementLetter extends BaseEventTypeElement
 				}
 			}
 
-			$this->re .= ', DOB: '.$patient->NHSDate('dob').', Hosp.No: '.$patient->hos_num.', NHS no: '.$patient->nhs_num;
+			$this->re .= ', DOB: '.$patient->NHSDate('dob').', Hosp No: '.$patient->hos_num.', NHS No: '.$patient->nhsnum;
 
 			$user = Yii::app()->session['user'];
 
