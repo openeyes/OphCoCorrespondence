@@ -20,10 +20,9 @@
 class LetterStringBase extends BaseEventTypeElement
 {
 	public function shouldShow() {
-		if (!$this->event_type_id || !$this->element_type_id) return true;
-		if (!$event_type = EventType::model()->findByPk($this->event_type_id)) return false;
-
-		$element_type = ElementType::model()->findByPk($this->element_type_id);
+		if (!$this->event_type|| !$this->element_type) return true;
+		if (!$event_type = EventType::model()->find('class_name=?',array($this->event_type))) return false;
+		if (!$element_type = ElementType::model()->find('class_name=?',array($this->element_type))) return false;
 
 		if (isset($_GET['patient_id'])) {
 			$patient = Patient::model()->findByPk($_GET['patient_id']);
