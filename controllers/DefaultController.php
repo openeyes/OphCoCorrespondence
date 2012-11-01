@@ -70,8 +70,8 @@ class DefaultController extends BaseEventTypeController {
 
 		$data['text_ElementLetter_introduction'] = 'Dear Sir/Madam,';
 
-		if ((boolean)@$_GET['nickname']) {
-			if (isset($nickname)) {
+		if ((boolean)@$_GET['nickname'] && (isset($nickname) || ($contact && $contact->nick_name))) {
+			if(isset($nickname)) {
 				$data['text_ElementLetter_introduction'] = "Dear ".$nickname.",";
 			} else if($contact) {
 				$data['text_ElementLetter_introduction'] = "Dear ".$contact->nick_name.",";
@@ -204,6 +204,10 @@ class DefaultController extends BaseEventTypeController {
 				if (!$firm = FirmLetterString::model()->findByPk(@$_GET['string_id'])) {
 					throw new Exception('Firm letter string not found: '.@$_GET['string_id']);
 				}
+				break;
+			case 'examination':
+				echo $this->process_examination_findings($_GET['patient_id'],$_GET['string_id']);
+				return;
 			default:
 				throw new Exception('Unknown letter string type: '.@$_GET['string_type']);
 		}
@@ -245,7 +249,6 @@ class DefaultController extends BaseEventTypeController {
 				$address_name = Gp::UNKNOWN_NAME;
 			}
 			$address = @$patient->practice->address;
-
 		} else if (preg_match('/^contact([0-9]+)_?(site|institution)?([0-9]+)?$/',@$_GET['contact_id'],$m)) {
 
 			if (!$contact = Contact::model()->findByPk($m[1])) {
@@ -253,7 +256,6 @@ class DefaultController extends BaseEventTypeController {
 			}
 
 			$address = $patient->getContactAddress($contact->id, @$m[2], @$m[3]);
-
 		} else {
 			throw new Exception('Invalid or missing contact_id value: '.@$_GET['contact_id']);
 		}
@@ -400,5 +402,24 @@ class DefaultController extends BaseEventTypeController {
 		}
 
 		echo json_encode($users);
+	}
+
+	public function process_examination_findings($patient_id, $element_type_id) {
+		if (!$patient = Patient::model()->findByPk($patient_id)) {
+			throw new Exception('Unable to find patient: '.$patient_id);
+		}
+
+		$event_type = EventType::model()->find('class_name=?',array('OphCiExamination'));
+
+		$element_type = ElementType::model()->findByPk($element_type_id);
+
+		if ($episode = $patient->getEpisodeForCurrentSubspecialty()) {
+			if ($event = $episode->getMostRecentEventByType($event_type->id)) {
+
+				if ($element = ModuleAPI::getmodel('OphCiExamination',$element_type->class_name)->find('event_id=?',array($event->id))) {
+					return $element->letter_string;
+				}
+			}
+		}
 	}
 }

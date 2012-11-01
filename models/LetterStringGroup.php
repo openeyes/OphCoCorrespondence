@@ -117,7 +117,9 @@ class LetterStringGroup extends BaseEventTypeElement
 		
 		foreach (FirmLetterString::model()->findAll($criteria) as $flm) {
 			if (!in_array($flm->name, $string_names)) {
-				$strings['firm'.$flm->id] = $string_names[] = $flm->name;
+				if ($flm->shouldShow()) {
+					$strings['firm'.$flm->id] = $string_names[] = $flm->name;
+				}
 			}
 		}
 
@@ -128,7 +130,9 @@ class LetterStringGroup extends BaseEventTypeElement
 
 		foreach (SubspecialtyLetterString::model()->findAll($criteria) as $slm) {
 			if (!in_array($slm->name, $string_names)) {
-				$strings['subspecialty'.$slm->id] = $string_names[] = $slm->name;
+				if ($slm->shouldShow()) {
+					$strings['subspecialty'.$slm->id] = $string_names[] = $slm->name;
+				}
 			}
 		}
 
@@ -139,7 +143,9 @@ class LetterStringGroup extends BaseEventTypeElement
 
 		foreach (LetterString::model()->findAll($criteria) as $slm) {
 			if (!in_array($slm->name, $string_names)) {
-				$strings['site'.$slm->id] = $string_names[] = $slm->name;
+				if ($slm->shouldShow()) {
+					$strings['site'.$slm->id] = $string_names[] = $slm->name;
+				}
 			}
 		}
 

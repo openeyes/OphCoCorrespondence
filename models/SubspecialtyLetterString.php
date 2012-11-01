@@ -25,7 +25,7 @@
  * The followings are the available model relations:
  * @property Event $event
  */
-class SubspecialtyLetterString extends BaseEventTypeElement
+class SubspecialtyLetterString extends LetterStringBase
 {
 	/**
 	 * Returns the static model of the specified AR class.
