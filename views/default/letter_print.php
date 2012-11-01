@@ -26,7 +26,7 @@
 
 <?php echo $letter->renderBody()?>
 
-<p>
+<p nobr="true">
 	<?php echo $letter->renderFooter()?>
 </p>
 </div>
