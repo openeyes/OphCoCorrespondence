@@ -17,10 +17,29 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html The GNU General Public License V3.0
  */
 ?>
-	<p>
-		Yours sincerely,<br />
-		<br />
-		<br />
-		Admissions Officer
-	</p>
+<div class="accessible">
+<p>
+	<?php echo $letter->renderIntroduction()?>
+</p>
+<p><strong><?php if ($letter->re) { ?>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",CHtml::encode($letter->re))?>
+<?php } else { ?>Hosp No: <?php echo $letter->event->episode->patient->hos_num?>, NHS No: <?php echo $letter->event->episode->patient->nhsnum?> <?php }?></strong></p>
+
+<?php echo $letter->renderBody()?>
+
+<p>
+	<?php echo $letter->renderFooter()?>
+</p>
 </div>
+
+<?php if ($letter->cc) { ?>
+<p>
+	To:
+	<?php echo $letter->renderToAddress()?>
+	<?php foreach (explode("\n",trim(CHtml::encode($letter->cc))) as $line) {
+			if (trim($line)) { ?>
+	<br />Cc:
+	<?php echo $line ?>
+	<?php } 
+} ?>
+</p>
+<?php } ?>

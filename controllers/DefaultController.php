@@ -321,23 +321,26 @@ class DefaultController extends BaseEventTypeController {
 
 		$this->event_type = EventType::model()->findByPk($this->event->event_type_id);
 
-		$elements = $this->getDefaultElements('view');
-
 		$this->layout = '//layouts/pdf';
 		$pdf_print = new OEPDFPrint('Openeyes', 'Correspondence letters', 'Correspondence letters');
 
 		$this->site = $letter->site;
 
-		$body = $this->renderPartial(
-			'print', array(
-			'elements' => $elements,
-			'eventId' => $id,
-		), true, true);
+		$body = $this->render('letter_print', array(
+			'letter' => $letter,
+		), true);
 
-		$from_address = $this->site->getCorrespondenceSiteName()."\n".implode("\n",$this->site->letterarray)."\nTel: ".CHtml::encode($this->site->telephone).($this->site->fax ? "\nFax: ".CHtml::encode($this->site->fax) : '').($letter->direct_line ? "\nDirect line: ".$letter->direct_line : '');
-
+		$from_address = $this->site->getCorrespondenceSiteName()."\n";
+		$from_address .= implode("\n",$this->site->letterarray)."\n";
+		$from_address .= "Tel: ".CHtml::encode($this->site->telephone);
+		if($this->site->fax) {
+			$from_address .= "\nFax: ".CHtml::encode($this->site->fax);
+		}
+		if($letter->direct_line) {
+			$from_address .= "\nDirect line: ".$letter->direct_line;
+		}
+		
 		$oeletter = new OELetter($letter->address,$from_address);
-		$oeletter->setFont('helvetica','10');
 		$oeletter->addBody($body);
 
 		if ($this->site->replyto) {
@@ -347,11 +350,13 @@ class DefaultController extends BaseEventTypeController {
 		$pdf_print->addLetter($oeletter);
 
 		if (@$_GET['all']) {
+			
+			// Add copy for file
 			$pdf_print->addLetter($oeletter);
 
+			// Add CCs
 			foreach ($letter->getCcTargets() as $cc) {
 				$ccletter = new OELetter(implode("\n",preg_replace('/^[a-zA-Z]+: /','',$cc)),$from_address);
-				$ccletter->setFont('helvetica','10');
 				$ccletter->addBody($body);
 
 				if ($this->site->replyto) {

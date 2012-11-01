@@ -33,43 +33,10 @@
 			'site' => $element->site,
 	))?>
 		
-	<div class="big">
-	<p>
-		<?php echo $element->renderIntroduction()?>
-		<br/><br/>
-		<?php if ($element->re) {?>
-			<strong>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",CHtml::encode($element->re))?></strong>
-			<br/><br/>
-		<?php }else{?>
-			<strong>Hosp No: <?php echo $element->event->episode->patient->hos_num?>, NHS No: <?php echo $element->event->episode->patient->nhsnum?></strong>
-			<br/><br/>
-		<?php }?>
-		<?php echo $element->renderBody()?>
-		<br/><br/>
-		<?php echo $element->renderFooter()?>
-		<br/><br/>
-	</p>
-	</div>
-
-	<br/>
+	<?php $this->renderPartial("letter_print", array(
+			'letter' => $element,
+	))?>
 	
-	<p>
-		<?php if ($element->cc) {?>
-			To: <?php echo $element->renderToAddress()?>
-			<?php foreach (explode("\n",trim(CHtml::encode($element->cc))) as $line) {
-				if (trim($line)) { ?>
-				<br/>Cc: <?php echo $line ?>
-			<?php }?>
-			<?php }?>
-		<?php }?>
-	</p>
-
-	<div class="patron">
-		Patron: Her Majesty The Queen<br/>
-		Chairman: Rudy Markham<br/>
-		Chief Executive: John Pelly
-	</div>
-
 	<input type="hidden" name="OphCoCorrespondence_printLetter" id="OphCoCorrespondence_printLetter" value="<?php echo $element->print?>" />
 </div>
 

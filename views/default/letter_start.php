@@ -37,4 +37,4 @@
 	</div>
 <?php }?>
 <div class="toAddress"><?php echo str_replace("\n","<br/>",$toAddress)?></div>
-<br/><br/><br/>
+<br/><br/>
