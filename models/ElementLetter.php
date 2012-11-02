@@ -366,7 +366,7 @@ class ElementLetter extends BaseEventTypeElement
 	}
 
 	public function isEditable() {
-		return true;
+		return !$this->event->episode->patient->date_of_death;
 	}
 
 	public function save($runValidation=true, $attributes=null, $allow_overriding=false) {
