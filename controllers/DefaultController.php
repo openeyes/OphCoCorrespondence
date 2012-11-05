@@ -341,6 +341,7 @@ class DefaultController extends BaseEventTypeController {
 		}
 		
 		$oeletter = new OELetter($letter->address,$from_address);
+		$oeletter->setBarcode('E:'.$id);
 		$oeletter->addBody($body);
 
 		if ($this->site->replyto) {
@@ -357,6 +358,7 @@ class DefaultController extends BaseEventTypeController {
 			// Add CCs
 			foreach ($letter->getCcTargets() as $cc) {
 				$ccletter = new OELetter(implode("\n",preg_replace('/^[a-zA-Z]+: /','',$cc)),$from_address);
+				$ccletter->setBarcode('E:'.$id);
 				$ccletter->addBody($body);
 
 				if ($this->site->replyto) {
