@@ -29,6 +29,8 @@
 
 	<?php echo $form->hiddenInput($element, 'draft', 1)?>
 
+	<input type="hidden" id="re_default" value="<?php echo $element->calculateRe($element->event->episode->patient)?>" />
+
 	<div class="row">
 		<span class="left"></span>
 		<span class="right">
@@ -63,10 +65,10 @@
 		</span>
 	</div>
 
-	<div class="row">
+	<div class="row"<?php if ((empty($_POST) && strlen($element->re) <1) || (!empty($_POST) && strlen(@$_POST['ElementLetter']['re']) <1)) {?> style="display: none;"<?php }?>>
 		<span class="left"></span>
 		<span class="right">
-			<?php echo $form->textArea($element, 're', array('rows' => 2, 'cols' => 100, 'label' => false, 'nowrapper' => true))?>
+			<?php echo $form->textArea($element, 're', array('rows' => 2, 'cols' => 100, 'label' => false, 'nowrapper' => true), empty($_POST) ? strlen($element->re) == 0 : strlen(@$_POST['ElementLetter']['re']) == 0)?>
 		</span>
 	</div>
 

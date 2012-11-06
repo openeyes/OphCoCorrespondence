@@ -80,7 +80,11 @@ $(document).ready(function() {
 			var val = $(this).children('option:selected').val();
 
 			if (re_field == null) {
-				re_field = $('#ElementLetter_re').val();
+				if ($('#re_default').length >0) {
+					re_field = $('#re_default').val();
+				} else {
+					re_field = $('#ElementLetter_re').val();
+				}
 			}
 
 			if (val == 'patient') {

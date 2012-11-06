@@ -181,6 +181,18 @@ class ElementLetter extends BaseEventTypeElement
 		return LetterStringGroup::model()->findAll(array('order'=>'display_order'));
 	}
 
+	public function calculateRe($patient) {
+		$re = $patient->first_name.' '.$patient->last_name;
+
+		foreach (array('address1','address2','city','postcode') as $field) {
+			if ($patient->address && $patient->address->{$field}) {
+				$re .= ', '.$patient->address->{$field};
+			}
+		}
+
+		return $re . ', DOB: '.$patient->NHSDate('dob').', Hosp No: '.$patient->hos_num.', NHS No: '.$patient->nhsnum;
+	}
+
 	public function setDefaultOptions() {
 		if (Yii::app()->getController()->getAction()->id == 'create') {
 			$this->site_id = Yii::app()->request->cookies['site_id']->value;
