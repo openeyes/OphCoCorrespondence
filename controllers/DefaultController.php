@@ -308,26 +308,23 @@ class DefaultController extends BaseEventTypeController {
 		}
 	}
 
-	public function actionPrint($id) {
-		if (!$this->event = Event::model()->findByPk($id)) {
-			throw new Exception('Event not found: '.$id);
-		}
-
+	protected function printHTML($id, $elements) {
+		$this->printPDF($id, $elements);
+	}
+	
+	protected function printPDF($id, $elements) {
+		
 		if (!$letter = ElementLetter::model()->find('event_id=?',array($id))) {
 			throw new Exception('Letter not found were event_id = '.$id);
 		}
-
-		$this->patient = $this->event->episode->patient;
-
-		$this->event_type = EventType::model()->findByPk($this->event->event_type_id);
-
+		$this->site = $letter->site;
+		
 		$this->layout = '//layouts/pdf';
 		$pdf_print = new OEPDFPrint('Openeyes', 'Correspondence letters', 'Correspondence letters');
 
-		$this->site = $letter->site;
-
-		$body = $this->render('letter_print', array(
-			'letter' => $letter,
+		$body = $this->render('print', array(
+				'elements' => $elements,
+				'eventId' => $id,
 		), true);
 
 		$from_address = $this->site->getCorrespondenceSiteName()."\n";

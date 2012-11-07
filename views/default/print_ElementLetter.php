@@ -19,23 +19,23 @@
 ?>
 <div class="accessible">
 <p>
-	<?php echo $letter->renderIntroduction()?>
+	<?php echo $element->renderIntroduction()?>
 </p>
-<p><strong><?php if ($letter->re) { ?>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",CHtml::encode($letter->re))?>
-<?php } else { ?>Hosp No: <?php echo $letter->event->episode->patient->hos_num?>, NHS No: <?php echo $letter->event->episode->patient->nhsnum?> <?php }?></strong></p>
+<p><strong><?php if ($element->re) { ?>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",CHtml::encode($element->re))?>
+<?php } else { ?>Hosp No: <?php echo $element->event->episode->patient->hos_num?>, NHS No: <?php echo $element->event->episode->patient->nhsnum?> <?php }?></strong></p>
 
-<?php echo $letter->renderBody()?>
+<?php echo $element->renderBody()?>
 
 <p nobr="true">
-	<?php echo $letter->renderFooter()?>
+	<?php echo $element->renderFooter()?>
 </p>
 </div>
 
-<?php if ($letter->cc) { ?>
+<?php if ($element->cc) { ?>
 <p>
 	To:
-	<?php echo $letter->renderToAddress()?>
-	<?php foreach (explode("\n",trim(CHtml::encode($letter->cc))) as $line) {
+	<?php echo $element->renderToAddress()?>
+	<?php foreach (explode("\n",trim(CHtml::encode($element->cc))) as $line) {
 			if (trim($line)) { ?>
 	<br />Cc:
 	<?php echo $line ?>
