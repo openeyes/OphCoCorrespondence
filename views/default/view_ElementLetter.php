@@ -33,8 +33,8 @@
 			'site' => $element->site,
 	))?>
 		
-	<?php $this->renderPartial("letter_print", array(
-			'letter' => $element,
+	<?php $this->renderPartial("print_ElementLetter", array(
+			'element' => $element,
 	))?>
 	
 	<input type="hidden" name="OphCoCorrespondence_printLetter" id="OphCoCorrespondence_printLetter" value="<?php echo $element->print?>" />
