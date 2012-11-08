@@ -40,6 +40,9 @@
 	<br />Cc:
 	<?php echo $line ?>
 	<?php } 
+	foreach ($letter->enclosures as $enclosure) {?>
+		<br/>Enc: <?php echo $enclosure->content?>
+	<?php }
 } ?>
 </p>
 <?php } ?>

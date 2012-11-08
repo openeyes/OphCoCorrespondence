@@ -382,6 +382,37 @@ $(document).ready(function() {
 		});
 	});
 
+	$('button.addEnclosure').die('click').live('click',function() {
+		var id = -1;
+		$('#enclosureItems').children('div.enclosureItem').map(function() {
+			$(this).children('input').map(function() {
+				console.log($(this).attr('name'));
+				m = $(this).attr('name').match(/[0-9]+/);
+				if (parseInt(m[0]) > id) {
+					id = parseInt(m[0]);
+				}
+			});
+		});
+
+		id += 1;
+
+		$('#enclosureItems').append('<div class="enclosureItem"><input size="60" type="text" value="" name="EnclosureItems[enclosure'+id+']"><a href="#" class="removeEnclosure">Remove</a></div>');
+		$('input[name="EnclosureItems[enclosure'+id+']"]').select().focus();
+	});
+
+	$('a.removeEnclosure').die('click').live('click',function() {
+		$(this).parent().remove();
+		return false;
+	});
+
+	$('div.enclosureItem input').die('keypress').live('keypress',function(e) {
+		if (e.keyCode == 13) {
+			$('button.addEnclosure').click();
+			return false;
+		}
+		return true;
+	});
+
 	var selected_recipient = $('#address_target').val();
 
 	$('#ElementLetter_body').tabby();

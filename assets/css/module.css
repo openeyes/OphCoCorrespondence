@@ -39,3 +39,8 @@ div.correspondence_footer { font-size: 11px; float: left; margin-top: 10px; marg
 #ElementLetter_body { width: 50em; }
 #ElementLetter_cc { width: 50em; height: 7em; }
 textarea { font-size: 16px !important; }
+
+.enclosures { padding-bottom: 20px !important; }
+.enclosures div.right { margin-left: 13px; display: inline-block; }
+.enclosures > .label { margin-top: 6px; }
+.enclosureItem > input { padding: 0 !important; margin-left: 0 !important; height: 24px; margin-bottom: 2px !important; margin-top: 0px !important; }
