@@ -124,4 +124,27 @@
 		<div id="cc_targets">
 		</div>
 	</div>
+
+	<div class="eventDetail row enclosures">
+		<input type="hidden" name="update_enclosures" value="1" />
+		<div class="label OphCoCorrespondence_footerLabel">Enclosures:</div>
+		<div class="right">
+			<div id="enclosureItems">
+				<?php if (is_array(@$_POST['EnclosureItems'])) {?>
+					<?php foreach ($_POST['EnclosureItems'] as $key => $value) {?>
+						<div class="enclosureItem"><?php echo CHtml::textField("EnclosureItems[$key]",$value,array('size'=>60))?><a href="#" class="removeEnclosure">Remove</a></div>
+					<?php }?>
+				<?php }else{?>
+					<?php foreach ($element->enclosures as $i => $item) {?>
+						<div class="enclosureItem"><?php echo CHtml::textField("EnclosureItems[enclosure$i]",$item->content,array('size'=>60))?><a href="#" class="removeEnclosure">Remove</a></div>
+					<?php }?>
+				<?php }?>
+			</div>
+			<div>
+				<button class="addEnclosure classy green mini" type="button">
+					<span class="button-span button-span-green">Add</span>
+				</button>
+			</div>
+		</div>
+	</div>
 </div>

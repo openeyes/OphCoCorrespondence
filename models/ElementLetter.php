@@ -79,6 +79,7 @@ class ElementLetter extends BaseEventTypeElement
 			'user' => array(self::BELONGS_TO, 'User', 'created_user_id'),
 			'usermodified' => array(self::BELONGS_TO, 'User', 'last_modified_user_id'),
 			'site' => array(self::BELONGS_TO, 'Site', 'site_id'),
+			'enclosures' => array(self::HAS_MANY, 'LetterEnclosure', 'element_letter_id', 'order'=>'display_order'),
 		);
 	}
 
@@ -350,6 +351,32 @@ class ElementLetter extends BaseEventTypeElement
 		}
 
 		return parent::beforeSave();
+	}
+
+	public function afterSave() {
+		if (@$_POST['update_enclosures']) {
+			foreach ($this->enclosures as $enclosure) {
+				$enclosure->delete();
+			}
+
+			if (is_array(@$_POST['EnclosureItems'])) {
+				$i = 1;
+
+				foreach (@$_POST['EnclosureItems'] as $key => $value) {
+					if (strlen($value) >0) {
+						$enc = new LetterEnclosure;
+						$enc->element_letter_id = $this->id;
+						$enc->display_order = $i++;
+						$enc->content = $value;
+						if (!$enc->save()) {
+							throw new Exception('Unable to save EnclosureItem: '.print_r($enc->getErrors(),true));
+						}
+					}
+				}
+			}
+		}
+
+		return parent::afterSave();
 	}
 
 	public function getInfotext() {
