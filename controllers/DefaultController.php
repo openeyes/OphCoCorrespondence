@@ -242,6 +242,7 @@ class DefaultController extends BaseEventTypeController {
 			$contact = $patient;
 			$address_name = $patient->addressName;
 			$address = $contact->address;
+			$prefix = 'Patient';
 
 		} else if (@$_GET['contact_id'] == 'gp') {
 
@@ -249,6 +250,8 @@ class DefaultController extends BaseEventTypeController {
 				$address_name = Gp::UNKNOWN_NAME;
 			}
 			$address = @$patient->practice->address;
+			$prefix = 'GP';
+
 		} else if (preg_match('/^contact([0-9]+)_?(site|institution)?([0-9]+)?$/',@$_GET['contact_id'],$m)) {
 
 			if (!$contact = Contact::model()->findByPk($m[1])) {
@@ -261,7 +264,9 @@ class DefaultController extends BaseEventTypeController {
 		}
 
 		if ($address) {
-			if ($contact->prefix) {
+			if (isset($prefix)) {
+				echo $prefix.': ';
+			} else if ($contact->prefix) {
 				echo $contact->prefix.': ';
 			}
 			if (isset($address_name)) {
