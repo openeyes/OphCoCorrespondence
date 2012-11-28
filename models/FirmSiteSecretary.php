@@ -54,7 +54,7 @@ class FirmSiteSecretary extends BaseEventTypeElement
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('firm_id, site_id, direct_line', 'safe'),
+			array('firm_id, site_id, direct_line, fax', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('firm_id, site_id, direct_line', 'safe', 'on' => 'search'),
