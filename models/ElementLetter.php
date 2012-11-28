@@ -450,27 +450,29 @@ class ElementLetter extends BaseEventTypeElement
 	}
 
 	public function renderBody() {
-		$body = '';
+		$body = array();
 
 		foreach (explode(chr(10),CHtml::encode($this->body)) as $line) {
+			$processed_line = '';
 			if (preg_match('/^([\t]+)/',$line,$m)) {
 				for ($i=0; $i<strlen($m[1]); $i++) {
 					for ($j=0; $j<8; $j++) {
-						$body .= '&nbsp;';
+						$processed_line .= '&nbsp;';
 					}
 				}
-				$body .= preg_replace('/^[\t]+/','',$line)."\n";
+				$processed_line .= preg_replace('/^[\t]+/','',$line);
 			} else if (preg_match('/^([\s]+)/',$line,$m)) {
 				for ($i=0; $i<strlen($m[1]); $i++) {
-					$body .= '&nbsp;';
+					$processed_line .= '&nbsp;';
 				}
-				$body .= preg_replace('/^[\s]+/','',$line)."\n";
+				$processed_line .= preg_replace('/^[\s]+/','',$line);
 			} else {
-				$body .= $line."\n";
+				$processed_line .= $line;
 			}
+			$body[] = $processed_line;
 		}
 
-		return str_replace("\n","<br/>",$body);
+		return implode('<br/>', $body);
 	}
 
 	public function renderFooter() {

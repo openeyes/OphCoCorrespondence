@@ -23,10 +23,12 @@
 <p class="accessible"><strong><?php if ($element->re) { ?>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",CHtml::encode($element->re))?>
 <?php } else { ?>Hosp No: <?php echo $element->event->episode->patient->hos_num?>, NHS No: <?php echo $element->event->episode->patient->nhsnum?> <?php }?></strong></p>
 
-<?php echo $element->renderBody()?>
+<p class="accessible">
+<?php echo $element->renderBody() ?>
+</p>
 
 <p class="accessible" nobr="true">
-	<?php echo $element->renderFooter()?>
+	<?php echo $element->renderFooter() ?>
 </p>
 
 <?php if ($element->cc) { ?>
