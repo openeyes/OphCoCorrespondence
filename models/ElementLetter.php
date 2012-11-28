@@ -453,7 +453,14 @@ class ElementLetter extends BaseEventTypeElement
 		$body = '';
 
 		foreach (explode(chr(10),CHtml::encode($this->body)) as $line) {
-			if (preg_match('/^([\s]+)/',$line,$m)) {
+			if (preg_match('/^([\t]+)/',$line,$m)) {
+				for ($i=0; $i<strlen($m[1]); $i++) {
+					for ($j=0; $j<8; $j++) {
+						$body .= '&nbsp;';
+					}
+				}
+				$body .= preg_replace('/^[\t]+/','',$line)."\n";
+			} else if (preg_match('/^([\s]+)/',$line,$m)) {
 				for ($i=0; $i<strlen($m[1]); $i++) {
 					$body .= '&nbsp;';
 				}
