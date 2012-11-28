@@ -28,10 +28,13 @@
 		echo $site->letterhtml ?>
 		<br />Tel: <?php echo CHtml::encode($site->telephone) ?>
 		<?php if($site->fax) { ?>
-		<br />Fax: <?php echo CHtml::encode($site->fax) ?>
+			<br />Fax: <?php echo CHtml::encode($site->fax) ?>
 		<?php } ?>
 		<?php if ($directLine) {?>
-		<br />Direct line: <?php echo $directLine?>
+			<br />Direct line: <?php echo $directLine?>
+		<?php }?>
+		<?php if ($faxNumber) {?>
+			<br/>Fax: <?php echo $faxNumber?>
 		<?php }?>
 		<div class="date"><?php echo date(Helper::NHS_DATE_FORMAT,strtotime($date)) ?></div>
 	</div>
