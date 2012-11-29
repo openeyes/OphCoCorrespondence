@@ -57,7 +57,7 @@ class ElementLetter extends BaseEventTypeElement
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('event_id, site_id, print, address, use_nickname, date, introduction, cc, re, body, footer, draft', 'safe'),
+			array('event_id, site_id, print, address, use_nickname, date, introduction, cc, re, body, footer, draft, direct_line, fax', 'safe'),
 			array('use_nickname, site_id, date, address, introduction, body, footer', 'required'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -343,6 +343,7 @@ class ElementLetter extends BaseEventTypeElement
 		if (Yii::app()->getController()->getAction()->id == 'create') {
 			if ($dl = FirmSiteSecretary::model()->find('firm_id=? and site_id=?',array(Yii::app()->session['selected_firm_id'],$this->site_id))) {
 				$this->direct_line = $dl->direct_line;
+				$this->fax = $dl->fax;
 			}
 		}
 		
@@ -449,27 +450,29 @@ class ElementLetter extends BaseEventTypeElement
 	}
 
 	public function renderBody() {
-		$body = '';
+		$body = array();
 
 		foreach (explode(chr(10),CHtml::encode($this->body)) as $line) {
+			$processed_line = '';
 			if (preg_match('/^([\t]+)/',$line,$m)) {
 				for ($i=0; $i<strlen($m[1]); $i++) {
 					for ($j=0; $j<8; $j++) {
-						$body .= '&nbsp;';
+						$processed_line .= '&nbsp;';
 					}
 				}
-				$body .= preg_replace('/^[\t]+/','',$line)."\n";
+				$processed_line .= preg_replace('/^[\t]+/','',$line);
 			} else if (preg_match('/^([\s]+)/',$line,$m)) {
 				for ($i=0; $i<strlen($m[1]); $i++) {
-					$body .= '&nbsp;';
+					$processed_line .= '&nbsp;';
 				}
-				$body .= preg_replace('/^[\s]+/','',$line)."\n";
+				$processed_line .= preg_replace('/^[\s]+/','',$line);
 			} else {
-				$body .= $line."\n";
+				$processed_line .= $line;
 			}
+			$body[] = $processed_line;
 		}
 
-		return str_replace("\n","<br/>",$body);
+		return implode('<br/>', $body);
 	}
 
 	public function renderFooter() {

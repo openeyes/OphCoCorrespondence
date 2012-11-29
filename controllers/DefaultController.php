@@ -354,6 +354,9 @@ class DefaultController extends BaseEventTypeController {
 		if($letter->direct_line) {
 			$from_address .= "\nDirect line: ".$letter->direct_line;
 		}
+		if ($letter->fax) {
+			$from_address .= "\nFax: ".$letter->fax;
+		}
 		
 		$oeletter = new OELetter($letter->address,$from_address);
 		$oeletter->setBarcode('E:'.$id);
