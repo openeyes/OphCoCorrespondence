@@ -87,21 +87,29 @@ $(document).ready(function() {
 				}
 			}
 
-			if (val == 'patient') {
-				$('#ElementLetter_re').val('');
-				$('#ElementLetter_re').parent().parent().hide();
-			} else {
-				if (re_field != null) {
-					$('#ElementLetter_re').val(re_field);
-					$('#ElementLetter_re').parent().parent().show();
-				}
-			}
+			var target = $(this);
 
 			$.ajax({
 				'type': 'GET',
 				'dataType': 'json',
 				'url': baseUrl+'/OphCoCorrespondence/Default/getAddress?patient_id='+patient_id+'&address_id='+val+'&nickname='+nickname,
 				'success': function(data) {
+					if (data['error'] == 'DECEASED') {
+						alert("This patient is deceased and cannot be written to.");
+						target.val(selected_recipient);
+						return false;
+					}
+
+					if (val == 'patient') {
+						$('#ElementLetter_re').val('');
+						$('#ElementLetter_re').parent().parent().hide();
+					} else {
+						if (re_field != null) {
+							$('#ElementLetter_re').val(re_field);
+							$('#ElementLetter_re').parent().parent().show();
+						}
+					}
+
 					correspondence_load_data(data);
 					selected_recipient = val;
 
@@ -111,7 +119,11 @@ $(document).ready(function() {
 							'type': 'GET',
 							'url': baseUrl+'/OphCoCorrespondence/Default/getCc?patient_id='+patient_id+'&contact_id='+val,
 							'success': function(text) {
-								if (!text.match(/NO ADDRESS/)) {
+								if (text.match(/DECEASED/)) {
+									alert("This patient is deceased and cannot be cc'd.");
+									target.val(selected_recipient);
+									return false;
+								} else if (!text.match(/NO ADDRESS/)) {
 									if ($('#ElementLetter_cc').val().length >0) {
 										var cur = $('#ElementLetter_cc').val();
 
@@ -179,7 +191,11 @@ $(document).ready(function() {
 							'type': 'GET',
 							'url': baseUrl+'/OphCoCorrespondence/Default/getCc?patient_id='+patient_id+'&contact_id=patient',
 							'success': function(text) {
-								if (!text.match(/NO ADDRESS/)) {
+								if (text.match(/DECEASED/)) {
+									alert("The patient is deceased so cannot be cc'd.");
+									target.val(selected_recipient);
+									return false;
+								} else if (!text.match(/NO ADDRESS/)) {
 									if ($('#ElementLetter_cc').val().length >0) {
 										var cur = $('#ElementLetter_cc').val();
 
@@ -219,6 +235,11 @@ $(document).ready(function() {
 				'dataType': 'json',
 				'url': baseUrl+'/OphCoCorrespondence/Default/getMacroData?patient_id='+patient_id+'&macro_type='+m[1]+'&macro_id='+m[2]+'&nickname='+nickname,
 				'success': function(data) {
+					if (data['error'] == 'DECEASED') {
+						alert("The patient is deceased so this macro cannot be used.");
+						obj.val('');
+						return false;
+					}
 					$('#ElementLetter_cc').val('');
 					$('#cc_targets').html('');
 					correspondence_load_data(data);
@@ -285,7 +306,11 @@ $(document).ready(function() {
 				'type': 'GET',
 				'url': baseUrl+'/OphCoCorrespondence/Default/getCc?patient_id='+patient_id+'&contact_id='+contact_id,
 				'success': function(text) {
-					if (!text.match(/NO ADDRESS/)) {
+					if (text.match(/DECEASED/)) {
+						alert("The patient is deceased so cannot be cc'd.");
+						obj.val('');
+						return false;
+					} else if (!text.match(/NO ADDRESS/)) {
 						if ($('#ElementLetter_cc').val().length >0) {
 							var cur = $('#ElementLetter_cc').val();
 

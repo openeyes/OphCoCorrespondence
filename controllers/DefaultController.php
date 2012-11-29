@@ -25,6 +25,10 @@ class DefaultController extends BaseEventTypeController {
 		if (@$_GET['address_id'] == 'patient') {
 			$contact = $patient;
 			$address = $contact->getLetterAddress();
+			if ($patient->date_of_death) {
+				echo json_encode(array('error'=>'DECEASED'));
+				return;
+			}
 		} else if (@$_GET['address_id'] == 'gp') {
 			if($contact = @$patient->gp->contact) {
 				$address_name = $contact->fullName;
@@ -119,6 +123,10 @@ class DefaultController extends BaseEventTypeController {
 		if ($macro->recipient_patient) {
 			$data['sel_address_target'] = 'patient';
 			$contact = $patient;
+			if ($patient->date_of_death) {
+				echo json_encode(array('error'=>'DECEASED'));
+				return;
+			}
 		}
 
 		if ($macro->recipient_doctor) {
@@ -167,7 +175,7 @@ class DefaultController extends BaseEventTypeController {
 			$data['text_ElementLetter_body'] = $macro->body;
 		}
 
-		if ($macro->cc_patient) {
+		if ($macro->cc_patient && !$patient->date_of_death) {
 			$data['textappend_ElementLetter_cc'] = 'Patient: '.$patient->addressName.', '.implode(', ',$patient->address->getLetterarray(false));
 			$data['elementappend_cc_targets'] = '<input type="hidden" name="CC_Targets[]" value="patient" />';
 		}
@@ -243,6 +251,11 @@ class DefaultController extends BaseEventTypeController {
 			$address_name = $patient->addressName;
 			$address = $contact->address;
 			$prefix = 'Patient';
+
+			if ($patient->date_of_death) {
+				echo "DECEASED";
+				return;
+			}
 
 		} else if (@$_GET['contact_id'] == 'gp') {
 
