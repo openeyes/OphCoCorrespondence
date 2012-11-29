@@ -57,7 +57,7 @@ class ElementLetter extends BaseEventTypeElement
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('event_id, site_id, print, address, use_nickname, date, introduction, cc, re, body, footer, draft, direct_line, fax', 'safe'),
+			array('event_id, site_id, print, address, use_nickname, date, introduction, cc, re, body, footer, draft, direct_line, fax, clinic_date', 'safe'),
 			array('use_nickname, site_id, date, address, introduction, body, footer', 'required'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -349,6 +349,10 @@ class ElementLetter extends BaseEventTypeElement
 		
 		foreach (array('address','introduction','re','body','footer','cc') as $field) {
 			$this->$field = trim($this->$field);
+		}
+
+		if (!$this->clinic_date) {
+			$this->clinic_date = null;
 		}
 
 		return parent::beforeSave();

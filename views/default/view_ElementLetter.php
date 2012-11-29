@@ -25,6 +25,7 @@
 			'toAddress' => CHtml::encode($element->address),
 			'patient' => $this->patient,
 			'date' => $element->date,
+			'clinicDate' => $element->clinic_date,
 			'directLine' => $element->direct_line,
 			'faxNumber' => $element->fax,
 		))?>

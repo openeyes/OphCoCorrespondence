@@ -36,7 +36,7 @@
 		<?php if ($faxNumber) {?>
 			<br/>Fax: <?php echo $faxNumber?>
 		<?php }?>
-		<div class="date"><?php echo date(Helper::NHS_DATE_FORMAT,strtotime($date)) ?></div>
+		<div class="date"><?php echo date(Helper::NHS_DATE_FORMAT,strtotime($date))?><?php if ($clinicDate) {?> (clinic date <?php echo date(Helper::NHS_DATE_FORMAT,strtotime($clinicDate))?>)<?php }?></div>
 	</div>
 <?php }?>
 <div class="toAddress"><?php echo str_replace("\n","<br/>",$toAddress)?></div>

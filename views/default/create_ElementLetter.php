@@ -54,6 +54,15 @@
 		</span>
 	</div>
 
+	<div class="eventDetail row">
+		<div class="label OphCoCorrespondence_footerLabel">
+			<?php echo $element->getAttributeLabel('clinic_date')?>:
+		</div>
+		<span class="right">
+			<?php echo $form->datePicker($element, 'clinic_date', array('maxDate' => 'today'), array('nowrapper'=>true,'null'=>true))?>
+		</span>
+	</div>
+
 	<div class="row">
 		<span class="left"></span>
 		<span class="right">
