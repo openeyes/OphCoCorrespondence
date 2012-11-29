@@ -357,8 +357,15 @@ class DefaultController extends BaseEventTypeController {
 		if ($letter->fax) {
 			$from_address .= "\nFax: ".$letter->fax;
 		}
-		
+
+		$from_address .= "\n\n".$letter->NHSDate('date');
+
+		if ($letter->clinic_date) {
+			$from_address .= " (clinic date ".$letter->NHSDate('clinic_date').")";
+		}
+
 		$oeletter = new OELetter($letter->address,$from_address);
+		$oeletter->setHideDate(true);
 		$oeletter->setBarcode('E:'.$id);
 		$oeletter->addBody($body);
 
