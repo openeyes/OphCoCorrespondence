@@ -383,6 +383,7 @@ class DefaultController extends BaseEventTypeController {
 			// Add CCs
 			foreach ($letter->getCcTargets() as $cc) {
 				$ccletter = new OELetter(implode("\n",preg_replace('/^[a-zA-Z]+: /','',$cc)),$from_address);
+				$ccletter->setHideDate(true);
 				$ccletter->setBarcode('E:'.$id);
 				$ccletter->addBody($body);
 
