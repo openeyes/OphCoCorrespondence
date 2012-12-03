@@ -26,7 +26,7 @@
 <p class="accessible">
 <?php echo $element->renderBody() ?>
 </p>
-
+<br/>
 <p class="accessible" nobr="true">
 	<?php echo $element->renderFooter() ?>
 </p>
