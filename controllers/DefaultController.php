@@ -346,7 +346,7 @@ class DefaultController extends BaseEventTypeController {
 		), true);
 
 		$from_address = $this->site->getCorrespondenceSiteName()."\n";
-		$from_address .= implode("\n",$this->site->letterarray)."\n";
+		$from_address .= implode("\n",$this->site->getLetterArray(false,false))."\n";
 		$from_address .= "Tel: ".CHtml::encode($this->site->telephone);
 		if($this->site->fax) {
 			$from_address .= "\nFax: ".CHtml::encode($this->site->fax);
