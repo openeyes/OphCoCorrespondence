@@ -408,6 +408,8 @@ function correspondence_load_data(data) {
 			$('#'+m[1]).val(data[i]);
 		} else if (m = i.match(/^elementappend_(.*)$/)) {
 			$('#'+m[1]).append(data[i]);
+		} else if (i == 'alert') {
+			alert(data[i]);
 		}
 	}
 }

@@ -165,8 +165,12 @@ class DefaultController extends BaseEventTypeController {
 		}
 
 		if ($macro->cc_patient) {
-			$data['textappend_ElementLetter_cc'] = 'Patient: '.$patient->addressName.', '.implode(', ',$patient->address->getLetterarray(false));
-			$data['elementappend_cc_targets'] = '<input type="hidden" name="CC_Targets[]" value="patient" />';
+			if ($patient->address) {
+				$data['textappend_ElementLetter_cc'] = 'Patient: '.$patient->addressName.', '.implode(', ',$patient->address->getLetterarray(false));
+				$data['elementappend_cc_targets'] = '<input type="hidden" name="CC_Targets[]" value="patient" />';
+			} else {
+				$data['alert'] = "Warning: the patient should be cc'd but there is no address for them in PAS.";
+			}
 		}
 
 		if ($macro->cc_doctor && @$patient->practice->address) {
