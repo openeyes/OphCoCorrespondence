@@ -169,7 +169,7 @@ class DefaultController extends BaseEventTypeController {
 				$data['textappend_ElementLetter_cc'] = 'Patient: '.$patient->addressName.', '.implode(', ',$patient->address->getLetterarray(false));
 				$data['elementappend_cc_targets'] = '<input type="hidden" name="CC_Targets[]" value="patient" />';
 			} else {
-				$data['alert'] = "Letters to the GP should be cc'd to the patient, but the patient does not have a valid address.";
+				$data['alert'] = "Letters to the GP should be cc'd to the patient, but this patient does not have a valid address.";
 			}
 		}
 
