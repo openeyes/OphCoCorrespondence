@@ -249,6 +249,7 @@ class ElementLetter extends BaseEventTypeElement
 					$event_type = EventType::model()->find('class_name=?',array('OphCiExamination'));
 					$criteria = new CDbCriteria;
 					$criteria->addCondition('event_type_id = '.$event_type->id);
+					$criteria->addCondition('episode_id = '.$episode->id);
 					$criteria->order = "created_date desc";
 					$criteria->limit = 1;
 
