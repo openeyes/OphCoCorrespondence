@@ -1,7 +1,6 @@
 <?php
 
 class DefaultController extends BaseEventTypeController {
-	public $print_css = false;
 
 	public function actionCreate() {
 		parent::actionCreate();
@@ -337,6 +336,9 @@ class DefaultController extends BaseEventTypeController {
 	}
 	
 	protected function printPDF($id, $elements) {
+		
+		// Remove any existing css
+		Yii::app()->getClientScript()->reset();
 		
 		if (!$letter = ElementLetter::model()->find('event_id=?',array($id))) {
 			throw new Exception('Letter not found were event_id = '.$id);
