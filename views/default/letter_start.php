@@ -26,7 +26,9 @@
 		<?php
 		$site->name = $site->getCorrespondenceSiteName();
 		echo $site->letterhtml ?>
-		<br />Tel: <?php echo CHtml::encode($site->telephone) ?>
+		<?php if ($site->telephone) {?>
+			<br />Tel: <?php echo CHtml::encode($site->telephone) ?>
+		<?php }?>
 		<?php if($site->fax) { ?>
 		<br />Fax: <?php echo CHtml::encode($site->fax) ?>
 		<?php } ?>
