@@ -37,7 +37,7 @@
 	<?php echo $element->renderToAddress()?>
 	<?php foreach (explode("\n",trim(CHtml::encode($element->cc))) as $line) {
 			if (trim($line)) { ?>
-	<br />Cc:
+	<br />CC:
 	<?php echo $line ?>
 	<?php } 
 	foreach ($element->enclosures as $enclosure) {?>
