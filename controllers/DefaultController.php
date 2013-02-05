@@ -263,7 +263,6 @@ class DefaultController extends BaseEventTypeController {
 			}
 
 		} else if (@$_GET['contact_id'] == 'gp') {
-
 			if(!$contact = @$patient->gp->contact) {
 				$address_name = Gp::UNKNOWN_NAME;
 			}
@@ -271,7 +270,6 @@ class DefaultController extends BaseEventTypeController {
 			$prefix = 'GP';
 
 		} else if (preg_match('/^contact([0-9]+)_?(site|institution)?([0-9]+)?$/',@$_GET['contact_id'],$m)) {
-
 			if (!$contact = Contact::model()->findByPk($m[1])) {
 				throw new Exception('Unknown contact id: '.$m[1]);
 			}
