@@ -1,7 +1,4 @@
-<?php
-	$this->breadcrumbs=array($this->module->id);
-	$this->header();
-?>
+<?php $this->header(); ?>
 
 <h3 class="withEventIcon" style="background:transparent url(<?php echo $this->assetPath?>/img/medium.png) center left no-repeat;"><?php echo $this->event_type->name ?></h3>
 
@@ -14,11 +11,12 @@
 	<div class="cleartall"></div>
 </div>
 
-<div class="form_button">
-	<img class="loader" style="display: none;" src="<?php echo Yii::app()->createUrl('img/ajax-loader.gif')?>" alt="loading..." />&nbsp;
-	<button type="submit" class="classy blue venti" id="et_print" name="print"><span class="button-span button-span-blue">Print</span></button>
-	<button type="submit" class="classy blue venti" id="et_print_all" name="printall"><span class="button-span button-span-blue">Print all</span></button>
-</div>
+<?php
+	// Event actions
+	$this->event_actions[] = EventAction::button('Print', 'print');
+	$this->event_actions[] = EventAction::button('Print all', 'printall', array('id' => 'et_print_all'));
+	$this->renderPartial('//patient/event_actions');
+?>
 
 <iframe id="print_iframe" name="print_iframe" style="display: none;"></iframe>
 

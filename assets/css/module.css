@@ -1,3 +1,4 @@
+#event_content.watermarkBox { background:#fafafa url(../img/watermark.png) top left repeat-y; }
 
 div.ElementLetter > .row > span.left { display: inline-block; width: 180px; }
 div.ElementLetter .row { background-color: #DAE6F1; }
