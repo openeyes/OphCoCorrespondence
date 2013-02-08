@@ -316,7 +316,7 @@ class ElementLetter extends BaseEventTypeElement
 		$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
 
 		$criteria = new CDbCriteria;
-		$criteria->compare('firm_id', $firm->id, true);
+		$criteria->compare('firm_id', $firm->id);
 		$criteria->order = 'display_order asc';
 
 		foreach (FirmLetterMacro::model()->findAll($criteria) as $flm) {
@@ -326,7 +326,7 @@ class ElementLetter extends BaseEventTypeElement
 		}
 
 		$criteria = new CDbCriteria;
-		$criteria->compare('subspecialty_id', $firm->serviceSubspecialtyAssignment->subspecialty_id, true);
+		$criteria->compare('subspecialty_id', $firm->serviceSubspecialtyAssignment->subspecialty_id);
 		$criteria->order = 'display_order asc';
 
 		foreach (SubspecialtyLetterMacro::model()->findAll($criteria) as $slm) {
@@ -336,7 +336,7 @@ class ElementLetter extends BaseEventTypeElement
 		}
 
 		$criteria = new CDbCriteria;
-		$criteria->compare('site_id', Yii::app()->session['selected_site_id'], true);
+		$criteria->compare('site_id', Yii::app()->session['selected_site_id']);
 		$criteria->order = 'display_order asc';
 
 		foreach (LetterMacro::model()->findAll($criteria) as $slm) {
