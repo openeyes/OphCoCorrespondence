@@ -42,7 +42,7 @@ class DefaultController extends BaseEventTypeController {
 				throw new Exception('Unknown contact id: '.$m[1]);
 			}
 			if ($address = $patient->getContactAddress($contact->id, @$m[2], @$m[3])) {
-				$address = $address->getLetterAddress();
+				$address = $address->getLetterAddress(true);
 			}
 		} else {
 			throw new Exception('Unknown or missing address_id value: '.@$_GET['address_id']);
@@ -292,7 +292,7 @@ class DefaultController extends BaseEventTypeController {
 			} else if($contact) {
 				echo $contact->fullName.', ';
 			}
-			echo implode(', ',$address->getLetterarray(true));
+			echo implode(', ',$address->getLetterarray(true,true,true));
 		} else {
 			echo "NO ADDRESS";
 		}
