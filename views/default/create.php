@@ -11,8 +11,8 @@
 		));
 		
 		// Event actions
-		$this->event_actions[] = EventAction::button('Save draft', 'savedraft', array('id' => 'et_save_draft', 'colour' => 'green'));
-		$this->event_actions[] = EventAction::button('Save and print', 'saveprint', array('id' => 'et_save_print', 'colour' => 'green'));
+		$this->event_actions[] = EventAction::button('Save draft', 'savedraft', array('colour' => 'green'), array('id' => 'et_save_draft'));
+		$this->event_actions[] = EventAction::button('Save and print', 'saveprint', array('colour' => 'green'), array('id' => 'et_save_print'));
 		$this->renderPartial('//patient/event_actions');
 	?>
 	

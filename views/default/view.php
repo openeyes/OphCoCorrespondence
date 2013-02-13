@@ -5,7 +5,7 @@
 <?php
 	// Event actions
 	$this->event_actions[] = EventAction::button('Print', 'print');
-	$this->event_actions[] = EventAction::button('Print all', 'printall', array('id' => 'et_print_all'));
+	$this->event_actions[] = EventAction::button('Print all', 'printall', null, array('id' => 'et_print_all'));
 	$this->renderPartial('//patient/event_actions');
 ?>
 
