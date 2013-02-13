@@ -216,7 +216,13 @@ class ElementLetter extends BaseEventTypeElement
 
 			if ($contact = $user->contact) {
 				$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
-				$consultant = $firm->getConsultantUser();
+				$consultant = null;
+				// only want to get consultant for medical firms
+				if ($specialty = $firm->getSpecialty()) {
+					if ($specialty->medical) {
+						$consultant = $firm->getConsultantUser();
+					}
+				}
 
 				$this->footer = "Yours sincerely\n\n\n\n\n".trim($contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications)."\n".$user->role;
 
