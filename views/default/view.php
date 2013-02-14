@@ -1,6 +1,13 @@
 <?php $this->header(); ?>
 
-<h3 class="withEventIcon" style="background:transparent url(<?php echo $this->assetPath?>/img/medium.png) center left no-repeat;"><?php echo $this->event_type->name ?></h3>
+<h3 class="withEventIcon"><?php echo $this->event_type->name ?></h3>
+
+<?php
+	// Event actions
+	$this->event_actions[] = EventAction::button('Print', 'print');
+	$this->event_actions[] = EventAction::button('Print all', 'printall', null, array('id' => 'et_print_all'));
+	$this->renderPartial('//patient/event_actions');
+?>
 
 <input type="hidden" id="moduleCSSPath" value="<?php echo $this->assetPath?>css" />
 
@@ -11,12 +18,6 @@
 	<div class="cleartall"></div>
 </div>
 
-<?php
-	// Event actions
-	$this->event_actions[] = EventAction::button('Print', 'print');
-	$this->event_actions[] = EventAction::button('Print all', 'printall', array('id' => 'et_print_all'));
-	$this->renderPartial('//patient/event_actions');
-?>
 
 <iframe id="print_iframe" name="print_iframe" style="display: none;"></iframe>
 
