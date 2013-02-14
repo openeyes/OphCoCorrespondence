@@ -428,7 +428,7 @@ class DefaultController extends BaseEventTypeController {
 
 				$consultant_name = false;
 
-				if ($user->id != $consultant->id) {
+				if ($consultant && $user->id != $consultant->id) {
 					$consultant_name = trim($consultant->contact->title.' '.$consultant->contact->first_name.' '.$consultant->contact->last_name);
 				}
 
