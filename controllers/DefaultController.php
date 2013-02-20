@@ -421,13 +421,20 @@ class DefaultController extends BaseEventTypeController {
 		$criteria->order = 'first_name, last_name';
 
 		$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
-		$consultant = $firm->getConsultantUser();
+		$consultant = null;
+		// only want a consultant for medical firms
+		if ($specialty = $firm->getSpecialty()) {
+			if ($specialty->medical) {
+				$consultant = $firm->getConsultantUser();
+			}
+		}
 
 		foreach (User::model()->findAll($criteria) as $user) {
 			if ($contact = $user->contact) {
 
 				$consultant_name = false;
-
+				
+				// if we have a consultant for the firm, and its not the matched user, attach the consultant name to the entry
 				if ($consultant && $user->id != $consultant->id) {
 					$consultant_name = trim($consultant->contact->title.' '.$consultant->contact->first_name.' '.$consultant->contact->last_name);
 				}
