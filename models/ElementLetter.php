@@ -301,15 +301,15 @@ class ElementLetter extends BaseEventTypeElement
 		$this->body = $this->macro->body;
 
 		if ($this->macro->cc_patient && $patient->address) {
-			$this->cc = 'Patient: '.$patient->title.' '.$patient->first_name.' '.$patient->last_name.', '.implode(', ',$patient->address->getLetterarray(false));
+			$this->cc = 'Patient: '.$patient->title.' '.$patient->first_name.' '.$patient->last_name.', '.implode(', ',$patient->address->getLetterarray());
 			$this->cc_targets[] = 'patient';
 		}
 
 		if ($this->macro->cc_doctor && @$patient->practice->address) {
 			if(@$patient->gp->contact) {
-				$this->cc = 'GP: '.$patient->gp->contact->title.' '.$patient->gp->contact->first_name.' '.$patient->gp->contact->last_name.', '.implode(', ',$patient->gp->contact->address->getLetterarray(false));
+				$this->cc = 'GP: '.$patient->gp->contact->title.' '.$patient->gp->contact->first_name.' '.$patient->gp->contact->last_name.', '.implode(', ',$patient->gp->contact->address->getLetterarray());
 			} else {
-				$this->cc = 'GP: '.Gp::UNKNOWN_NAME.', '.implode(', ',$patient->practice->address->getLetterarray(false));
+				$this->cc = 'GP: '.Gp::UNKNOWN_NAME.', '.implode(', ',$patient->practice->address->getLetterarray());
 			}
 			$this->cc_targets[] = 'gp';
 		}
