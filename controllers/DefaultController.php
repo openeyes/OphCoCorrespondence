@@ -331,7 +331,7 @@ class DefaultController extends BaseEventTypeController {
 		}
 	}
 
-	protected function printHTML($id, $elements) {
+	protected function printHTML($id, $elements, $template='print') {
 		$this->printPDF($id, $elements);
 	}
 
