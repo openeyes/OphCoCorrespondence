@@ -452,21 +452,16 @@ class DefaultController extends BaseEventTypeController {
 	}
 
 	public function process_examination_findings($patient_id, $element_type_id) {
-		if (!$patient = Patient::model()->findByPk($patient_id)) {
-			throw new Exception('Unable to find patient: '.$patient_id);
-		}
-
-		$event_type = EventType::model()->find('class_name=?',array('OphCiExamination'));
-
-		$element_type = ElementType::model()->findByPk($element_type_id);
-
-		if ($episode = $patient->getEpisodeForCurrentSubspecialty()) {
-			if ($event = $episode->getMostRecentEventByType($event_type->id)) {
-
-				if ($element = ModuleAPI::getmodel('OphCiExamination',$element_type->class_name)->find('event_id=?',array($event->id))) {
-					return $element->letter_string;
-				}
+		if ($api = Yii::app()->moduleAPI->get('OphCiExamination')) {
+			if (!$patient = Patient::model()->findByPk($patient_id)) {
+				throw new Exception('Unable to find patient: '.$patient_id);
 			}
+
+			if ($element_type = ElementType::model()->findByPk($element_type_id)) {
+				throw new Exception("Unknown element type: $element_type_id");
+			}
+
+			return $api->getLetterStringForModel($patient, $element_type_id);
 		}
 	}
 }

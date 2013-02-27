@@ -30,10 +30,8 @@ class LetterStringBase extends BaseEventTypeElement
 			$patient = Yii::app()->getController()->patient;
 		}
 
-		if ($episode = $patient->getEpisodeForCurrentSubspecialty()) {
-			if ($event = $episode->getMostRecentEventByType($event_type->id)) {
-				return ModuleAPI::getmodel('OphCiExamination',$element_type->class_name)->find('event_id=?',array($event->id));
-			}
+		if ($api = Yii::app()->moduleAPI->get($event_type->class_name)) {
+			return $api->getElementForLatestEventInEpisode($patient, $element_type->class_name);
 		}
 
 		return false;
