@@ -1,70 +1,48 @@
 
 $(document).ready(function() {
-	$('#et_save_draft').unbind('click').click(function() {
-		if (!$(this).hasClass('inactive')) {
-			disableButtons();
-			$('#ElementLetter_draft').val(1);
-			return true;
-		}
-		return false;
+	handleButton($('#et_save_draft'),function() {
+		$('#ElementLetter_draft').val(1);
 	});
 
-	$('#et_save_print').unbind('click').click(function() {
-		if (!$(this).hasClass('inactive')) {
-			disableButtons();
-			$('#ElementLetter_draft').val(0);
-			return true;
-		}
-		return false;
+	handleButton($('#et_save_print'),function() {
+		$('#ElementLetter_draft').val(0);
 	});
 
-	$('#et_cancel').unbind('click').click(function() {
-		if (!$(this).hasClass('inactive')) {
-			$('#dialog-confirm-cancel').dialog({
-				resizable: false,
-				//height: 140,
-				modal: true,
-				buttons: {
-					"Yes, cancel": function() {
-						$(this).dialog('close');
+	handleButton($('#et_cancel'),function() {
+		$('#dialog-confirm-cancel').dialog({
+			resizable: false,
+			//height: 140,
+			modal: true,
+			buttons: {
+				"Yes, cancel": function() {
+					$(this).dialog('close');
 
-						disableButtons();
+					disableButtons();
 
-						if (m = window.location.href.match(/\/update\/[0-9]+/)) {
-							window.location.href = window.location.href.replace('/update/','/view/');
-						} else {
-							window.location.href = baseUrl+'/patient/episodes/'+et_patient_id;
-						}
-					},
-					"No, go back": function() {
-						$(this).dialog('close');
-						return false;
+					if (m = window.location.href.match(/\/update\/[0-9]+/)) {
+						window.location.href = window.location.href.replace('/update/','/view/');
+					} else {
+						window.location.href = baseUrl+'/patient/episodes/'+et_patient_id;
 					}
+				},
+				"No, go back": function() {
+					$(this).dialog('close');
+					return false;
 				}
-			});
-		}
-		return false;
-	});
-
-	$('#et_deleteevent').unbind('click').click(function() {
-		if (!$(this).hasClass('inactive')) {
-			disableButtons();
-			return true;
-		}
-		return false;
-	});
-
-	$('#et_canceldelete').unbind('click').click(function() {
-		if (!$(this).hasClass('inactive')) {
-			disableButtons();
-
-			if (m = window.location.href.match(/\/delete\/[0-9]+/)) {
-				window.location.href = window.location.href.replace('/delete/','/view/');
-			} else {
-				window.location.href = baseUrl+'/patient/episodes/'+et_patient_id;
 			}
-		} 
-		return false;
+		});
+	});
+
+	handleButton($('#et_deleteevent'),function() {
+	});
+
+	handleButton($('#et_canceldelete'),function(e) {
+		if (m = window.location.href.match(/\/delete\/[0-9]+/)) {
+			window.location.href = window.location.href.replace('/delete/','/view/');
+		} else {
+			window.location.href = baseUrl+'/patient/episodes/'+et_patient_id;
+		}
+		e.preventDefault();
 	});
 
 	$('#address_target').change(function() {
@@ -362,9 +340,9 @@ $(document).ready(function() {
 		printLetter(true);
 	}
 
-	$('#et_print').unbind('click').click(function() {
+	handleButton($('#et_print'),function(e) {
 		printLetter();
-		return false;
+		e.preventDefault();
 	});
 
 	function printLetter(all) {
@@ -385,11 +363,11 @@ $(document).ready(function() {
 		});
 	}
 
-	$('#et_print_all').unbind('click').click(function() {
+	handleButton($('#et_print_all'),function() {
 		printLetter(true);
 	});
 
-	$('#et_confirm_printed').unbind('click').click(function() {
+	handleButton($('#et_confirm_printed'),function() {
 		var m = window.location.href.match(/\/view\/([0-9]+)/);
 
 		$.ajax({
@@ -398,6 +376,7 @@ $(document).ready(function() {
 			'success': function(html) {
 				if (html != "1") {
 					alert("Sorry, something went wrong. Please try again or contact support for assistance.");
+					enableButtons();
 				} else {
 					location.reload(true);
 				}
@@ -423,9 +402,9 @@ $(document).ready(function() {
 		$('input[name="EnclosureItems[enclosure'+id+']"]').select().focus();
 	});
 
-	$('a.removeEnclosure').die('click').live('click',function() {
+	$('a.removeEnclosure').die('click').live('click',function(e) {
 		$(this).parent().remove();
-		return false;
+		e.preventDefault();
 	});
 
 	$('div.enclosureItem input').die('keypress').live('keypress',function(e) {
