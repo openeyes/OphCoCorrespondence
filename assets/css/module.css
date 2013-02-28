@@ -1,3 +1,5 @@
+#event_content.watermarkBox { background-image: url(../img/watermark.png); background-position: -5px 0; background-repeat: repeat-y; border-color: #86cdff; }
+#event_content h3.withEventIcon { background:transparent url(../img/medium.png) center left no-repeat; }
 
 div.ElementLetter > .row > span.left { display: inline-block; width: 180px; }
 div.ElementLetter .row { background-color: #DAE6F1; }
@@ -14,11 +16,11 @@ div.ElementLetter textarea,input { font-family: courier !important; }
 #ElementLetter_clinic_date_0 { font-size: 16px; margin-left: 14px !important;}
 
 /* Correspondence OUT */
-#correspondence_out { margin: 0 10px 10px 10px; font-family: times; width:660px; background:#fff; font-size: 12pt; border:1px solid #ccc; padding:40px; -moz-box-shadow: 4px 4px 4px 0 #CCC;	-webkit-box-shadow: 4px 4px 4px 0 #CCC;  box-shadow: 4px 4px 4px 0 #CCC; }
+#correspondence_out { margin: 0 10px 10px 10px; font-family: sans-serif; width:660px; background:#fff; font-size: 12pt; border:1px solid #ccc; padding:40px; -moz-box-shadow: 4px 4px 4px 0 #CCC;	-webkit-box-shadow: 4px 4px 4px 0 #CCC;  box-shadow: 4px 4px 4px 0 #CCC; }
 #correspondence_out.draft {background:#fff url(../img/bg_draft.png) top center no-repeat;}
 #correspondence_out .accessible { font-size: 16pt; }
 #correspondence_out p { background:none !important; padding-left:0 !important;}
-#correspondence_out pre { margin: 0; padding:0; font-family: Helvetica, Arial, sans-serif;	}
+#correspondence_out pre { margin: 0; padding:0; font-family: sans-serif;	}
 #correspondence_out .banner { background:#fff; padding-bottom:25px; }
 #correspondence_out .banner .seal { float:left; }
 #correspondence_out .banner .logo { float:right; }

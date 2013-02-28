@@ -216,7 +216,13 @@ class ElementLetter extends BaseEventTypeElement
 
 			if ($contact = $user->contact) {
 				$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
-				$consultant = $firm->getConsultantUser();
+				$consultant = null;
+				// only want to get consultant for medical firms
+				if ($specialty = $firm->getSpecialty()) {
+					if ($specialty->medical) {
+						$consultant = $firm->getConsultantUser();
+					}
+				}
 
 				$this->footer = "Yours sincerely\n\n\n\n\n".trim($contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications)."\n".$user->role;
 
@@ -295,15 +301,15 @@ class ElementLetter extends BaseEventTypeElement
 		$this->body = $this->macro->body;
 
 		if ($this->macro->cc_patient && $patient->address) {
-			$this->cc = 'Patient: '.$patient->title.' '.$patient->first_name.' '.$patient->last_name.', '.implode(', ',$patient->address->getLetterarray(false));
+			$this->cc = 'Patient: '.$patient->title.' '.$patient->first_name.' '.$patient->last_name.', '.implode(', ',$patient->address->getLetterarray());
 			$this->cc_targets[] = 'patient';
 		}
 
 		if ($this->macro->cc_doctor && @$patient->practice->address) {
 			if(@$patient->gp->contact) {
-				$this->cc = 'GP: '.$patient->gp->contact->title.' '.$patient->gp->contact->first_name.' '.$patient->gp->contact->last_name.', '.implode(', ',$patient->gp->contact->address->getLetterarray(false));
+				$this->cc = 'GP: '.$patient->gp->contact->title.' '.$patient->gp->contact->first_name.' '.$patient->gp->contact->last_name.', '.implode(', ',$patient->gp->contact->address->getLetterarray());
 			} else {
-				$this->cc = 'GP: '.Gp::UNKNOWN_NAME.', '.implode(', ',$patient->practice->address->getLetterarray(false));
+				$this->cc = 'GP: '.Gp::UNKNOWN_NAME.', '.implode(', ',$patient->practice->address->getLetterarray());
 			}
 			$this->cc_targets[] = 'gp';
 		}
@@ -316,7 +322,7 @@ class ElementLetter extends BaseEventTypeElement
 		$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
 
 		$criteria = new CDbCriteria;
-		$criteria->compare('firm_id', $firm->id, true);
+		$criteria->compare('firm_id', $firm->id);
 		$criteria->order = 'display_order asc';
 
 		foreach (FirmLetterMacro::model()->findAll($criteria) as $flm) {
@@ -326,7 +332,7 @@ class ElementLetter extends BaseEventTypeElement
 		}
 
 		$criteria = new CDbCriteria;
-		$criteria->compare('subspecialty_id', $firm->serviceSubspecialtyAssignment->subspecialty_id, true);
+		$criteria->compare('subspecialty_id', $firm->serviceSubspecialtyAssignment->subspecialty_id);
 		$criteria->order = 'display_order asc';
 
 		foreach (SubspecialtyLetterMacro::model()->findAll($criteria) as $slm) {
@@ -336,7 +342,7 @@ class ElementLetter extends BaseEventTypeElement
 		}
 
 		$criteria = new CDbCriteria;
-		$criteria->compare('site_id', Yii::app()->session['selected_site_id'], true);
+		$criteria->compare('site_id', Yii::app()->session['selected_site_id']);
 		$criteria->order = 'display_order asc';
 
 		foreach (LetterMacro::model()->findAll($criteria) as $slm) {
