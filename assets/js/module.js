@@ -33,8 +33,7 @@ $(document).ready(function() {
 		});
 	});
 
-	handleButton($('#et_deleteevent'),function() {
-	});
+	handleButton($('#et_deleteevent'));
 
 	handleButton($('#et_canceldelete'),function(e) {
 		if (m = window.location.href.match(/\/delete\/[0-9]+/)) {
