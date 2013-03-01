@@ -1,3 +1,4 @@
+var correspondence_print_url, module_css_path;
 
 $(document).ready(function() {
 	handleButton($('#et_save_draft'),function() {
@@ -343,34 +344,17 @@ $(document).ready(function() {
 	});
 
 	if ($('#OphCoCorrespondence_printLetter').val() == 1) {
-		printLetter(true);
+		setTimeout("OphCoCorrespondence_do_print(true);",1000);
 	}
 
 	handleButton($('#et_print'),function(e) {
-		printLetter();
+		OphCoCorrespondence_do_print(false);
 		e.preventDefault();
 	});
 
-	function printLetter(all) {
-		$('#correspondence_out').removeClass('draft');
-
-		var m = window.location.href.match(/\/view\/([0-9]+)/);
-
-		$.ajax({
-			'type': 'GET',
-			'url': baseUrl+'/OphCoCorrespondence/Default/markPrinted/'+m[1],
-			'success': function(html) {
-				if (all) {
-					printPDF(baseUrl+'/OphCoCorrespondence/Default/print/'+m[1],{"all":1});
-				} else {
-					printPDF(baseUrl+'/OphCoCorrespondence/Default/print/'+m[1],{});
-				}
-			}
-		});
-	}
-
 	handleButton($('#et_print_all'),function() {
-		printLetter(true);
+		OphCoCorrespondence_do_print(true);
+		e.preventDefault();
 	});
 
 	handleButton($('#et_confirm_printed'),function() {
@@ -531,4 +515,13 @@ function inArray(needle, haystack) {
 		if (haystack[i] == needle) return true;
 	}
 	return false;
+}
+
+function OphCoCorrespondence_do_print(all) {
+	if (!all) {
+		printIFrameUrl(correspondence_print_url, null);
+	} else {
+		printIFrameUrl(correspondence_print_url, {"all":1});
+	}
+	enableButtons();
 }
