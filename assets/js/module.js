@@ -241,8 +241,14 @@ $(document).ready(function() {
 				'type': 'GET',
 				'url': baseUrl+'/OphCoCorrespondence/Default/getString?patient_id='+patient_id+'&string_type='+m[1]+'&string_id='+m[2],
 				'success': function(text) {
+					if (ophcocorrespondence_previous_dropdown(obj.attr('id'))) {
+						text = "\n\n"+ucfirst(text);
+					}
+
 					correspondence_append_body(text);
 					obj.val('');
+
+					et_oph_correspondence_last_stringgroup = obj.attr('id');
 				}
 			});
 		}
@@ -313,6 +319,7 @@ $(document).ready(function() {
 
 	$('#ElementLetter_body').unbind('keyup').bind('keyup',function() {
 		et_oph_correspondence_body_cursor_position = $(this).prop('selectionEnd');
+		et_oph_correspondence_last_stringgroup_do = false;
 
 		if (m = $(this).val().match(/\[([a-z]{3})\]/)) {
 
@@ -387,7 +394,6 @@ $(document).ready(function() {
 		var id = -1;
 		$('#enclosureItems').children('div.enclosureItem').map(function() {
 			$(this).children('input').map(function() {
-				console.log($(this).attr('name'));
 				m = $(this).attr('name').match(/[0-9]+/);
 				if (parseInt(m[0]) > id) {
 					id = parseInt(m[0]);
@@ -421,6 +427,8 @@ $(document).ready(function() {
 
 var et_oph_correspondence_body_cursor_position = 0;
 var re_field = null;
+var et_oph_correspondence_last_stringgroup_do = true;
+var et_oph_correspondence_last_stringgroup = null;
 
 function correspondence_load_data(data) {
 	for (var i in data) {
@@ -494,4 +502,33 @@ function uclower(str) {
 	str += '';
 	var f = str.charAt(0).toLowerCase();
 	return f + str.substr(1);
+}
+
+function ophcocorrespondence_previous_dropdown(dropdown) {
+	if (!et_oph_correspondence_last_stringgroup_do) {
+		return false;
+	}
+
+	switch (dropdown) {
+		case 'findings':
+			return (et_oph_correspondence_last_stringgroup == "introduction");
+		case 'diagnosis':
+			return inArray(et_oph_correspondence_last_stringgroup, ["introduction","findings"]);
+		case 'management':
+			return inArray(et_oph_correspondence_last_stringgroup, ["introduction","findings","diagnosis"]);
+		case 'drugs':
+			return inArray(et_oph_correspondence_last_stringgroup, ["introduction","findings","diagnosis","management"]);
+		case 'outcome':
+			return inArray(et_oph_correspondence_last_stringgroup, ["introduction","findings","diagnosis","management","drugs"]);
+	}
+
+	return false;
+}
+
+function inArray(needle, haystack) {
+	var length = haystack.length;
+	for (var i = 0; i < length; i++) {
+		if (haystack[i] == needle) return true;
+	}
+	return false;
 }
