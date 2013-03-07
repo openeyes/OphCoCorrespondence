@@ -12,7 +12,10 @@ class DefaultController extends BaseEventTypeController {
 
 	public function actionView($id) {
 		$cs = Yii::app()->getClientScript();
-		$cs->registerScript('scr_correspondence_view', "correspondence_print_url = '" . Yii::app()->createUrl('OphCoCorrespondence/Default/print/'.$id) . "';\nmodule_css_path = '" . $this->assetPath . "/css';", CClientScript::POS_READY);
+		$cs->registerScript('scr_correspondence_view', 
+				"correspondence_markprinted_url = '" . Yii::app()->createUrl('OphCoCorrespondence/Default/markPrinted/'.$id) . "';\n" .
+				"correspondence_print_url = '" . Yii::app()->createUrl('OphCoCorrespondence/Default/print/'.$id) . "';\n" .
+				"module_css_path = '" . $this->assetPath . "/css';", CClientScript::POS_READY);
 		parent::actionView($id);
 	}
 

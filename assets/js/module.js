@@ -518,10 +518,17 @@ function inArray(needle, haystack) {
 }
 
 function OphCoCorrespondence_do_print(all) {
-	if (!all) {
-		printIFrameUrl(correspondence_print_url, null);
-	} else {
-		printIFrameUrl(correspondence_print_url, {"all":1});
-	}
+	$.ajax({
+		'type': 'GET',
+		'url': correspondence_markprinted_url,
+		'success': function(html) {
+			if (all) {
+				printIFrameUrl(correspondence_print_url, {"all":1});
+			} else {
+				printIFrameUrl(correspondence_print_url, null);
+			}
+		}
+	});
+	
 	enableButtons();
 }
