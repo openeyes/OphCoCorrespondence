@@ -282,7 +282,34 @@ $(document).ready(function() {
 				}
 			});
 
-			if (!ok) return true;
+			if (!ok) {
+				if (obj.val() == 'patient') {
+					var found = false;
+					$.each($('#ElementLetter_cc').val().split("\n"),function(key, value) {
+						if (value.match(/^Patient: /)) {
+							found = true;
+						}
+					});
+					if (found) {
+						obj.val('');
+						return true;
+					}
+				} else if (obj.val() == 'gp') {
+					var found = false;
+					$.each($('#ElementLetter_cc').val().split("\n"),function(key, value) {
+						if (value.match(/^GP: /)) {
+							found = true;
+						}
+					});
+					if (found) {
+						obj.val('');
+						return true;
+					}
+				} else {
+					obj.val('');
+					return true;
+				}
+			}
 
 			$.ajax({
 				'type': 'GET',
