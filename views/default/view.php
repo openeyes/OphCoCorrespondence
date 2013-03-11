@@ -18,7 +18,4 @@
 	<div class="cleartall"></div>
 </div>
 
-
-<iframe id="print_iframe" name="print_iframe" style="display: none;"></iframe>
-
 <?php $this->footer() ?>
