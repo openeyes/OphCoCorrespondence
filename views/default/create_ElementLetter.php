@@ -25,8 +25,6 @@
 	data-element-display-order="<?php echo $element->elementType->display_order ?>">
 	<h4 class="elementTypeName"><?php echo $element->elementType->name ?></h4>
 
-	<script type="text/javascript"> var patient_id = <?php echo $this->patient->id?>; </script>
-
 	<?php echo $form->hiddenInput($element, 'draft', 1)?>
 
 	<div class="row">
