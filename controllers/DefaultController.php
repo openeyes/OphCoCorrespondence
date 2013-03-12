@@ -12,6 +12,7 @@ class DefaultController extends BaseEventTypeController {
 
 	public function actionView($id) {
 		$this->jsVars['correspondence_markprinted_url'] = Yii::app()->createUrl('OphCoCorrespondence/Default/markPrinted/'.$id);
+		$this->jsVars['correspondence_print_url'] = Yii::app()->createUrl('OphCoCorrespondence/Default/print/'.$id);
 		parent::actionView($id);
 	}
 

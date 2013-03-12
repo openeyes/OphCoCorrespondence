@@ -1,3 +1,5 @@
+
+var correspondence_markprinted_url, correspondence_print_url;
 $(document).ready(function() {
 	handleButton($('#et_save_draft'),function() {
 		$('#ElementLetter_draft').val(1);
