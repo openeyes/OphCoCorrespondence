@@ -252,15 +252,16 @@ class ElementLetter extends BaseEventTypeElement
 
 			if (Yii::app()->findModule('OphCiExamination')) {
 				if ($episode = $patient->getEpisodeForCurrentSubspecialty()) {
-					$event_type = EventType::model()->find('class_name=?',array('OphCiExamination'));
-					$criteria = new CDbCriteria;
-					$criteria->addCondition('event_type_id = '.$event_type->id);
-					$criteria->addCondition('episode_id = '.$episode->id);
-					$criteria->order = "created_date desc";
-					$criteria->limit = 1;
+					if ($event_type = EventType::model()->find('class_name=?',array('OphCiExamination'))) {
+						$criteria = new CDbCriteria;
+						$criteria->addCondition('event_type_id = '.$event_type->id);
+						$criteria->addCondition('episode_id = '.$episode->id);
+						$criteria->order = "created_date desc";
+						$criteria->limit = 1;
 
-					if ($event = Event::model()->find($criteria)) {
-						$this->clinic_date = $event->datetime;
+						if ($event = Event::model()->find($criteria)) {
+							$this->clinic_date = $event->datetime;
+						}
 					}
 				}
 			}
