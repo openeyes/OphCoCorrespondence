@@ -66,3 +66,4 @@ textarea { font-size: 16px !important; }
 .enclosures div.right { margin-left: 13px; display: inline-block; }
 .enclosures > .label { margin-top: 6px; }
 .enclosureItem > input { padding: 0 !important; margin-left: 0 !important; height: 24px; margin-bottom: 2px !important; margin-top: 0px !important; }
+#event_content .metaData { margin-top: 20px; }
