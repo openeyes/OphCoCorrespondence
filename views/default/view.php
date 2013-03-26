@@ -23,8 +23,10 @@
 
 <?php
 	// Event actions
-	$this->event_actions[] = EventAction::button('Print', 'print');
-	$this->event_actions[] = EventAction::button('Print all', 'printall', null, array('id' => 'et_print_all'));
+	if($this->canPrint()) {
+		$this->event_actions[] = EventAction::button('Print', 'print');
+		$this->event_actions[] = EventAction::button('Print all', 'printall', null, array('id' => 'et_print_all'));
+	}
 	$this->renderPartial('//patient/event_actions');
 ?>
 
