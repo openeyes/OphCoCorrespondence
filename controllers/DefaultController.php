@@ -443,7 +443,7 @@ class DefaultController extends BaseEventTypeController {
 		// only want a consultant for medical firms
 		if ($specialty = $firm->getSpecialty()) {
 			if ($specialty->medical) {
-				$consultant = $firm->getConsultantUser();
+				$consultant = $firm->consultant;
 			}
 		}
 

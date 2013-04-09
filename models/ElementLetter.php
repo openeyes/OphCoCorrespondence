@@ -220,7 +220,7 @@ class ElementLetter extends BaseEventTypeElement
 				// only want to get consultant for medical firms
 				if ($specialty = $firm->getSpecialty()) {
 					if ($specialty->medical) {
-						$consultant = $firm->getConsultantUser();
+						$consultant = $firm->consultant;
 					}
 				}
 
