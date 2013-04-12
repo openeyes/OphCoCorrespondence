@@ -127,50 +127,19 @@ class ElementLetter extends BaseEventTypeElement
 			$patient = $this->event->episode->patient;
 		}
 
-		$options = array('patient' => $patient->fullname.' (Patient)');
+		$options = array('Patient'.$patient->id => $patient->fullname.' (Patient)');
 
 		if ($patient->gp && $patient->gp->contact) {
-			$options['gp'] = $patient->gp->contact->fullname.' (GP)';
+			$options['Gp'.$patient->gp_id] = $patient->gp->contact->fullname.' (GP)';
 		} else {
-			$options['gp'] = Gp::UNKNOWN_NAME.' (GP)';
+			$options['Gp'.$patient->gp_id] = Gp::UNKNOWN_NAME.' (GP)';
 		}
 		if(!$patient->practice || !$patient->practice->address) {
-			$options['gp'] .= ' - NO ADDRESS';
+			$options['Gp'.$patient->gp_id] .= ' - NO ADDRESS';
 		}
-		
-		foreach (PatientContactAssignment::model()->findAll('patient_id=?',array($patient->id)) as $pca) {
-			if ($pca->contact->parent_class == 'Specialist') {
-				$type = Specialist::model()->findByPk($pca->contact->parent_id)->specialist_type->name;
-			} else if ($pca->contact->parent_class == 'Consultant') {
-				$type = 'Consultant Ophthalmologist';
-			} else {
-				if ($uca = UserContactAssignment::model()->find('contact_id=?',array($pca->contact_id))) {
-					$type = $uca->user->role ? $uca->user->role : 'Staff';
-				} else {
-					$type = $pca->contact->parent_class;
-				}
-			}
 
-			if ($pca->site || $pca->institution || $pca->contact->address) {
-				if ($pca->site) {
-					$key = 'contact'.$pca->contact_id.'_site'.$pca->site->id;
-				} else if ($pca->institution) {
-					$key = 'contact'.$pca->contact_id.'_institution'.$pca->institution->id;
-				} else {
-					$key = 'contact'.$pca->contact_id;
-				}
-
-				$options[$key] = $pca->contact->fullname.' ('.$type.', ';
-				if ($pca->site) {
-					$options[$key] .= $pca->site->name.')';
-				} else if ($pca->institution) {
-					$options[$key] .= $pca->institution->name.')';
-				} else {
-					$options[$key] .= str_replace(',','',$pca->contact->address->address1).')';
-				}
-			} else {
-				$options[$key] = $pca->contact->fullname.' ('.$type.') - NO ADDRESS';
-			}
+		foreach ($patient->contactAssignments as $pca) {
+			$options['ContactLocation'.$pca->location_id] = $pca->location->contact->fullName.' ('.$pca->location->contact->label->name.', '.$pca->location.')';
 		}
 
 		asort($options);

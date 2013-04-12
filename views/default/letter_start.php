@@ -24,12 +24,11 @@
 <?php if (isset($site)) {?>
 	<div class="fromAddress">
 		<?php
-		$site->name = $site->getCorrespondenceSiteName();
-		echo $site->letterhtml ?>
-		<br />Tel: <?php echo CHtml::encode($site->telephone) ?>
-		<?php if($site->fax) { ?>
-			<br />Fax: <?php echo CHtml::encode($site->fax) ?>
-		<?php } ?>
+		echo $site->getLetterAddress(array(
+			'delimiter' => '<br />',
+			'include_telephone' => true,
+			'include_fax' => true,
+		))?>
 		<?php if ($directLine) {?>
 			<br />Direct line: <?php echo $directLine?>
 		<?php }?>

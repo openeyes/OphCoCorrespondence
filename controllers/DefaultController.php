@@ -20,6 +20,11 @@
 class DefaultController extends BaseEventTypeController {
 
 	public function actionCreate() {
+		if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
+			throw new Exception("Unknown patient: ".@$_GET['patient_id']);
+		}
+		$this->jsVars['OE_gp_id'] = $patient->gp_id;
+
 		parent::actionCreate();
 	}
 
@@ -35,76 +40,33 @@ class DefaultController extends BaseEventTypeController {
 
 	public function actionGetAddress() {
 		if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
-			throw new Exception('Patient not found: '.@$_GET['patient_id']);
+			throw new Exception("Unknown patient: ".@$_GET['patient_id']);
 		}
 
-		$data = array();
-
-		if (@$_GET['address_id'] == 'patient') {
-			$contact = $patient;
-			$address = $contact->getLetterAddress();
-			if ($patient->date_of_death) {
-				echo json_encode(array('error'=>'DECEASED'));
-				return;
-			}
-		} else if (@$_GET['address_id'] == 'gp') {
-			if($contact = @$patient->gp->contact) {
-				$address_name = $contact->fullName;
-			} else {
-				$address_name = Gp::UNKNOWN_NAME;
-			}
-			$address = ($patient->practice && $patient->practice->address) ? $patient->practice->getLetterAddress($address_name) : null;
-			$salutation = ($contact) ? $contact->salutationName : Gp::UNKNOWN_SALUTATION;
-			$nickname = ($contact) ? $contact->nick_name : Gp::UNKNOWN_NAME;
-		} else if (preg_match('/^contact([0-9]+)_?(site|institution)?([0-9]+)?$/',@$_GET['address_id'],$m)) {
-			if (!$contact = Contact::model()->findByPk($m[1])) {
-				throw new Exception('Unknown contact id: '.$m[1]);
-			}
-			if ($address = $patient->getContactAddress($contact->id, @$m[2], @$m[3])) {
-				$address = $address->getLetterAddress(true);
-			}
-		} else {
-			throw new Exception('Unknown or missing address_id value: '.@$_GET['address_id']);
+		if (!preg_match('/^([a-zA-Z]+)([0-9]+)$/',@$_GET['contact'],$m)) {
+			throw new Exception("Invalid contact format: ".@$_GET['contact']);
 		}
 
-		$person = @$contact->fullName;
-
-		if (isset($contact->parent_class)) {
-			if ($contact->parent_class == 'Specialist') {
-				$specialist = Specialist::model()->findByPk($contact->parent_id);
-				$person .= "\n".$specialist->specialist_type->name."\n";
-			} else if ($contact->parent_class == 'Consultant') {
-				$person .= "\nConsultant Ophthalmologist\n";
-			} else if ($contact->parent_class == 'Gp') {
-				$person = '';
-			} else {
-				if ($uca = UserContactAssignment::model()->find('contact_id=?',array($contact->id))) {
-					$person .= "\n".($uca->user->role ? $uca->user->role : 'Staff')."\n";
-				} else {
-					$person .= "\n".$contact->parent_class."\n";
-				}
-			}
-		} else {
-			$person = '';
+		if (!$contact = $m[1]::model()->findByPk($m[2])) {
+			throw new Exception("{$m[1]} not found: {$m[2]}");
 		}
 
-		$data['text_ElementLetter_address'] = $person.$address;
-
-		$data['text_ElementLetter_introduction'] = 'Dear Sir/Madam,';
-
-		if ((boolean)@$_GET['nickname'] && (isset($nickname) || ($contact && $contact->nick_name))) {
-			if(isset($nickname)) {
-				$data['text_ElementLetter_introduction'] = "Dear ".$nickname.",";
-			} else if($contact) {
-				$data['text_ElementLetter_introduction'] = "Dear ".$contact->nick_name.",";
-			}
-		} else {
-			if (isset($salutation)) {
-				$data['text_ElementLetter_introduction'] = "Dear ".$salutation.",";
-			} else if($contact) {
-				$data['text_ElementLetter_introduction'] = "Dear ".$contact->salutationName.",";
-			}
+		if ($contact->isDeceased()) {
+			echo json_encode(array('errors'=>'DECEASED'));
+			return;
 		}
+
+		$data = array( 
+			'text_ElementLetter_address' => $contact->getLetterAddress(array(
+				'patient' => $patient,
+				'include_name' => true,
+				'include_label' => true,
+				'delimiter' => "\n",
+			)),
+			'text_ElementLetter_introduction' => $contact->getLetterIntroduction(array(
+				'nickname' => (boolean)@$_GET['nickname'],
+			)),
+		);
 
 		echo json_encode($data);
 	}
@@ -139,7 +101,7 @@ class DefaultController extends BaseEventTypeController {
 		$macro->substitute($patient);
 
 		if ($macro->recipient_patient) {
-			$data['sel_address_target'] = 'patient';
+			$data['sel_address_target'] = 'Patient'.$patient->id;
 			$contact = $patient;
 			if ($patient->date_of_death) {
 				echo json_encode(array('error'=>'DECEASED'));
@@ -148,46 +110,22 @@ class DefaultController extends BaseEventTypeController {
 		}
 
 		if ($macro->recipient_doctor) {
-			$data['sel_address_target'] = 'gp';
-			if (@$patient->practice->address) {
-				if(@$patient->gp->contact) {
-					$address_name = $patient->gp->contact->fullName;
-					$address_salutation = ($macro->use_nickname && $patient->gp->contact->nick_name) ? $patient->gp->contact->nick_name : $patient->gp->contact->salutationName;
-				} else {
-					$address_name = Gp::UNKNOWN_NAME;
-					$address_salutation = Gp::UNKNOWN_SALUTATION;
-				}
-				$address = $patient->practice->getLetterAddress($address_name);
-			}
+			$data['sel_address_target'] = 'Gp'.$patient->gp_id;
+			$contact = $patient->gp;
 		}
 
-		if(isset($address)) {
-			$data['text_ElementLetter_address'] = $address;
-		} else if (isset($contact)) {
-			$data['text_ElementLetter_address'] = $contact->getLetterAddress();
-		}
+		$data['text_ElementLetter_address'] = $contact->getLetterAddress(array(
+			'patient' => $patient,
+			'include_name' => true,
+			'include_label' => true,
+			'delimiter' => "\n",
+		));
 
-		if ($macro->use_nickname) {
-			$data['check_ElementLetter_use_nickname'] = 1;
+		$data['text_ElementLetter_introduction'] = $contact->getLetterIntroduction(array(
+			'nickname' => $macro->use_nickname,
+		));
 
-			if(isset($address_salutation)) {
-				$data['text_ElementLetter_introduction'] = "Dear ".$address_salutation.",";
-			} else if (isset($contact)) {
-				if (isset($contact->nick_name) && $contact->nick_name) {
-					$data['text_ElementLetter_introduction'] = "Dear ".$contact->nick_name.",";
-				} else {
-					$data['text_ElementLetter_introduction'] = "Dear ".$contact->salutationName.",";
-				}
-			}
-		} else {
-			$data['check_ElementLetter_use_nickname'] = 0;
-
-			if(isset($address_salutation)) {
-				$data['text_ElementLetter_introduction'] = "Dear ".$address_salutation.",";
-			} else if (isset($contact)) {
-				$data['text_ElementLetter_introduction'] = "Dear ".$contact->salutationName.",";
-			}
-		}
+		$data['check_ElementLetter_use_nickname'] = $macro->use_nickname;
 
 		if ($macro->body) {
 			$data['text_ElementLetter_body'] = $macro->body;
@@ -197,20 +135,27 @@ class DefaultController extends BaseEventTypeController {
 			if ($patient->date_of_death) {
 				$data['alert'] = "Warning: the patient cannot be cc'd because they are deceased.";
 			} else if ($patient->address) {
-				$data['textappend_ElementLetter_cc'] = 'Patient: '.$patient->addressName.', '.implode(', ',$patient->address->getLetterarray());
-				$data['elementappend_cc_targets'] = '<input type="hidden" name="CC_Targets[]" value="patient" />';
+				$data['textappend_ElementLetter_cc'] = $patient->getLetterAddress(array(
+					'include_name' => true,
+					'include_label' => true,
+					'delimiter' => ", ",
+					'include_prefix' => true,
+				));
+				$data['elementappend_cc_targets'] = '<input type="hidden" name="CC_Targets[]" value="Patient'.$patient->id.'" />';
 			} else {
 				$data['alert'] = "Letters to the GP should be cc'd to the patient, but this patient does not have a valid address.";
 			}
 		}
 
 		if ($macro->cc_doctor && @$patient->practice->address) {
-			if(@$patient->gp->contact) {
-				$data['textappend_ElementLetter_cc'] = 'GP: '.$patient->gp->contact->fullName.', '.implode(', ',$patient->practice->address->getLetterarray());
-			} else {
-				$data['textappend_ElementLetter_cc'] = 'GP: '.Gp::UNKNOWN_NAME.', '.implode(', ',$patient->practice->address->getLetterarray());
-			}
-			$data['elementappend_cc_targets'] = '<input type="hidden" name="CC_Targets[]" value="gp" />';
+			$data['textappend_ElementLetter_cc'] = $patient->gp->getLetterAddress(array(
+				'patient' => $patient,
+				'include_name' => true,
+				'include_label' => true,
+				'delimiter' => ", ",
+				'include_prefix' => true,
+			));
+			$data['elementappend_cc_targets'] = '<input type="hidden" name="CC_Targets[]" value="Gp'.$patient->gp_id.'" />';
 		}
 
 		echo json_encode($data);
@@ -266,55 +211,31 @@ class DefaultController extends BaseEventTypeController {
 
 	public function actionGetCc() {
 		if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
-			throw new Exception('Patient not found: '.@$_GET['patient_id']);
+			throw new Exception("Unknown patient: ".@$_GET['patient_id']);
 		}
 
-		if (@$_GET['contact_id'] == 'patient') {
-
-			$contact = $patient;
-			$address_name = $patient->addressName;
-			$address = $contact->address;
-			$prefix = 'Patient';
-
-			if ($patient->date_of_death) {
-				echo "DECEASED";
-				return;
-			}
-
-		} else if (@$_GET['contact_id'] == 'gp') {
-
-			if(!$contact = @$patient->gp->contact) {
-				$address_name = Gp::UNKNOWN_NAME;
-			}
-			$address = @$patient->practice->address;
-			$prefix = 'GP';
-
-		} else if (preg_match('/^contact([0-9]+)_?(site|institution)?([0-9]+)?$/',@$_GET['contact_id'],$m)) {
-
-			if (!$contact = Contact::model()->findByPk($m[1])) {
-				throw new Exception('Unknown contact id: '.$m[1]);
-			}
-
-			$address = $patient->getContactAddress($contact->id, @$m[2], @$m[3]);
-		} else {
-			throw new Exception('Invalid or missing contact_id value: '.@$_GET['contact_id']);
+		if (!preg_match('/^([a-zA-Z]+)([0-9]+)$/',@$_GET['contact'],$m)) {
+			throw new Exception("Invalid contact format: ".@$_GET['contact']);
 		}
 
-		if ($address) {
-			if (isset($prefix)) {
-				echo $prefix.': ';
-			} else if ($contact->prefix) {
-				echo $contact->prefix.': ';
-			}
-			if (isset($address_name)) {
-				echo $address_name . ', ';
-			} else if($contact) {
-				echo $contact->fullName.', ';
-			}
-			echo implode(', ',$address->getLetterarray(true,true,true));
-		} else {
-			echo "NO ADDRESS";
+		if (!$contact = $m[1]::model()->findByPk($m[2])) {
+			throw new Exception("{$m[1]} not found: {$m[2]}");
 		}
+
+		if ($contact->isDeceased()) {
+			echo json_encode(array('errors'=>'DECEASED'));
+			return;
+		}
+
+		$address = $contact->getLetterAddress(array(
+			'patient' => $patient,
+			'include_name' => true,
+			'include_label' => true,
+			'delimiter' => ", ",
+			'include_prefix' => true,
+		));
+
+		echo $address ? $address : 'NO ADDRESS';
 	}
 
 	public function actionExpandStrings() {
@@ -371,13 +292,16 @@ class DefaultController extends BaseEventTypeController {
 				'eventId' => $id,
 		), true);
 
-		$from_address = $this->site->getCorrespondenceSiteName()."\n";
-		$from_address .= implode("\n",$this->site->getLetterArray(false,false))."\n";
-		$from_address .= "Tel: ".CHtml::encode($this->site->telephone);
-		if($this->site->fax) {
+		$from_address = $this->site->getLetterAddress(array(
+			'delimiter' => "\n",
+			'include_telephone' => true,
+			'include_fax' => true,
+		));
+
+		if ($this->site->fax) {
 			$from_address .= "\nFax: ".CHtml::encode($this->site->fax);
 		}
-		if($letter->direct_line) {
+		if ($letter->direct_line) {
 			$from_address .= "\nDirect line: ".$letter->direct_line;
 		}
 		if ($letter->fax) {
@@ -395,8 +319,8 @@ class DefaultController extends BaseEventTypeController {
 		$oeletter->setBarcode('E:'.$id);
 		$oeletter->addBody($body);
 
-		if ($this->site->replyto) {
-			$oeletter->addReplyToAddress($this->site->getReplyToAddress().($this->site->replyto->primary_phone ? ', Tel: '.$this->site->replyto->primary_phone : ''));
+		if ($this->site->replyToAddress) {
+			$oeletter->addReplyToAddress($this->site->replyToAddress.($this->site->replyToAddress->primary_phone ? ', Tel: '.$this->site->replyToAddress->primary_phone : ''));
 		}
 
 		$pdf_print->addLetter($oeletter);

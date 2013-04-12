@@ -18,12 +18,9 @@
  */
 ?>
 <div class="replyAddress">
-	<?php if ($site->replyto) {?>
+	<?php if ($site->replyToAddress) {?>
 		<strong>Please reply to:</strong>
-		<?php echo $site->getReplyToAddress()?>
-		<?php if ($site->replyto->primary_phone) {?>
-			, Tel:
-			<?php echo $site->replyto->primary_phone?>
-		<?php }?>
+		<br/>
+		<?php echo implode("<br/>",$site->replyToAddress->getLetterArray())?>
 	<?php }?>
 </div>
