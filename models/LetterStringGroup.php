@@ -112,12 +112,14 @@ class LetterStringGroup extends BaseEventTypeElement
 				} else {
 					$patient = Yii::app()->getController()->patient;
 				}
-
-				foreach ($api->getElementsForLatestEventInEpisode($patient) as $element_type) {
-					$strings['examination'.$element_type->id] = $element_type->name;
+				
+				if ($episode = $patient->getEpisodeForCurrentSubspecialty()) {
+					foreach ($api->getElementsForLatestEventInEpisode($patient, $episode) as $element_type) {
+						$strings['examination'.$element_type->id] = $element_type->name;
+					}
+	
+					return $strings;
 				}
-
-				return $strings;
 			}
 		}
 
