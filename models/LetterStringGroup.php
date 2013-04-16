@@ -114,6 +114,8 @@ class LetterStringGroup extends BaseEventTypeElement
 				}
 				
 				if ($episode = $patient->getEpisodeForCurrentSubspecialty()) {
+					$strings = array();
+
 					foreach ($api->getElementsForLatestEventInEpisode($patient, $episode) as $element_type) {
 						$strings['examination'.$element_type->id] = $element_type->name;
 					}
