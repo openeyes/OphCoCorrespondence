@@ -400,11 +400,15 @@ class DefaultController extends BaseEventTypeController {
 				throw new Exception('Unable to find patient: '.$patient_id);
 			}
 
-			if ($element_type = ElementType::model()->findByPk($element_type_id)) {
+			if (!$element_type = ElementType::model()->findByPk($element_type_id)) {
 				throw new Exception("Unknown element type: $element_type_id");
 			}
-
-			return $api->getLetterStringForModel($patient, $element_type_id);
+			
+			if (!$episode = $patient->getEpisodeForCurrentSubspecialty()) {
+				throw new Exception('No Episode available for patient: ' . $patient_id);
+			}
+			
+			return $api->getLetterStringForModel($patient, $episode, $element_type_id);
 		}
 	}
 }

@@ -18,20 +18,25 @@
  */
 
 class OphCoCorrespondence_Substitution {
+	
 	static public function replace($text, $patient) {
 		preg_match_all('/\[([a-z]{3})\]/s',$text,$m);
 
 		foreach ($m[1] as $el) {
-			$text = str_replace('['.$el.']',$patient->{$el},$text);
+			if(property_exists($patient, $el) || method_exists($patient, 'get'.ucfirst($el))) {
+				$text = str_replace('['.$el.']',$patient->{$el},$text);
+			}
 		}
 
 		preg_match_all('/\[([A-Z][a-z]{2})\]/s',$text,$m);
 
 		foreach ($m[1] as $el) {
-			$text = str_replace('['.$el.']',ucfirst($patient->{$el}),$text);
+			if(property_exists($patient, $el) || method_exists($patient, 'get'.ucfirst($el))) {
+				$text = str_replace('['.$el.']',ucfirst($patient->{$el}),$text);
+			}
 		}
 
 		return $text;
 	}
 }
-?>
+
