@@ -18,9 +18,13 @@
  */
 ?>
 <div class="replyAddress">
-	<?php if ($site->replyToAddress) {?>
+	<?php if ($site->replyTo) {?>
 		<strong>Please reply to:</strong>
 		<br/>
-		<?php echo implode("<br/>",$site->replyToAddress->getLetterArray())?>
+		<?php
+		echo $site->replyTo->getLetterAddress(array(
+			'include_name' => true,
+			'delimiter' => '<br/>',
+		))?>
 	<?php }?>
 </div>

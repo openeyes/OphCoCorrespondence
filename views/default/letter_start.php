@@ -25,6 +25,7 @@
 	<div class="fromAddress">
 		<?php
 		echo $site->getLetterAddress(array(
+			'include_name' => true,
 			'delimiter' => '<br />',
 			'include_telephone' => true,
 			'include_fax' => true,

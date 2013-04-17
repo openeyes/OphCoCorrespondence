@@ -134,7 +134,7 @@ class DefaultController extends BaseEventTypeController {
 		if ($macro->cc_patient) {
 			if ($patient->date_of_death) {
 				$data['alert'] = "Warning: the patient cannot be cc'd because they are deceased.";
-			} else if ($patient->address) {
+			} else if ($patient->contact->address) {
 				$data['textappend_ElementLetter_cc'] = $patient->getLetterAddress(array(
 					'include_name' => true,
 					'include_label' => true,
@@ -147,7 +147,7 @@ class DefaultController extends BaseEventTypeController {
 			}
 		}
 
-		if ($macro->cc_doctor && @$patient->practice->address) {
+		if ($macro->cc_doctor && @$patient->practice->contact->address) {
 			$data['textappend_ElementLetter_cc'] = $patient->gp->getLetterAddress(array(
 				'patient' => $patient,
 				'include_name' => true,
