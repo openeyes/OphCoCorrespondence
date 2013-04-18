@@ -69,7 +69,7 @@ class DefaultController extends BaseEventTypeController {
 			$person = '';
 		}
 
-		$data['text_ElementLetter_address'] = $person.$address;
+		$data['text_ElementLetter_address'] = str_replace('&#039;',"'",$person.$address);
 
 		$data['text_ElementLetter_introduction'] = 'Dear Sir/Madam,';
 
