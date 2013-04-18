@@ -292,7 +292,7 @@ class DefaultController extends BaseEventTypeController {
 			} else if($contact) {
 				echo $contact->fullName.', ';
 			}
-			echo implode(', ',$address->getLetterarray(true,true,true));
+			echo str_replace('&#039;',"'",implode(', ',$address->getLetterarray(true,true,true)));
 		} else {
 			echo "NO ADDRESS";
 		}
