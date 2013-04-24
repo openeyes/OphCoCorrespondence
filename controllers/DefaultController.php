@@ -109,21 +109,23 @@ class DefaultController extends BaseEventTypeController {
 			}
 		}
 
-		if ($macro->recipient_doctor) {
+		if ($macro->recipient_doctor && $patient->gp) {
 			$data['sel_address_target'] = 'Gp'.$patient->gp_id;
 			$contact = $patient->gp;
 		}
 
-		$data['text_ElementLetter_address'] = $contact->getLetterAddress(array(
-			'patient' => $patient,
-			'include_name' => true,
-			'include_label' => true,
-			'delimiter' => "\n",
-		));
+		if (isset($contact)) {
+			$data['text_ElementLetter_address'] = $contact->getLetterAddress(array(
+				'patient' => $patient,
+				'include_name' => true,
+				'include_label' => true,
+				'delimiter' => "\n",
+			));
 
-		$data['text_ElementLetter_introduction'] = $contact->getLetterIntroduction(array(
-			'nickname' => $macro->use_nickname,
-		));
+			$data['text_ElementLetter_introduction'] = $contact->getLetterIntroduction(array(
+				'nickname' => $macro->use_nickname,
+			));
+		}
 
 		$data['check_ElementLetter_use_nickname'] = $macro->use_nickname;
 
@@ -147,7 +149,7 @@ class DefaultController extends BaseEventTypeController {
 			}
 		}
 
-		if ($macro->cc_doctor && @$patient->practice->contact->address) {
+		if ($macro->cc_doctor && $patient->gp && @$patient->practice->contact->address) {
 			$data['textappend_ElementLetter_cc'] = $patient->gp->getLetterAddress(array(
 				'patient' => $patient,
 				'include_name' => true,
