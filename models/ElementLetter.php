@@ -57,7 +57,7 @@ class ElementLetter extends BaseEventTypeElement
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('event_id, site_id, print, address, use_nickname, date, introduction, cc, re, body, footer, draft, direct_line, fax, clinic_date', 'safe'),
+			array('event_id, site_id, print, address, use_nickname, date, introduction, cc, re, body, footer, draft, direct_line, fax, clinic_date, print_all', 'safe'),
 			array('use_nickname, site_id, date, address, introduction, body, footer', 'required'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -165,7 +165,7 @@ class ElementLetter extends BaseEventTypeElement
 
 	public function setDefaultOptions() {
 		if (Yii::app()->getController()->getAction()->id == 'create') {
-			$this->site_id = Yii::app()->request->cookies['site_id']->value;
+			$this->site_id = Yii::app()->session['selected_site_id'];
 
 			if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
 				throw new Exception('Patient not found: '.@$_GET['patient_id']);

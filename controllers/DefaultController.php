@@ -413,4 +413,33 @@ class DefaultController extends BaseEventTypeController {
 			return $api->getLetterStringForModel($patient, $episode, $element_type_id);
 		}
 	}
+
+	public function actionDoPrint($id) {
+		if (!$letter = ElementLetter::model()->find('event_id=?',array($id))) {
+			throw new Exception("Letter not found for event id: $id");
+		}
+
+		$letter->print = 1;
+		$letter->draft = 0;
+
+		if (@$_GET['all']) {
+			$letter->print_all = 1;
+		}
+
+		if (!$letter->save()) {
+			throw new Exception("Unable to save letter: ".print_r($letter->getErrors(),true));
+		}
+
+		if (!$event = Event::model()->findByPk($id)) {
+			throw new Exception("Event not found: $id");
+		}
+
+		$event->info = '';
+
+		if (!$event->save()) {
+			throw new Exception("Unable to save event: ".print_r($event->getErrors(),true));
+		}
+
+		echo "1";
+	}
 }

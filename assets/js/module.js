@@ -388,17 +388,49 @@ $(document).ready(function() {
 	});
 
 	if ($('#OphCoCorrespondence_printLetter').val() == 1) {
-		setTimeout("OphCoCorrespondence_do_print(true);",1000);
+		if ($('#OphCoCorrespondence_printLetter_all').val() == 1) {
+			setTimeout("OphCoCorrespondence_do_print(true);",1000);
+		} else {
+			setTimeout("OphCoCorrespondence_do_print(false);",1000);
+		}
 	}
 
 	handleButton($('#et_print'),function(e) {
-		OphCoCorrespondence_do_print(false);
-		e.preventDefault();
+		if ($('#correspondence_out').hasClass('draft')) {
+			$.ajax({
+				'type': 'GET',
+				'url': baseUrl+'/OphCoCorrespondence/default/doPrint/'+OE_event_id,
+				'success': function(html) {
+					if (html == "1") {
+						window.location.reload();
+					} else {
+						alert("Something went wrong trying to print the letter, please try again or contact support for assistance.");
+					}
+				}
+			});
+		} else {
+			OphCoCorrespondence_do_print(false);
+			e.preventDefault();
+		}
 	});
 
 	handleButton($('#et_print_all'),function() {
-		OphCoCorrespondence_do_print(true);
-		e.preventDefault();
+		if ($('#correspondence_out').hasClass('draft')) {
+			$.ajax({
+				'type': 'GET',
+				'url': baseUrl+'/OphCoCorrespondence/default/doPrint/'+OE_event_id+'?all=1',
+				'success': function(html) {
+					if (html == "1") {
+						window.location.reload();
+					} else {
+						alert("Something went wrong trying to print the letter, please try again or contact support for assistance.");
+					}
+				} 
+			});
+		} else {
+			OphCoCorrespondence_do_print(true);
+			e.preventDefault();
+		}
 	});
 
 	handleButton($('#et_confirm_printed'),function() {
