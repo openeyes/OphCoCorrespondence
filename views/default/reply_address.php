@@ -18,12 +18,13 @@
  */
 ?>
 <div class="replyAddress">
-	<?php if ($site->replyto) {?>
+	<?php if ($site->replyTo) {?>
 		<strong>Please reply to:</strong>
-		<?php echo $site->getReplyToAddress()?>
-		<?php if ($site->replyto->primary_phone) {?>
-			, Tel:
-			<?php echo $site->replyto->primary_phone?>
-		<?php }?>
+		<br/>
+		<?php
+		echo $site->replyTo->getLetterAddress(array(
+			'include_name' => true,
+			'delimiter' => '<br/>',
+		))?>
 	<?php }?>
 </div>

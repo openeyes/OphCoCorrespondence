@@ -127,50 +127,19 @@ class ElementLetter extends BaseEventTypeElement
 			$patient = $this->event->episode->patient;
 		}
 
-		$options = array('patient' => $patient->fullname.' (Patient)');
+		$options = array('Patient'.$patient->id => $patient->fullname.' (Patient)');
 
 		if ($patient->gp && $patient->gp->contact) {
-			$options['gp'] = $patient->gp->contact->fullname.' (GP)';
+			$options['Gp'.$patient->gp_id] = $patient->gp->contact->fullname.' (GP)';
 		} else {
-			$options['gp'] = Gp::UNKNOWN_NAME.' (GP)';
+			$options['Gp'.$patient->gp_id] = Gp::UNKNOWN_NAME.' (GP)';
 		}
-		if(!$patient->practice || !$patient->practice->address) {
-			$options['gp'] .= ' - NO ADDRESS';
+		if(!$patient->practice || !$patient->practice->contact->address) {
+			$options['Gp'.$patient->gp_id] .= ' - NO ADDRESS';
 		}
-		
-		foreach (PatientContactAssignment::model()->findAll('patient_id=?',array($patient->id)) as $pca) {
-			if ($pca->contact->parent_class == 'Specialist') {
-				$type = Specialist::model()->findByPk($pca->contact->parent_id)->specialist_type->name;
-			} else if ($pca->contact->parent_class == 'Consultant') {
-				$type = 'Consultant Ophthalmologist';
-			} else {
-				if ($uca = UserContactAssignment::model()->find('contact_id=?',array($pca->contact_id))) {
-					$type = $uca->user->role ? $uca->user->role : 'Staff';
-				} else {
-					$type = $pca->contact->parent_class;
-				}
-			}
 
-			if ($pca->site || $pca->institution || $pca->contact->address) {
-				if ($pca->site) {
-					$key = 'contact'.$pca->contact_id.'_site'.$pca->site->id;
-				} else if ($pca->institution) {
-					$key = 'contact'.$pca->contact_id.'_institution'.$pca->institution->id;
-				} else {
-					$key = 'contact'.$pca->contact_id;
-				}
-
-				$options[$key] = $pca->contact->fullname.' ('.$type.', ';
-				if ($pca->site) {
-					$options[$key] .= $pca->site->name.')';
-				} else if ($pca->institution) {
-					$options[$key] .= $pca->institution->name.')';
-				} else {
-					$options[$key] .= str_replace(',','',$pca->contact->address->address1).')';
-				}
-			} else {
-				$options[$key] = $pca->contact->fullname.' ('.$type.') - NO ADDRESS';
-			}
+		foreach ($patient->contactAssignments as $pca) {
+			$options['ContactLocation'.$pca->location_id] = $pca->location->contact->fullName.' ('.$pca->location->contact->label->name.', '.$pca->location.')';
 		}
 
 		asort($options);
@@ -186,8 +155,8 @@ class ElementLetter extends BaseEventTypeElement
 		$re = $patient->first_name.' '.$patient->last_name;
 
 		foreach (array('address1','address2','city','postcode') as $field) {
-			if ($patient->address && $patient->address->{$field}) {
-				$re .= ', '.$patient->address->{$field};
+			if ($patient->contact->address && $patient->contact->address->{$field}) {
+				$re .= ', '.$patient->contact->address->{$field};
 			}
 		}
 
@@ -205,8 +174,8 @@ class ElementLetter extends BaseEventTypeElement
 			$this->re = $patient->first_name.' '.$patient->last_name;
 
 			foreach (array('address1','address2','city','postcode') as $field) {
-				if ($patient->address && $patient->address->{$field}) {
-					$this->re .= ', '.$patient->address->{$field};
+				if ($patient->contact->address && $patient->contact->address->{$field}) {
+					$this->re .= ', '.$patient->contact->address->{$field};
 				}
 			}
 
@@ -220,7 +189,7 @@ class ElementLetter extends BaseEventTypeElement
 				// only want to get consultant for medical firms
 				if ($specialty = $firm->getSpecialty()) {
 					if ($specialty->medical) {
-						$consultant = $firm->getConsultantUser();
+						$consultant = $firm->consultant;
 					}
 				}
 
@@ -274,44 +243,44 @@ class ElementLetter extends BaseEventTypeElement
 		}
 
 		if ($this->macro->recipient_patient) {
-			$this->address = $patient->getLetterAddress();
+			$contact = $patient;
 			$this->address_target = 'patient';
-			if ($this->macro->use_nickname && $patient->nick_name) {
-				$this->introduction = "Dear ".$patient->nick_name.",";
-			} else {
-				$this->introduction = "Dear ".$patient->title." ".$patient->last_name.",";
-			}
-		} else if ($this->macro->recipient_doctor && @$patient->practice->address) {
-			if($patient->gp && $patient->gp->contact) {
-				$gp_name = $patient->gp->contact->fullName;
-			} else {
-				$gp_name = Gp::UNKNOWN_NAME;
-			}
-			$this->address = $patient->practice->getLetterAddress($gp_name);
+		} else if ($this->macro->recipient_doctor && $patient->gp && @$patient->practice->contact->address) {
+			$contact = $patient->gp;
 			$this->address_target = 'gp';
-			if ($this->macro->use_nickname && @$patient->gp->contact->nick_name) {
-				$this->introduction = "Dear ".$patient->gp->contact->nick_name.",";
-			} else if(@$patient->gp->contact->salutationName) {
-				$this->introduction = "Dear ".$patient->gp->contact->salutationName.",";
-			} else {
-				$this->introduction = "Dear " . Gp::UNKNOWN_SALUTATION . ",";
-			}
 		}
+
+		$this->address = $contact->getLetterAddress(array(
+			'patient' => $patient,
+			'include_name' => true,
+			'include_label' => true,
+			'delimiter' => "\n",
+		));
+
+		$this->introduction = $contact->getLetterIntroduction(array(
+			'nickname' => $this->use_nickname,
+		));
 
 		$this->macro->substitute($patient);
 		$this->body = $this->macro->body;
 
-		if ($this->macro->cc_patient && $patient->address) {
-			$this->cc = 'Patient: '.$patient->title.' '.$patient->first_name.' '.$patient->last_name.', '.implode(', ',$patient->address->getLetterarray());
+		if ($this->macro->cc_patient && $patient->contact->address) {
+			$this->cc = $patient->getLetterAddress(array(
+				'include_name' => true,
+				'include_prefix' => true,
+				'delimiter'=>', ',
+			));
 			$this->cc_targets[] = 'patient';
 		}
 
-		if ($this->macro->cc_doctor && @$patient->practice->address) {
-			if(@$patient->gp->contact) {
-				$this->cc = 'GP: '.$patient->gp->contact->title.' '.$patient->gp->contact->first_name.' '.$patient->gp->contact->last_name.', '.implode(', ',$patient->gp->contact->address->getLetterarray());
-			} else {
-				$this->cc = 'GP: '.Gp::UNKNOWN_NAME.', '.implode(', ',$patient->practice->address->getLetterarray());
-			}
+		if ($this->macro->cc_doctor && $patient->gp && @$patient->practice->contact->address) {
+			$this->cc = $patient->gp->getLetterAddress(array(
+				'patient' => $patient,
+				'include_name' => true,
+				'include_label' => true,
+				'delimiter' => ', ',
+				'include_prefix' => true,
+			));
 			$this->cc_targets[] = 'gp';
 		}
 	}

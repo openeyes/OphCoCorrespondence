@@ -87,7 +87,7 @@ $(document).ready(function() {
 			$.ajax({
 				'type': 'GET',
 				'dataType': 'json',
-				'url': baseUrl+'/OphCoCorrespondence/Default/getAddress?patient_id='+OE_patient_id+'&address_id='+val+'&nickname='+nickname,
+				'url': baseUrl+'/OphCoCorrespondence/Default/getAddress?patient_id='+OE_patient_id+'&contact='+val+'&nickname='+nickname,
 				'success': function(data) {
 					if (data['error'] == 'DECEASED') {
 						alert("This patient is deceased and cannot be written to.");
@@ -95,7 +95,7 @@ $(document).ready(function() {
 						return false;
 					}
 
-					if (val == 'patient') {
+					if (val.match(/^Patient/)) {
 						$('#ElementLetter_re').val('');
 						$('#ElementLetter_re').parent().parent().hide();
 					} else {
@@ -112,7 +112,7 @@ $(document).ready(function() {
 					if ($('#ElementLetter_cc').val().length >0) {
 						$.ajax({
 							'type': 'GET',
-							'url': baseUrl+'/OphCoCorrespondence/Default/getCc?patient_id='+OE_patient_id+'&contact_id='+val,
+							'url': baseUrl+'/OphCoCorrespondence/Default/getCc?patient_id='+OE_patient_id+'&contact='+val,
 							'success': function(text) {
 								if (text.match(/DECEASED/)) {
 									alert("This patient is deceased and cannot be cc'd.");
@@ -153,10 +153,10 @@ $(document).ready(function() {
 					}
 
 					// if the letter is to anyone but the GP we need to cc the GP
-					if (val != 'gp') {
+					if (!val.match(/^Gp/)) {
 						$.ajax({
 							'type': 'GET',
-							'url': baseUrl+'/OphCoCorrespondence/Default/getCc?patient_id='+OE_patient_id+'&contact_id=gp',
+							'url': baseUrl+'/OphCoCorrespondence/Default/getCc?patient_id='+OE_patient_id+'&contact=Gp'+OE_gp_id,
 							'success': function(text) {
 								if (!text.match(/NO ADDRESS/)) {
 									if ($('#ElementLetter_cc').val().length >0) {
@@ -184,7 +184,7 @@ $(document).ready(function() {
 						// if the letter is to the GP we need to cc the patient
 						$.ajax({
 							'type': 'GET',
-							'url': baseUrl+'/OphCoCorrespondence/Default/getCc?patient_id='+OE_patient_id+'&contact_id=patient',
+							'url': baseUrl+'/OphCoCorrespondence/Default/getCc?patient_id='+OE_patient_id+'&contact=Patient'+OE_patient_id,
 							'success': function(text) {
 								if (text.match(/DECEASED/)) {
 									alert("The patient is deceased so cannot be cc'd.");
@@ -303,7 +303,7 @@ $(document).ready(function() {
 			});
 
 			if (!ok) {
-				if (obj.val() == 'patient') {
+				if (obj.val().match(/^Patient/)) {
 					var found = false;
 					$.each($('#ElementLetter_cc').val().split("\n"),function(key, value) {
 						if (value.match(/^Patient: /)) {
@@ -314,7 +314,7 @@ $(document).ready(function() {
 						obj.val('');
 						return true;
 					}
-				} else if (obj.val() == 'gp') {
+				} else if (obj.val().match(/^Gp/)) {
 					var found = false;
 					$.each($('#ElementLetter_cc').val().split("\n"),function(key, value) {
 						if (value.match(/^GP: /)) {
@@ -333,7 +333,7 @@ $(document).ready(function() {
 
 			$.ajax({
 				'type': 'GET',
-				'url': baseUrl+'/OphCoCorrespondence/Default/getCc?patient_id='+OE_patient_id+'&contact_id='+contact_id,
+				'url': baseUrl+'/OphCoCorrespondence/Default/getCc?patient_id='+OE_patient_id+'&contact='+contact_id,
 				'success': function(text) {
 					if (text.match(/DECEASED/)) {
 						alert("The patient is deceased so cannot be cc'd.");
@@ -500,7 +500,7 @@ function correspondence_load_data(data) {
 			$('#'+m[1]).val(data[i]);
 		} else if (m = i.match(/^sel_(.*)$/)) {
 			if (m[1] == 'address_target') {
-				if (data[i] == 'patient') {
+				if (data[i].match(/^Patient/)) {
 					$('#ElementLetter_re').val('');
 					$('#ElementLetter_re').parent().parent().hide();
 				} else {
