@@ -238,6 +238,7 @@ $(document).ready(function() {
 					$('#ElementLetter_cc').val('');
 					$('#cc_targets').html('');
 					correspondence_load_data(data);
+					et_oph_correspondence_body_cursor_position = $('#ElementLetter_body').val().length;
 					obj.val('');
 				}
 			});
@@ -365,6 +366,11 @@ $(document).ready(function() {
 	$('#ElementLetter_body').unbind('keyup').bind('keyup',function() {
 		et_oph_correspondence_body_cursor_position = $(this).prop('selectionEnd');
 		et_oph_correspondence_last_stringgroup_do = false;
+
+		// turn on the last_stringgroup feature if the user has removed all of the text in the body field
+		if ($(this).val().length == 0) {
+			et_oph_correspondence_last_stringgroup_do = true;
+		}
 
 		if (m = $(this).val().match(/\[([a-z]{3})\]/)) {
 
