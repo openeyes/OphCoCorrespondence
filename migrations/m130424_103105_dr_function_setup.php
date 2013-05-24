@@ -1,6 +1,6 @@
 cd <?php
 
-class m130210_103105_dr_function_setup extends CDbMigration
+class m130424_103105_dr_function_setup extends CDbMigration
 {
 	public function up()
 	{
