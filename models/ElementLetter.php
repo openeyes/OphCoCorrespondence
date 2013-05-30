@@ -391,7 +391,7 @@ class ElementLetter extends BaseEventTypeElement
 				$i = 1;
 
 				foreach (@$_POST['EnclosureItems'] as $key => $value) {
-					if (strlen($value) >0) {
+					if (strlen(trim($value)) >0) {
 						$enc = new LetterEnclosure;
 						$enc->element_letter_id = $this->id;
 						$enc->display_order = $i++;
