@@ -139,7 +139,11 @@ class ElementLetter extends BaseEventTypeElement
 		}
 
 		foreach ($patient->contactAssignments as $pca) {
-			$options['ContactLocation'.$pca->location_id] = $pca->location->contact->fullName.' ('.$pca->location->contact->label->name.', '.$pca->location.')';
+			if ($pca->location) {
+				$options['ContactLocation'.$pca->location_id] = $pca->location->contact->fullName.' ('.$pca->location->contact->label->name.', '.$pca->location.')';
+			} else {
+				$options['Contact'.$pca->contact_id] = $pca->contact->fullName.' ('.$pca->contact->label->name.', '.$pca->contact->address->address1.')';
+			}
 		}
 
 		asort($options);

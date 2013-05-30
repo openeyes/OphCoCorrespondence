@@ -47,8 +47,12 @@ class DefaultController extends BaseEventTypeController {
 			throw new Exception("Invalid contact format: ".@$_GET['contact']);
 		}
 
-		if (!$contact = $m[1]::model()->findByPk($m[2])) {
-			throw new Exception("{$m[1]} not found: {$m[2]}");
+		if ($m[1] == 'Contact') {
+			$contact = Person::model()->find('contact_id=?',array($m[2]));
+		} else {
+			if (!$contact = $m[1]::model()->findByPk($m[2])) {
+				throw new Exception("{$m[1]} not found: {$m[2]}");
+			}
 		}
 
 		if ($contact->isDeceased()) {
@@ -220,8 +224,12 @@ class DefaultController extends BaseEventTypeController {
 			throw new Exception("Invalid contact format: ".@$_GET['contact']);
 		}
 
-		if (!$contact = $m[1]::model()->findByPk($m[2])) {
-			throw new Exception("{$m[1]} not found: {$m[2]}");
+		if ($m[1] == 'Contact') {
+			$contact = Person::model()->find('contact_id=?',array($m[2]));
+		} else {
+			if (!$contact = $m[1]::model()->findByPk($m[2])) {
+				throw new Exception("{$m[1]} not found: {$m[2]}");
+			}
 		}
 
 		if ($contact->isDeceased()) {
