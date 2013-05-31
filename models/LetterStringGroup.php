@@ -143,15 +143,17 @@ class LetterStringGroup extends BaseEventTypeElement
 			}
 		}
 
-		$criteria = new CDbCriteria;
-		$criteria->compare('letter_string_group_id', $this->id);
-		$criteria->compare('subspecialty_id', $firm->serviceSubspecialtyAssignment->subspecialty_id, true);
-		$criteria->order = 'display_order asc';
+		if ($firm->service_subspecialty_assignment_id) {
+			$criteria = new CDbCriteria;
+			$criteria->compare('letter_string_group_id', $this->id);
+			$criteria->compare('subspecialty_id', $firm->serviceSubspecialtyAssignment->subspecialty_id, true);
+			$criteria->order = 'display_order asc';
 
-		foreach (SubspecialtyLetterString::model()->findAll($criteria) as $slm) {
-			if (!in_array($slm->name, $string_names)) {
-				if ($slm->shouldShow()) {
-					$strings['subspecialty'.$slm->id] = $string_names[] = $slm->name;
+			foreach (SubspecialtyLetterString::model()->findAll($criteria) as $slm) {
+				if (!in_array($slm->name, $string_names)) {
+					if ($slm->shouldShow()) {
+						$strings['subspecialty'.$slm->id] = $string_names[] = $slm->name;
+					}
 				}
 			}
 		}

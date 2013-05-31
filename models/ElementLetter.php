@@ -211,10 +211,12 @@ class ElementLetter extends BaseEventTypeElement
 			$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
 			if ($episode = $patient->getEpisodeForCurrentSubspecialty()) {
 				if (!$this->macro = FirmLetterMacro::model()->find('firm_id=? and episode_status_id=?',array($firm->id, $episode->episode_status_id))) {
-					$subspecialty_id = $firm->serviceSubspecialtyAssignment->subspecialty_id;
+					if ($firm->service_subspecialty_assignment_id) {
+						$subspecialty_id = $firm->serviceSubspecialtyAssignment->subspecialty_id;
 
-					if (!$this->macro = SubspecialtyLetterMacro::model()->find('subspecialty_id=? and episode_status_id=?',array($subspecialty_id, $episode->episode_status_id))) {
-						$this->macro = LetterMacro::model()->find('episode_status_id=?',array($episode->episode_status_id));
+						if (!$this->macro = SubspecialtyLetterMacro::model()->find('subspecialty_id=? and episode_status_id=?',array($subspecialty_id, $episode->episode_status_id))) {
+							$this->macro = LetterMacro::model()->find('episode_status_id=?',array($episode->episode_status_id));
+						}
 					}
 				}
 			}
@@ -305,13 +307,15 @@ class ElementLetter extends BaseEventTypeElement
 			}
 		}
 
-		$criteria = new CDbCriteria;
-		$criteria->compare('subspecialty_id', $firm->serviceSubspecialtyAssignment->subspecialty_id);
-		$criteria->order = 'display_order asc';
+		if ($firm->service_subspecialty_assignment_id) {
+			$criteria = new CDbCriteria;
+			$criteria->compare('subspecialty_id', $firm->serviceSubspecialtyAssignment->subspecialty_id);
+			$criteria->order = 'display_order asc';
 
-		foreach (SubspecialtyLetterMacro::model()->findAll($criteria) as $slm) {
-			if (!in_array($slm->name, $macro_names)) {
-				$macros['subspecialty'.$slm->id] = $macro_names[] = $slm->name;
+			foreach (SubspecialtyLetterMacro::model()->findAll($criteria) as $slm) {
+				if (!in_array($slm->name, $macro_names)) {
+					$macros['subspecialty'.$slm->id] = $macro_names[] = $slm->name;
+				}
 			}
 		}
 
