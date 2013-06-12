@@ -379,7 +379,7 @@ $(document).ready(function() {
 			$.ajax({
 				'type': 'POST',
 				'url': baseUrl+'/OphCoCorrespondence/Default/expandStrings',
-				'data': 'patient_id='+OE_patient_id+'&text='+text,
+				'data': 'patient_id='+OE_patient_id+'&text='+text+"&YII_CSRF_TOKEN="+YII_CSRF_TOKEN,
 				'success': function(resp) {
 					if (resp) {
 						$('#ElementLetter_body').val(resp);
