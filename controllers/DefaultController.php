@@ -254,20 +254,10 @@ class DefaultController extends BaseEventTypeController {
 		}
 
 		$text = @$_POST['text'];
+		$textNew = OphCoCorrespondence_Substitution::replace($text,$patient);
 
-		preg_match_all('/\[([a-z]{3})\]/',$text,$m);
-
-		$changed = false;
-
-		foreach ($m[1] as $code) {
-			if (isset($patient->{$code})) {
-				$text = str_replace('['.$code.']',$patient->{$code},$text);
-				$changed = true;
-			}
-		}
-
-		if ($changed) {
-			echo $text;
+		if ($text != $textNew) {
+			echo $textNew;
 		}
 	}
 

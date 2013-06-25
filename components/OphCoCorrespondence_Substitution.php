@@ -18,21 +18,18 @@
  */
 
 class OphCoCorrespondence_Substitution {
-	
 	static public function replace($text, $patient) {
-		preg_match_all('/\[([a-z]{3})\]/s',$text,$m);
+		preg_match_all('/\[([a-z]{3})\]/is',$text,$m);
 
 		foreach ($m[1] as $el) {
-			if(property_exists($patient, $el) || method_exists($patient, 'get'.ucfirst($el))) {
-				$text = str_replace('['.$el.']',$patient->{$el},$text);
-			}
-		}
+			$count = PatientShortcode::model()->count('code=?',array(strtolower($el)));
 
-		preg_match_all('/\[([A-Z][a-z]{2})\]/s',$text,$m);
-
-		foreach ($m[1] as $el) {
-			if(property_exists($patient, $el) || method_exists($patient, 'get'.ucfirst($el))) {
-				$text = str_replace('['.$el.']',ucfirst($patient->{$el}),$text);
+			if ($count == 1) {
+				if ($code = PatientShortcode::model()->find('code=?',array(strtolower($el)))) {
+					$text = $code->replaceText($text,$patient,(boolean)preg_match('/^[A-Z]/',$el));
+				}
+			} else if ($count >1) {
+				throw new Exception("Multiple shortcode definitions for $el");
 			}
 		}
 
