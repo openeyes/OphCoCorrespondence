@@ -240,6 +240,10 @@ class ElementLetter extends BaseEventTypeElement
 					}
 				}
 			}
+
+			if ($dl = FirmSiteSecretary::model()->find('firm_id=? and site_id=?',array(Yii::app()->session['selected_firm_id'],$this->site_id))) {
+				$this->direct_line = $dl->direct_line;
+			}
 		}
 	}
 
@@ -342,7 +346,6 @@ class ElementLetter extends BaseEventTypeElement
 
 		if (Yii::app()->getController()->getAction()->id == 'create') {
 			if ($dl = FirmSiteSecretary::model()->find('firm_id=? and site_id=?',array(Yii::app()->session['selected_firm_id'],$this->site_id))) {
-				$this->direct_line = $dl->direct_line;
 				$this->fax = $dl->fax;
 			}
 		}

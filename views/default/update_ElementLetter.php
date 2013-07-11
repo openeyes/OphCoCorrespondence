@@ -63,6 +63,8 @@
 		</span>
 	</div>
 
+	<?php echo $form->textField($element, 'direct_line')?>
+
 	<div class="row">
 		<span class="left"></span>
 		<span class="right">
