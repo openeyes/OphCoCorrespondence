@@ -59,7 +59,7 @@ class FirmLetterString extends LetterStringBase
 			array('letter_string_group_id, firm_id, name, body, display_order', 'safe', 'on' => 'search'),
 		);
 	}
-	
+
 	/**
 	 * @return array relational rules.
 	 */
@@ -100,13 +100,14 @@ class FirmLetterString extends LetterStringBase
 
 		$criteria->compare('id', $this->id, true);
 		$criteria->compare('event_id', $this->event_id, true);
-		
+
 		return new CActiveDataProvider(get_class($this), array(
 			'criteria' => $criteria,
 		));
 	}
 
-	public function substitute($patient) {
+	public function substitute($patient)
+	{
 		$this->body = OphCoCorrespondence_Substitution::replace($this->body, $patient);
 	}
 }

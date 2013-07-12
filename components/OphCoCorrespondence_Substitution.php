@@ -17,8 +17,10 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html The GNU General Public License V3.0
  */
 
-class OphCoCorrespondence_Substitution {
-	static public function replace($text, $patient) {
+class OphCoCorrespondence_Substitution
+{
+	static public function replace($text, $patient)
+	{
 		preg_match_all('/\[([a-z]{3})\]/is',$text,$m);
 
 		foreach ($m[1] as $el) {
@@ -26,7 +28,7 @@ class OphCoCorrespondence_Substitution {
 
 			if ($count == 1) {
 				if ($code = PatientShortcode::model()->find('code=?',array(strtolower($el)))) {
-					$text = $code->replaceText($text,$patient,(boolean)preg_match('/^[A-Z]/',$el));
+					$text = $code->replaceText($text,$patient,(boolean) preg_match('/^[A-Z]/',$el));
 				}
 			} else if ($count >1) {
 				throw new Exception("Multiple shortcode definitions for $el");
@@ -36,4 +38,3 @@ class OphCoCorrespondence_Substitution {
 		return $text;
 	}
 }
-

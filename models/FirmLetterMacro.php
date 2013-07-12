@@ -59,7 +59,7 @@ class FirmLetterMacro extends BaseEventTypeElement
 			array('firm_id, name, recipient_patient, recipient_doctor, use_nickname, body, cc_patient, cc_doctor, display_order', 'safe', 'on' => 'search'),
 		);
 	}
-	
+
 	/**
 	 * @return array relational rules.
 	 */
@@ -99,13 +99,14 @@ class FirmLetterMacro extends BaseEventTypeElement
 
 		$criteria->compare('id', $this->id, true);
 		$criteria->compare('event_id', $this->event_id, true);
-		
+
 		return new CActiveDataProvider(get_class($this), array(
 			'criteria' => $criteria,
 		));
 	}
 
-	public function substitute($patient) {
+	public function substitute($patient)
+	{
 		$this->body = OphCoCorrespondence_Substitution::replace($this->body, $patient);
 	}
 }

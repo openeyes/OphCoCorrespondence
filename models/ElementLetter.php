@@ -64,7 +64,7 @@ class ElementLetter extends BaseEventTypeElement
 			array('id, event_id, site_id, use_nickname, date, introduction, re, body, footer, draft, direct_line', 'safe', 'on' => 'search'),
 		);
 	}
-	
+
 	/**
 	 * @return array relational rules.
 	 */
@@ -112,13 +112,14 @@ class ElementLetter extends BaseEventTypeElement
 
 		$criteria->compare('id', $this->id, true);
 		$criteria->compare('event_id', $this->event_id, true);
-		
+
 		return new CActiveDataProvider(get_class($this), array(
 			'criteria' => $criteria,
 		));
 	}
 
-	public function getAddress_targets() {
+	public function getAddress_targets()
+	{
 		if (Yii::app()->getController()->getAction()->id == 'create') {
 			if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
 				throw new Exception('patient not found: '.@$_GET['patient_id']);
@@ -134,7 +135,7 @@ class ElementLetter extends BaseEventTypeElement
 		} else {
 			$options['Gp'.$patient->gp_id] = Gp::UNKNOWN_NAME.' (GP)';
 		}
-		if(!$patient->practice || !$patient->practice->contact->address) {
+		if (!$patient->practice || !$patient->practice->contact->address) {
 			$options['Gp'.$patient->gp_id] .= ' - NO ADDRESS';
 		}
 
@@ -151,11 +152,13 @@ class ElementLetter extends BaseEventTypeElement
 		return $options;
 	}
 
-	public function getStringGroups() {
+	public function getStringGroups()
+	{
 		return LetterStringGroup::model()->findAll(array('order'=>'display_order'));
 	}
 
-	public function calculateRe($patient) {
+	public function calculateRe($patient)
+	{
 		$re = $patient->first_name.' '.$patient->last_name;
 
 		foreach (array('address1','address2','city','postcode') as $field) {
@@ -167,13 +170,14 @@ class ElementLetter extends BaseEventTypeElement
 		return $re . ', DOB: '.$patient->NHSDate('dob').', Hosp No: '.$patient->hos_num.', NHS No: '.$patient->nhsnum;
 	}
 
-	public function setDefaultOptions() {
+	public function setDefaultOptions()
+	{
 		if (Yii::app()->getController()->getAction()->id == 'create') {
 			$this->site_id = Yii::app()->session['selected_site_id'];
 
 			if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
 				throw new Exception('Patient not found: '.@$_GET['patient_id']);
-			} 
+			}
 
 			$this->re = $patient->first_name.' '.$patient->last_name;
 
@@ -247,7 +251,8 @@ class ElementLetter extends BaseEventTypeElement
 		}
 	}
 
-	public function populate_from_macro($patient) {
+	public function populate_from_macro($patient)
+	{
 		if ($this->macro->use_nickname) {
 			$this->use_nickname = 1;
 		}
@@ -295,7 +300,8 @@ class ElementLetter extends BaseEventTypeElement
 		}
 	}
 
-	public function getLetter_macros() {
+	public function getLetter_macros()
+	{
 		$macros = array();
 		$macro_names = array();
 
@@ -336,7 +342,8 @@ class ElementLetter extends BaseEventTypeElement
 		return $macros;
 	}
 
-	public function beforeSave() {
+	public function beforeSave()
+	{
 		if (in_array(Yii::app()->getController()->getAction()->id,array('create','update'))) {
 			if (!$this->draft) {
 				$this->print = 1;
@@ -349,7 +356,7 @@ class ElementLetter extends BaseEventTypeElement
 				$this->fax = $dl->fax;
 			}
 		}
-		
+
 		foreach (array('address','introduction','re','body','footer','cc') as $field) {
 			$this->$field = trim($this->$field);
 		}
@@ -361,7 +368,8 @@ class ElementLetter extends BaseEventTypeElement
 		return parent::beforeSave();
 	}
 
-	public function afterSave() {
+	public function afterSave()
+	{
 		if (@$_POST['update_enclosures']) {
 			foreach ($this->enclosures as $enclosure) {
 				$enclosure->delete();
@@ -387,13 +395,15 @@ class ElementLetter extends BaseEventTypeElement
 		return parent::afterSave();
 	}
 
-	public function getInfotext() {
+	public function getInfotext()
+	{
 		if ($this->draft) {
 			return 'Letter is being drafted';
 		}
 	}
 
-	public function getCcTargets() {
+	public function getCcTargets()
+	{
 		$targets = array();
 
 		if (trim($this->cc)) {
@@ -412,11 +422,13 @@ class ElementLetter extends BaseEventTypeElement
 		return $targets;
 	}
 
-	public function isEditable() {
+	public function isEditable()
+	{
 		return !$this->event->episode->patient->date_of_death;
 	}
 
-	public function save($runValidation=true, $attributes=null, $allow_overriding=false) {
+	public function save($runValidation=true, $attributes=null, $allow_overriding=false)
+	{
 		$old = new ElementLetterOld;
 
 		if ($current = ElementLetter::model()->findByPk($this->id)) {
@@ -440,7 +452,8 @@ class ElementLetter extends BaseEventTypeElement
 		return parent::save($runValidation, $attributes, $allow_overriding);
 	}
 
-	public function getFirm_members() {
+	public function getFirm_members()
+	{
 		$members = CHtml::listData(Yii::app()->getController()->firm->members, 'id', 'fullNameAndTitle');
 
 		$user = Yii::app()->session['user'];
@@ -452,11 +465,13 @@ class ElementLetter extends BaseEventTypeElement
 		return $members;
 	}
 
-	public function renderIntroduction() {
+	public function renderIntroduction()
+	{
 		return str_replace("\n","<br/>",trim(CHtml::encode($this->introduction)));
 	}
 
-	public function renderBody() {
+	public function renderBody()
+	{
 		$body = array();
 
 		foreach (explode(chr(10),CHtml::encode($this->body)) as $line) {
@@ -482,11 +497,13 @@ class ElementLetter extends BaseEventTypeElement
 		return implode('<br/>', $body);
 	}
 
-	public function renderFooter() {
+	public function renderFooter()
+	{
 		return str_replace("\n","<br/>",CHtml::encode($this->footer));
 	}
 
-	public function renderToAddress() {
+	public function renderToAddress()
+	{
 		return preg_replace('/[\r\n]+/',', ',CHtml::encode($this->address));
 	}
 }

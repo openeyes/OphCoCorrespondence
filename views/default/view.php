@@ -23,7 +23,7 @@
 
 <?php
 	// Event actions
-	if($this->canPrint()) {
+	if ($this->canPrint()) {
 		$this->event_actions[] = EventAction::button('Print', 'print');
 		$this->event_actions[] = EventAction::button('Print all', 'printall', null, array('id' => 'et_print_all'));
 	}

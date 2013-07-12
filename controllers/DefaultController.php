@@ -17,9 +17,10 @@
 * @license http://www.gnu.org/licenses/gpl-3.0.html The GNU General Public License V3.0
 */
 
-class DefaultController extends BaseEventTypeController {
-
-	public function actionCreate() {
+class DefaultController extends BaseEventTypeController
+{
+	public function actionCreate()
+	{
 		if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
 			throw new Exception("Unknown patient: ".@$_GET['patient_id']);
 		}
@@ -28,17 +29,20 @@ class DefaultController extends BaseEventTypeController {
 		parent::actionCreate();
 	}
 
-	public function actionUpdate($id) {
+	public function actionUpdate($id)
+	{
 		parent::actionUpdate($id);
 	}
 
-	public function actionView($id) {
+	public function actionView($id)
+	{
 		$this->jsVars['correspondence_markprinted_url'] = Yii::app()->createUrl('OphCoCorrespondence/Default/markPrinted/'.$id);
 		$this->jsVars['correspondence_print_url'] = Yii::app()->createUrl('OphCoCorrespondence/Default/print/'.$id);
 		parent::actionView($id);
 	}
 
-	public function actionGetAddress() {
+	public function actionGetAddress()
+	{
 		if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
 			throw new Exception("Unknown patient: ".@$_GET['patient_id']);
 		}
@@ -60,7 +64,7 @@ class DefaultController extends BaseEventTypeController {
 			return;
 		}
 
-		$data = array( 
+		$data = array(
 			'text_ElementLetter_address' => $contact->getLetterAddress(array(
 				'patient' => $patient,
 				'include_name' => true,
@@ -68,14 +72,15 @@ class DefaultController extends BaseEventTypeController {
 				'delimiter' => "\n",
 			)),
 			'text_ElementLetter_introduction' => $contact->getLetterIntroduction(array(
-				'nickname' => (boolean)@$_GET['nickname'],
+				'nickname' => (boolean) @$_GET['nickname'],
 			)),
 		);
 
 		echo json_encode($data);
 	}
 
-	public function actionGetMacroData() {
+	public function actionGetMacroData()
+	{
 		if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
 			throw new Exception('Patient not found: '.@$_GET['patient_id']);
 		}
@@ -167,7 +172,8 @@ class DefaultController extends BaseEventTypeController {
 		echo json_encode($data);
 	}
 
-	public function actionGetString() {
+	public function actionGetString()
+	{
 		if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
 			throw new Exception('Patient not found: '.@$_GET['patient_id']);
 		}
@@ -200,7 +206,8 @@ class DefaultController extends BaseEventTypeController {
 		echo $string->body;
 	}
 
-	public function actionGetFrom() {
+	public function actionGetFrom()
+	{
 		if (!$user = User::model()->findByPk(@$_GET['user_id'])) {
 			throw new Exception('User not found: '.@$_GET['user_id']);
 		}
@@ -215,7 +222,8 @@ class DefaultController extends BaseEventTypeController {
 		$ssa = $firm->serviceSubspecialtyAssignment;
 	}
 
-	public function actionGetCc() {
+	public function actionGetCc()
+	{
 		if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
 			throw new Exception("Unknown patient: ".@$_GET['patient_id']);
 		}
@@ -248,7 +256,8 @@ class DefaultController extends BaseEventTypeController {
 		echo $address ? $address : 'NO ADDRESS';
 	}
 
-	public function actionExpandStrings() {
+	public function actionExpandStrings()
+	{
 		if (!$patient = Patient::model()->findByPk(@$_POST['patient_id'])) {
 			throw new Exception('Patient not found: '.@$_POST['patient_id']);
 		}
@@ -261,7 +270,8 @@ class DefaultController extends BaseEventTypeController {
 		}
 	}
 
-	public function actionMarkPrinted($id) {
+	public function actionMarkPrinted($id)
+	{
 		if ($letter = ElementLetter::model()->find('event_id=?',array($id))) {
 			$letter->print = 0;
 			$letter->draft = 0;
@@ -271,19 +281,21 @@ class DefaultController extends BaseEventTypeController {
 		}
 	}
 
-	protected function printHTML($id, $elements, $template='print') {
+	protected function printHTML($id, $elements, $template='print')
+	{
 		$this->printPDF($id, $elements);
 	}
 
-	protected function printPDF($id, $elements, $template='print', $params=array()) {
+	protected function printPDF($id, $elements, $template='print', $params=array())
+	{
 		// Remove any existing css
 		Yii::app()->getClientScript()->reset();
-		
+
 		if (!$letter = ElementLetter::model()->find('event_id=?',array($id))) {
 			throw new Exception('Letter not found were event_id = '.$id);
 		}
 		$this->site = $letter->site;
-		
+
 		$this->layout = '//layouts/pdf';
 		$pdf_print = new OEPDFPrint('Openeyes', 'Correspondence letters', 'Correspondence letters');
 
@@ -326,7 +338,7 @@ class DefaultController extends BaseEventTypeController {
 		$pdf_print->addLetter($oeletter);
 
 		if (@$_GET['all']) {
-			
+
 			// Add copy for file
 			$pdf_print->addLetter($oeletter);
 
@@ -348,7 +360,8 @@ class DefaultController extends BaseEventTypeController {
 		$pdf_print->output();
 	}
 
-	public function actionUsers() {
+	public function actionUsers()
+	{
 		$users = array();
 
 		$criteria = new CDbCriteria;
@@ -375,7 +388,7 @@ class DefaultController extends BaseEventTypeController {
 			if ($contact = $user->contact) {
 
 				$consultant_name = false;
-				
+
 				// if we have a consultant for the firm, and its not the matched user, attach the consultant name to the entry
 				if ($consultant && $user->id != $consultant->id) {
 					$consultant_name = trim($consultant->contact->title.' '.$consultant->contact->first_name.' '.$consultant->contact->last_name);
@@ -394,7 +407,8 @@ class DefaultController extends BaseEventTypeController {
 		echo json_encode($users);
 	}
 
-	public function process_examination_findings($patient_id, $element_type_id) {
+	public function process_examination_findings($patient_id, $element_type_id)
+	{
 		if ($api = Yii::app()->moduleAPI->get('OphCiExamination')) {
 			if (!$patient = Patient::model()->findByPk($patient_id)) {
 				throw new Exception('Unable to find patient: '.$patient_id);
@@ -403,16 +417,17 @@ class DefaultController extends BaseEventTypeController {
 			if (!$element_type = ElementType::model()->findByPk($element_type_id)) {
 				throw new Exception("Unknown element type: $element_type_id");
 			}
-			
+
 			if (!$episode = $patient->getEpisodeForCurrentSubspecialty()) {
 				throw new Exception('No Episode available for patient: ' . $patient_id);
 			}
-			
+
 			return $api->getLetterStringForModel($patient, $episode, $element_type_id);
 		}
 	}
 
-	public function actionDoPrint($id) {
+	public function actionDoPrint($id)
+	{
 		if (!$letter = ElementLetter::model()->find('event_id=?',array($id))) {
 			throw new Exception("Letter not found for event id: $id");
 		}

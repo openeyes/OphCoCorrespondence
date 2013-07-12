@@ -63,7 +63,7 @@ class ElementLetterOld extends BaseEventTypeElement
 			array('id, event_id, site_id, use_nickname, date, introduction, re, body, footer, draft', 'safe', 'on' => 'search'),
 		);
 	}
-	
+
 	/**
 	 * @return array relational rules.
 	 */
@@ -110,13 +110,14 @@ class ElementLetterOld extends BaseEventTypeElement
 
 		$criteria->compare('id', $this->id, true);
 		$criteria->compare('event_id', $this->event_id, true);
-		
+
 		return new CActiveDataProvider(get_class($this), array(
 			'criteria' => $criteria,
 		));
 	}
 
-	public function save($runValidation=true, $attributes=null, $allow_overriding=false) {
+	public function save($runValidation=true, $attributes=null, $allow_overriding=false)
+	{
 		return parent::save($runValidation, $attributes, true);
 	}
 }
