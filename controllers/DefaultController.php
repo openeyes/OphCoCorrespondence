@@ -145,7 +145,7 @@ class DefaultController extends BaseEventTypeController
 		if ($macro->cc_patient) {
 			if ($patient->date_of_death) {
 				$data['alert'] = "Warning: the patient cannot be cc'd because they are deceased.";
-			} else if ($patient->contact->address) {
+			} elseif ($patient->contact->address) {
 				$data['textappend_ElementLetter_cc'] = $patient->getLetterAddress(array(
 					'include_name' => true,
 					'include_label' => true,

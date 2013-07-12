@@ -19,7 +19,7 @@
 
 class OphCoCorrespondence_Substitution
 {
-	static public function replace($text, $patient)
+	public static function replace($text, $patient)
 	{
 		preg_match_all('/\[([a-z]{3})\]/is',$text,$m);
 
@@ -30,7 +30,7 @@ class OphCoCorrespondence_Substitution
 				if ($code = PatientShortcode::model()->find('code=?',array(strtolower($el)))) {
 					$text = $code->replaceText($text,$patient,(boolean) preg_match('/^[A-Z]/',$el));
 				}
-			} else if ($count >1) {
+			} elseif ($count >1) {
 				throw new Exception("Multiple shortcode definitions for $el");
 			}
 		}
