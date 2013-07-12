@@ -22,7 +22,8 @@
 		<strong>Please reply to:</strong>
 		<br/>
 		<?php
-		echo $site->replyTo->getLetterAddress(array(
+		echo $site->getLetterAddress(array(
+			'contact' => 'replyTo',
 			'include_name' => true,
 			'delimiter' => '<br/>',
 		))?>
