@@ -28,14 +28,14 @@
 			'enableAjaxValidation'=>false,
 			'htmlOptions' => array('class'=>'sliding'),
 		));
-		
+
 		// Event actions
 		$this->event_actions[] = EventAction::button('Save draft', 'savedraft', array('colour' => 'green'), array('id' => 'et_save_draft'));
 		$this->event_actions[] = EventAction::button('Save and print', 'saveprint', array('colour' => 'green'), array('id' => 'et_save_print'));
 		$this->renderPartial('//patient/event_actions');
 	?>
-	
-	<?php if(!$this->patient->practice || !$this->patient->practice->contact->address) { ?>
+
+	<?php if (!$this->patient->practice || !$this->patient->practice->contact->address) { ?>
 	<div id="no-practice-address" class="alertBox">
 		Patient has no GP practice address, please correct in PAS before creating GP letter.
 	</div>

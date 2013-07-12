@@ -1,7 +1,8 @@
 <?php
 class m120510_102418_ophcocorrespondence_consolidated extends CDbMigration
 {
-	public function up() {
+	public function up()
+	{
 				$group = $this->dbConnection->createCommand()->select('id')->from('event_group')->where('name=:name',array(':name'=>'Communication events'))->queryRow();
 		$this->insert('event_type', array('name' => 'Correspondence','event_group_id' => $group['id'], 'class_name' => 'OphCoCorrespondence'));
 
@@ -304,14 +305,14 @@ class m120510_102418_ophcocorrespondence_consolidated extends CDbMigration
 			$this->addColumn('et_ophcocorrespondence_letter','print','tinyint(1) unsigned NOT NULL DEFAULT 0');
 	}
 
-	public function down() {
-	
+	public function down()
+	{
 		$this->dropColumn('et_ophcocorrespondence_letter','print');
-	
+
 		$this->dropColumn('et_ophcocorrespondence_firm_letter_macro','episode_status_id');
 		$this->dropColumn('et_ophcocorrespondence_subspecialty_letter_macro','episode_status_id');
 		$this->dropColumn('et_ophcocorrespondence_letter_macro','episode_status_id');
-	
+
 		$this->dropForeignKey('et_ophcocorrespondence_lm_created_user_id_fk','et_ophcocorrespondence_letter_macro');
 		$this->dropForeignKey('et_ophcocorrespondence_lm_last_modified_user_id_fk','et_ophcocorrespondence_letter_macro');
 		$this->dropIndex('et_ophcocorrespondence_lm_created_user_id_fk','et_ophcocorrespondence_letter_macro');
@@ -343,7 +344,7 @@ class m120510_102418_ophcocorrespondence_consolidated extends CDbMigration
 		$this->addForeignKey('et_ophcocorrespondence_sls2_site_id_fk','et_ophcocorrespondence_letter_string','site_id','site','id');
 		$this->addForeignKey('et_ophcocorrespondence_sls2_letter_string_group_id_fk','et_ophcocorrespondence_letter_string','letter_string_group_id','et_ophcocorrespondence_letter_string_group','id');
 		$this->renameTable('et_ophcocorrespondence_letter_string','et_ophcocorrespondence_site_letter_string');
-	
+
 		$this->dropTable('et_ophcocorrespondence_firm_letter_string');
 		$this->dropTable('et_ophcocorrespondence_site_letter_string');
 
@@ -382,7 +383,7 @@ class m120510_102418_ophcocorrespondence_consolidated extends CDbMigration
 		$this->addForeignKey('et_ophcocorrespondence_letter_macro_last_modified_user_id_fk','et_ophcocorrespondence_site_letter_macro','last_modified_user_id','user','id');
 
 		$this->renameTable('et_ophcocorrespondence_site_letter_macro','et_ophcocorrespondence_letter_macro');
-	
+
 		$this->dropTable('et_ophcocorrespondence_letter_string');
 		$this->dropTable('et_ophcocorrespondence_letter_string_group');
 		$this->dropTable('et_ophcocorrespondence_letter_macro');

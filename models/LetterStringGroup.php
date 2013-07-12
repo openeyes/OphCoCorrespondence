@@ -59,7 +59,7 @@ class LetterStringGroup extends BaseEventTypeElement
 			array('name, display_order', 'safe', 'on' => 'search'),
 		);
 	}
-	
+
 	/**
 	 * @return array relational rules.
 	 */
@@ -98,13 +98,14 @@ class LetterStringGroup extends BaseEventTypeElement
 
 		$criteria->compare('id', $this->id, true);
 		$criteria->compare('event_id', $this->event_id, true);
-		
+
 		return new CActiveDataProvider(get_class($this), array(
 			'criteria' => $criteria,
 		));
 	}
 
-	public function getStrings() {
+	public function getStrings()
+	{
 		if ($this->name == 'Findings') {
 			if ($api = Yii::app()->moduleAPI->get('OphCiExamination')) {
 				if (isset($_GET['patient_id'])) {
@@ -112,14 +113,14 @@ class LetterStringGroup extends BaseEventTypeElement
 				} else {
 					$patient = Yii::app()->getController()->patient;
 				}
-				
+
 				if ($episode = $patient->getEpisodeForCurrentSubspecialty()) {
 					$strings = array();
 
 					foreach ($api->getElementsForLatestEventInEpisode($patient, $episode) as $element_type) {
 						$strings['examination'.$element_type->id] = $element_type->name;
 					}
-	
+
 					return $strings;
 				}
 			}
@@ -134,7 +135,7 @@ class LetterStringGroup extends BaseEventTypeElement
 		$criteria->compare('letter_string_group_id', $this->id);
 		$criteria->compare('firm_id', $firm->id, true);
 		$criteria->order = 'display_order asc';
-		
+
 		foreach (FirmLetterString::model()->findAll($criteria) as $flm) {
 			if (!in_array($flm->name, $string_names)) {
 				if ($flm->shouldShow()) {

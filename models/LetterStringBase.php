@@ -19,7 +19,8 @@
 
 class LetterStringBase extends BaseEventTypeElement
 {
-	public function shouldShow() {
+	public function shouldShow()
+	{
 		if (!$this->event_type|| !$this->element_type) return true;
 		if (!$event_type = EventType::model()->find('class_name=?',array($this->event_type))) return false;
 		if (!$element_type = ElementType::model()->find('class_name=?',array($this->element_type))) return false;
@@ -30,7 +31,7 @@ class LetterStringBase extends BaseEventTypeElement
 			$patient = Yii::app()->getController()->patient;
 		}
 
-		if ( ($api = Yii::app()->moduleAPI->get($event_type->class_name)) && 
+		if ( ($api = Yii::app()->moduleAPI->get($event_type->class_name)) &&
 				($episode = $patient->getEpisodeForCurrentSubspecialty()) )  {
 			return $api->getElementForLatestEventInEpisode($patient, $episode, $element_type->class_name);
 		}

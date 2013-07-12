@@ -143,7 +143,7 @@
 					<?php foreach ($_POST['EnclosureItems'] as $key => $value) {?>
 						<div class="enclosureItem"><?php echo CHtml::textField("EnclosureItems[$key]",$value,array('size'=>60))?><a href="#" class="removeEnclosure">Remove</a></div>
 					<?php }?>
-				<?php }else{?>
+				<?php } else {?>
 					<?php foreach ($element->enclosures as $i => $item) {?>
 						<div class="enclosureItem"><?php echo CHtml::textField("EnclosureItems[enclosure$i]",$item->content,array('size'=>60))?><a href="#" class="removeEnclosure">Remove</a></div>
 					<?php }?>

@@ -18,7 +18,7 @@
  */
 ?>
 
-<div id="correspondence_out"<?php if ($element->draft){?> class="draft"<?php }?>>
+<div id="correspondence_out"<?php if ($element->draft) {?> class="draft"<?php }?>>
 	<div class="letter_header">
 		<?php $this->renderPartial("letter_start", array(
 			'site' => $element->site,
@@ -34,11 +34,11 @@
 	<?php $this->renderPartial("reply_address", array(
 			'site' => $element->site,
 	))?>
-		
+
 	<?php $this->renderPartial("print_ElementLetter", array(
 			'element' => $element,
 	))?>
-	
+
 	<input type="hidden" name="OphCoCorrespondence_printLetter" id="OphCoCorrespondence_printLetter" value="<?php echo $element->print?>" />
 	<input type="hidden" name="OphCoCorrespondence_printLetter" id="OphCoCorrespondence_printLetter_all" value="<?php echo $element->print_all?>" />
 </div>

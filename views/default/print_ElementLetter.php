@@ -39,7 +39,7 @@
 			if (trim($line)) { ?>
 	<br />CC:
 	<?php echo $line ?>
-	<?php } 
+	<?php }
 	foreach ($element->enclosures as $enclosure) {?>
 		<br/>Enc: <?php echo $enclosure->content?>
 	<?php }

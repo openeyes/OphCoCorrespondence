@@ -60,7 +60,7 @@ class FirmSiteSecretary extends BaseEventTypeElement
 			array('firm_id, site_id, direct_line', 'safe', 'on' => 'search'),
 		);
 	}
-	
+
 	/**
 	 * @return array relational rules.
 	 */
@@ -98,7 +98,7 @@ class FirmSiteSecretary extends BaseEventTypeElement
 
 		$criteria->compare('id', $this->id, true);
 		$criteria->compare('event_id', $this->event_id, true);
-		
+
 		return new CActiveDataProvider(get_class($this), array(
 			'criteria' => $criteria,
 		));
