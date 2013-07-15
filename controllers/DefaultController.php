@@ -331,8 +331,9 @@ class DefaultController extends BaseEventTypeController
 		$oeletter->setBarcode('E:'.$id);
 		$oeletter->addBody($body);
 
-		if ($this->site->replyToAddress) {
-			$oeletter->addReplyToAddress($this->site->replyToAddress.($this->site->replyToAddress->primary_phone ? ', Tel: '.$this->site->replyToAddress->primary_phone : ''));
+		if ($this->site->replyTo) {
+			$oeletter->addReplyToAddress($this->site->getReplyToAddress(array('delimiter' => ', ', 'include_telephone' => true)));
+			
 		}
 
 		$pdf_print->addLetter($oeletter);
@@ -349,8 +350,8 @@ class DefaultController extends BaseEventTypeController
 				$ccletter->setBarcode('E:'.$id);
 				$ccletter->addBody($body);
 
-				if ($this->site->replyto) {
-					$ccletter->addReplyToAddress($this->site->getReplyToAddress().($this->site->replyto->primary_phone ? ', Tel: '.$this->site->replyto->primary_phone : ''));
+				if ($this->site->replyTo) {
+					$ccletter->addReplyToAddress($this->site->getReplyToAddress(array('delimiter' => ', ', 'include_telephone' => true)));
 				}
 
 				$pdf_print->addLetter($ccletter);

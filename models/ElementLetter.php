@@ -138,6 +138,17 @@ class ElementLetter extends BaseEventTypeElement
 		if (!$patient->practice || !$patient->practice->contact->address) {
 			$options['Gp'.$patient->gp_id] .= ' - NO ADDRESS';
 		}
+		if ($cbs = $patient->getDistinctCommissioningBodiesByType()) {
+			foreach ($cbs as $cb_type_id => $cb_list) {
+				$cb_type = CommissioningBodyType::model()->findByPk($cb_type_id);
+				foreach ($cb_list as $cb) {
+					$options['CommissioningBody'.$cb->id] = $cb->name . ' (' . $cb_type->name . ')';
+					if (!$cb->getAddress()) {
+						$options['CommissioningBody'.$cb->id] .= ' - NO ADDRESS';
+					}
+				}
+			}
+		}
 
 		foreach ($patient->contactAssignments as $pca) {
 			if ($pca->location) {

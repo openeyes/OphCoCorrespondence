@@ -420,7 +420,7 @@ $(document).ready(function() {
 		}
 	});
 
-	handleButton($('#et_print_all'),function() {
+	handleButton($('#et_print_all'),function(e) {
 		if ($('#correspondence_out').hasClass('draft')) {
 			$.ajax({
 				'type': 'GET',
