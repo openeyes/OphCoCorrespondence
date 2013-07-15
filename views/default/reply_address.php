@@ -25,7 +25,7 @@
 		echo $site->getLetterAddress(array(
 			'contact' => 'replyTo',
 			'include_name' => true,
-			'delimiter' => '<br/>',
+			'delimiter' => ', ',
 		))?>
 	<?php }?>
 </div>

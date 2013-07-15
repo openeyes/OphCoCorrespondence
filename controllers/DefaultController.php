@@ -31,6 +31,10 @@ class DefaultController extends BaseEventTypeController
 
 	public function actionUpdate($id)
 	{
+		if (!$event = Event::model()->findByPk($id)) {
+			throw new Exception("Unknown event: " . $id);
+		}
+		$this->jsVars['OE_gp_id'] = $event->episode->patient->gp_id;
 		parent::actionUpdate($id);
 	}
 
