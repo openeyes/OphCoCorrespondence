@@ -239,7 +239,7 @@ class ElementLetter extends BaseEventTypeElement
 						$criteria->limit = 1;
 
 						if ($event = Event::model()->find($criteria)) {
-							$this->clinic_date = $event->datetime;
+							$this->clinic_date = $event->created_date;
 						}
 					}
 				}
