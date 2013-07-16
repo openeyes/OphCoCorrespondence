@@ -138,6 +138,17 @@ class ElementLetter extends BaseEventTypeElement
 		if (!$patient->practice || !$patient->practice->contact->address) {
 			$options['Gp'.$patient->gp_id] .= ' - NO ADDRESS';
 		}
+		if ($cbs = $patient->getDistinctCommissioningBodiesByType()) {
+			foreach ($cbs as $cb_type_id => $cb_list) {
+				$cb_type = CommissioningBodyType::model()->findByPk($cb_type_id);
+				foreach ($cb_list as $cb) {
+					$options['CommissioningBody'.$cb->id] = $cb->name . ' (' . $cb_type->name . ')';
+					if (!$cb->getAddress()) {
+						$options['CommissioningBody'.$cb->id] .= ' - NO ADDRESS';
+					}
+				}
+			}
+		}
 
 		foreach ($patient->contactAssignments as $pca) {
 			if ($pca->location) {
@@ -260,7 +271,7 @@ class ElementLetter extends BaseEventTypeElement
 		if ($this->macro->recipient_patient) {
 			$contact = $patient;
 			$this->address_target = 'patient';
-		} else if ($this->macro->recipient_doctor && $patient->gp && @$patient->practice->contact->address) {
+		} elseif ($this->macro->recipient_doctor && $patient->gp && @$patient->practice->contact->address) {
 			$contact = $patient->gp;
 			$this->address_target = 'gp';
 		}
@@ -483,7 +494,7 @@ class ElementLetter extends BaseEventTypeElement
 					}
 				}
 				$processed_line .= preg_replace('/^[\t]+/','',$line);
-			} else if (preg_match('/^([\s]+)/',$line,$m)) {
+			} elseif (preg_match('/^([\s]+)/',$line,$m)) {
 				for ($i=0; $i<strlen($m[1]); $i++) {
 					$processed_line .= '&nbsp;';
 				}
