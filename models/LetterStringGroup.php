@@ -73,6 +73,9 @@ class LetterStringGroup extends BaseEventTypeElement
 			'event' => array(self::BELONGS_TO, 'Event', 'event_id'),
 			'user' => array(self::BELONGS_TO, 'User', 'created_user_id'),
 			'usermodified' => array(self::BELONGS_TO, 'User', 'last_modified_user_id'),
+			'firmLetterStrings' => array(self::HAS_MANY, 'FirmLetterString', 'letter_string_group_id'),
+			'subspecialtyLetterStrings' => array(self::HAS_MANY, 'SubspecialtyLetterString', 'letter_string_group_id'),
+			'siteLetterStrings' => array(self::HAS_MANY, 'LetterString', 'letter_string_group_id'),
 		);
 	}
 
@@ -104,15 +107,9 @@ class LetterStringGroup extends BaseEventTypeElement
 		));
 	}
 
-	public function getStrings() {
+	public function getStrings($patient, $event_types) {
 		if ($this->name == 'Findings') {
 			if ($api = Yii::app()->moduleAPI->get('OphCiExamination')) {
-				if (isset($_GET['patient_id'])) {
-					$patient = Patient::model()->findByPk($_GET['patient_id']);
-				} else {
-					$patient = Yii::app()->getController()->patient;
-				}
-				
 				if ($episode = $patient->getEpisodeForCurrentSubspecialty()) {
 					$strings = array();
 
@@ -128,42 +125,25 @@ class LetterStringGroup extends BaseEventTypeElement
 		$strings = array();
 		$string_names = array();
 
-		$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
-
-		$criteria = new CDbCriteria;
-		$criteria->compare('letter_string_group_id', $this->id);
-		$criteria->compare('firm_id', $firm->id, true);
-		$criteria->order = 'display_order asc';
-		
-		foreach (FirmLetterString::model()->findAll($criteria) as $flm) {
+		foreach ($this->firmLetterStrings as $flm) {
 			if (!in_array($flm->name, $string_names)) {
-				if ($flm->shouldShow()) {
+				if ($flm->shouldShow($patient, $event_types)) {
 					$strings['firm'.$flm->id] = $string_names[] = $flm->name;
 				}
 			}
 		}
 
-		$criteria = new CDbCriteria;
-		$criteria->compare('letter_string_group_id', $this->id);
-		$criteria->compare('subspecialty_id', $firm->serviceSubspecialtyAssignment->subspecialty_id, true);
-		$criteria->order = 'display_order asc';
-
-		foreach (SubspecialtyLetterString::model()->findAll($criteria) as $slm) {
+		foreach ($this->subspecialtyLetterStrings as $slm) {
 			if (!in_array($slm->name, $string_names)) {
-				if ($slm->shouldShow()) {
+				if ($slm->shouldShow($patient, $event_types)) {
 					$strings['subspecialty'.$slm->id] = $string_names[] = $slm->name;
 				}
 			}
 		}
 
-		$criteria = new CDbCriteria;
-		$criteria->compare('letter_string_group_id', $this->id);
-		$criteria->compare('site_id', Yii::app()->session['selected_site_id'], true);
-		$criteria->order = 'display_order asc';
-
-		foreach (LetterString::model()->findAll($criteria) as $slm) {
+		foreach ($this->siteLetterStrings as $slm) {
 			if (!in_array($slm->name, $string_names)) {
-				if ($slm->shouldShow()) {
+				if ($slm->shouldShow($patient, $event_types)) {
 					$strings['site'.$slm->id] = $string_names[] = $slm->name;
 				}
 			}
