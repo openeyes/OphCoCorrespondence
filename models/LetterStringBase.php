@@ -24,9 +24,9 @@ class LetterStringBase extends BaseEventTypeElement
 		if (!isset($event_types[$this->event_type])) return false;
 		if (!in_array($this->element_type,$event_types[$this->event_type])) return false;
 
-		if ( ($api = Yii::app()->moduleAPI->get($event_type->class_name)) && 
+		if ( ($api = Yii::app()->moduleAPI->get($this->event_type)) && 
 				($episode = $patient->getEpisodeForCurrentSubspecialty()) )  {
-			return $api->getElementForLatestEventInEpisode($patient, $episode, $element_type->class_name);
+			return $api->getElementForLatestEventInEpisode($patient, $episode, $this->element_type);
 		}
 
 		return false;
