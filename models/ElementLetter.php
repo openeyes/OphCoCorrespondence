@@ -156,13 +156,14 @@ class ElementLetter extends BaseEventTypeElement
 				'with' => array('address'),
 			),
 			'location' => array(
-				'with' => array(
+				//todo: fix this, can't have two relations with the same name in one query
+				/*'with' => array(
 					'contact' => array(
 						'with' => array(
 							'label',
 						),
 					),
-				),
+				),*/
 			),
 		))->findAll('patient_id=?',array($patient->id)) as $pca) {
 			if ($pca->location) {
@@ -205,7 +206,7 @@ class ElementLetter extends BaseEventTypeElement
 		if (Yii::app()->getController()->getAction()->id == 'create') {
 			$this->site_id = Yii::app()->session['selected_site_id'];
 
-			if (!$patient = Patient::model()->with('address')->findByPk(@$_GET['patient_id'])) {
+			if (!$patient = Patient::model()->with(array('contact'=>array('with'=>array('address'))))->findByPk(@$_GET['patient_id'])) {
 				throw new Exception('Patient not found: '.@$_GET['patient_id']);
 			}
 
