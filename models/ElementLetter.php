@@ -121,7 +121,7 @@ class ElementLetter extends BaseEventTypeElement
 	public function getAddress_targets()
 	{
 		if (Yii::app()->getController()->getAction()->id == 'create') {
-			if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
+			if (!$patient = Patient::model()->with(array('gp','practice'))->findByPk(@$_GET['patient_id'])) {
 				throw new Exception('patient not found: '.@$_GET['patient_id']);
 			}
 		} else {
@@ -138,6 +138,7 @@ class ElementLetter extends BaseEventTypeElement
 		if (!$patient->practice || !$patient->practice->contact->address) {
 			$options['Gp'.$patient->gp_id] .= ' - NO ADDRESS';
 		}
+
 		if ($cbs = $patient->getDistinctCommissioningBodiesByType()) {
 			foreach ($cbs as $cb_type_id => $cb_list) {
 				$cb_type = CommissioningBodyType::model()->findByPk($cb_type_id);
@@ -150,7 +151,19 @@ class ElementLetter extends BaseEventTypeElement
 			}
 		}
 
-		foreach ($patient->contactAssignments as $pca) {
+		foreach (PatientContactAssignment::model()->with(array(
+			'contact' => array(
+				'with' => array('address'),
+			),
+			'location' => array(
+				'with' => array(
+					'contact' => array(
+						'with' => array(
+							'label',
+						),
+					),
+				),
+			)->findAll('patient_id=?',array($patient->id)) as $pca) {
 			if ($pca->location) {
 				$options['ContactLocation'.$pca->location_id] = $pca->location->contact->fullName.' ('.$pca->location->contact->label->name.', '.$pca->location.')';
 			} else {
@@ -191,7 +204,7 @@ class ElementLetter extends BaseEventTypeElement
 		if (Yii::app()->getController()->getAction()->id == 'create') {
 			$this->site_id = Yii::app()->session['selected_site_id'];
 
-			if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
+			if (!$patient = Patient::model()->with('address')->findByPk(@$_GET['patient_id'])) {
 				throw new Exception('Patient not found: '.@$_GET['patient_id']);
 			}
 
@@ -206,9 +219,9 @@ class ElementLetter extends BaseEventTypeElement
 			$this->re .= ', DOB: '.$patient->NHSDate('dob').', Hosp No: '.$patient->hos_num.', NHS No: '.$patient->nhsnum;
 
 			$user = Yii::app()->session['user'];
+			$firm = Firm::model()->with('serviceSubspecialtyAssignment')->findByPk(Yii::app()->session['selected_firm_id']);
 
 			if ($contact = $user->contact) {
-				$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
 				$consultant = null;
 				// only want to get consultant for medical firms
 				if ($specialty = $firm->getSpecialty()) {
@@ -223,12 +236,10 @@ class ElementLetter extends BaseEventTypeElement
 					$this->footer .= "\nConsultant: {$consultant->contact->title} {$consultant->contact->first_name} {$consultant->contact->last_name}";
 				}
 
-				$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
 				$ssa = $firm->serviceSubspecialtyAssignment;
 			}
 
 			// Look for a macro based on the episode_status
-			$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
 			if ($episode = $patient->getEpisodeForCurrentSubspecialty()) {
 				if (!$this->macro = FirmLetterMacro::model()->find('firm_id=? and episode_status_id=?',array($firm->id, $episode->episode_status_id))) {
 					if ($firm->service_subspecialty_assignment_id) {
@@ -321,7 +332,7 @@ class ElementLetter extends BaseEventTypeElement
 		$macros = array();
 		$macro_names = array();
 
-		$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
+		$firm = Firm::model()->with('serviceSubspecialtyAssignment')->findByPk(Yii::app()->session['selected_firm_id']);
 
 		$criteria = new CDbCriteria;
 		$criteria->compare('firm_id', $firm->id);

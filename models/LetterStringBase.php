@@ -19,21 +19,15 @@
 
 class LetterStringBase extends BaseEventTypeElement
 {
-	public function shouldShow()
+	public function shouldShow($patient, $event_types)
 	{
 		if (!$this->event_type|| !$this->element_type) return true;
-		if (!$event_type = EventType::model()->find('class_name=?',array($this->event_type))) return false;
-		if (!$element_type = ElementType::model()->find('class_name=?',array($this->element_type))) return false;
+		if (!isset($event_types[$this->event_type])) return false;
+		if (!in_array($this->element_type,$event_types[$this->event_type])) return false;
 
-		if (isset($_GET['patient_id'])) {
-			$patient = Patient::model()->findByPk($_GET['patient_id']);
-		} else {
-			$patient = Yii::app()->getController()->patient;
-		}
-
-		if ( ($api = Yii::app()->moduleAPI->get($event_type->class_name)) &&
+		if ( ($api = Yii::app()->moduleAPI->get($this->event_type)) && 
 				($episode = $patient->getEpisodeForCurrentSubspecialty()) )  {
-			return $api->getElementForLatestEventInEpisode($patient, $episode, $element_type->class_name);
+			return $api->getElementForLatestEventInEpisode($patient, $episode, $this->element_type);
 		}
 
 		return false;
