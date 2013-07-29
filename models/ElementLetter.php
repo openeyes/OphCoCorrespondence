@@ -140,10 +140,13 @@ class ElementLetter extends BaseEventTypeElement
 		}
 
 		if ($cbs = $patient->getDistinctCommissioningBodiesByType()) {
+			$criteria = new CDbCriteria;
+			$criteria->addInCondition('id',array_keys($cbs));
+			$cbtype_lookup = CHtml::listData(CommissioningBodyType::model()->findAll($criteria),'id','name');
+
 			foreach ($cbs as $cb_type_id => $cb_list) {
-				$cb_type = CommissioningBodyType::model()->findByPk($cb_type_id);
 				foreach ($cb_list as $cb) {
-					$options['CommissioningBody'.$cb->id] = $cb->name . ' (' . $cb_type->name . ')';
+					$options['CommissioningBody'.$cb->id] = $cb->name . ' (' . $cbtype_lookup[$cb_type_id] . ')';
 					if (!$cb->getAddress()) {
 						$options['CommissioningBody'.$cb->id] .= ' - NO ADDRESS';
 					}
@@ -156,18 +159,18 @@ class ElementLetter extends BaseEventTypeElement
 				'with' => array('address'),
 			),
 			'location' => array(
-				//todo: fix this, can't have two relations with the same name in one query
-				/*'with' => array(
+				'with' => array(
 					'contact' => array(
+						'alias' => 'contact2',
 						'with' => array(
 							'label',
 						),
 					),
-				),*/
+				),
 			),
 		))->findAll('patient_id=?',array($patient->id)) as $pca) {
 			if ($pca->location) {
-				$options['ContactLocation'.$pca->location_id] = $pca->location->contact->fullName.' ('.$pca->location->contact->label->name.', '.$pca->location.')';
+				$options['ContactLocation'.$pca->location_id] = $pca->location->contact2->fullName.' ('.$pca->location->contact2->label->name.', '.$pca->location.')';
 			} else {
 				$options['Contact'.$pca->contact_id] = $pca->contact->fullName.' ('.$pca->contact->label->name;
 				if ($pca->contact->address) {
