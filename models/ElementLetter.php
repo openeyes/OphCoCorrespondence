@@ -140,10 +140,13 @@ class ElementLetter extends BaseEventTypeElement
 		}
 
 		if ($cbs = $patient->getDistinctCommissioningBodiesByType()) {
+			$criteria = new CDbCriteria;
+			$criteria->addInCondition('id',array_keys($cbs));
+			$cbtype_lookup = CHtml::listData(CommissioningBodyType::model()->findAll($criteria),'id','name');
+
 			foreach ($cbs as $cb_type_id => $cb_list) {
-				$cb_type = CommissioningBodyType::model()->findByPk($cb_type_id);
 				foreach ($cb_list as $cb) {
-					$options['CommissioningBody'.$cb->id] = $cb->name . ' (' . $cb_type->name . ')';
+					$options['CommissioningBody'.$cb->id] = $cb->name . ' (' . $cbtype_lookup[$cb_type_id] . ')';
 					if (!$cb->getAddress()) {
 						$options['CommissioningBody'.$cb->id] .= ' - NO ADDRESS';
 					}
