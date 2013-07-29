@@ -156,18 +156,18 @@ class ElementLetter extends BaseEventTypeElement
 				'with' => array('address'),
 			),
 			'location' => array(
-				//todo: fix this, can't have two relations with the same name in one query
-				/*'with' => array(
+				'with' => array(
 					'contact' => array(
+						'alias' => 'contact2',
 						'with' => array(
 							'label',
 						),
 					),
-				),*/
+				),
 			),
 		))->findAll('patient_id=?',array($patient->id)) as $pca) {
 			if ($pca->location) {
-				$options['ContactLocation'.$pca->location_id] = $pca->location->contact->fullName.' ('.$pca->location->contact->label->name.', '.$pca->location.')';
+				$options['ContactLocation'.$pca->location_id] = $pca->location->contact2->fullName.' ('.$pca->location->contact2->label->name.', '.$pca->location.')';
 			} else {
 				$options['Contact'.$pca->contact_id] = $pca->contact->fullName.' ('.$pca->contact->label->name;
 				if ($pca->contact->address) {
