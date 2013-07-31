@@ -170,7 +170,7 @@ class ElementLetter extends BaseEventTypeElement
 			),
 		))->findAll('patient_id=?',array($patient->id)) as $pca) {
 			if ($pca->location) {
-				$options['ContactLocation'.$pca->location_id] = $pca->location->contact2->fullName.' ('.$pca->location->contact2->label->name.', '.$pca->location.')';
+				$options['ContactLocation'.$pca->location_id] = $pca->location->contact->fullName.' ('.$pca->location->contact->label->name.', '.$pca->location.')';
 			} else {
 				$options['Contact'.$pca->contact_id] = $pca->contact->fullName.' ('.$pca->contact->label->name;
 				if ($pca->contact->address) {
