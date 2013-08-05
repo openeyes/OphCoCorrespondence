@@ -130,12 +130,12 @@ class ElementLetter extends BaseEventTypeElement
 
 		$options = array('Patient'.$patient->id => $patient->fullname.' (Patient)');
 
-		if ($patient->gp && $patient->gp->contact) {
+		if (@$patient->gp->contact) {
 			$options['Gp'.$patient->gp_id] = $patient->gp->contact->fullname.' (GP)';
 		} else {
 			$options['Gp'.$patient->gp_id] = Gp::UNKNOWN_NAME.' (GP)';
 		}
-		if (!$patient->practice || !$patient->practice->contact->address) {
+		if (@!$patient->practice->contact->address) {
 			$options['Gp'.$patient->gp_id] .= ' - NO ADDRESS';
 		}
 
@@ -289,24 +289,34 @@ class ElementLetter extends BaseEventTypeElement
 			$this->use_nickname = 1;
 		}
 
+		$address_contact = null;
 		if ($this->macro->recipient_patient) {
-			$contact = $patient;
+			$address_contact = $patient;
 			$this->address_target = 'patient';
-		} elseif ($this->macro->recipient_doctor && $patient->gp && @$patient->practice->contact->address) {
-			$contact = $patient->gp;
+			$this->introduction = $patient->getLetterIntroduction(array(
+				'nickname' => $this->use_nickname,
+			));
+		} elseif ($this->macro->recipient_doctor) {
 			$this->address_target = 'gp';
+			if($patient->gp) {
+				$this->introduction = $patient->gp->getLetterIntroduction(array(
+					'nickname' => $this->use_nickname,
+				));
+				$address_contact = $patient->gp;
+			} else {
+				$this->introduction = "Dear " . Gp::UNKNOWN_SALUTATION . ",";
+				$address_contact = @$patient->practice;
+			}
 		}
 
-		$this->address = $contact->getLetterAddress(array(
-			'patient' => $patient,
-			'include_name' => true,
-			'include_label' => true,
-			'delimiter' => "\n",
-		));
-
-		$this->introduction = $contact->getLetterIntroduction(array(
-			'nickname' => $this->use_nickname,
-		));
+		if ($address_contact) {
+			$this->address = $address_contact->getLetterAddress(array(
+				'patient' => $patient,
+				'include_name' => true,
+				'include_label' => true,
+				'delimiter' => "\n",
+			));
+		}
 
 		$this->macro->substitute($patient);
 		$this->body = $this->macro->body;
