@@ -25,6 +25,7 @@ class DefaultController extends BaseEventTypeController
 			throw new Exception("Unknown patient: ".@$_GET['patient_id']);
 		}
 		$this->jsVars['OE_gp_id'] = $patient->gp_id;
+		$this->jsVars['OE_practice_id'] = $patient->practice_id;
 
 		parent::actionCreate();
 	}
@@ -35,6 +36,8 @@ class DefaultController extends BaseEventTypeController
 			throw new Exception("Unknown event: " . $id);
 		}
 		$this->jsVars['OE_gp_id'] = $event->episode->patient->gp_id;
+		$this->jsVars['OE_practice_id'] = $event->episode->patient->practice_id;
+		
 		parent::actionUpdate($id);
 	}
 

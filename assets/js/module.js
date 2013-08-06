@@ -163,35 +163,44 @@ $(document).ready(function() {
 					}
 
 					// if the letter is to anyone but the GP we need to cc the GP
-					if (!val.match(/^Gp/)) {
-						$.ajax({
-							'type': 'GET',
-							'url': baseUrl+'/OphCoCorrespondence/Default/getCc?patient_id='+OE_patient_id+'&contact=Gp'+OE_gp_id,
-							'success': function(text) {
-								if (!text.match(/NO ADDRESS/)) {
-									if ($('#ElementLetter_cc').val().length >0) {
-										var cur = $('#ElementLetter_cc').val();
-
-										if (cur.indexOf(text) == -1) {
-											if (!$('#ElementLetter_cc').val().match(/[\n\r]$/)) {
-												cur += "\n";
+					if (!val.match(/^Gp|^Practice/)) {
+						var contact;
+						if (OE_gp_id) {
+							contact = 'Gp' + OE_gp_id;
+						}
+						else if (OE_practice_id) {
+							contact = 'Practice' + OE_practice_id;
+						}
+						if (contact) {
+							$.ajax({
+								'type': 'GET',
+								'url': baseUrl+'/OphCoCorrespondence/Default/getCc?patient_id='+OE_patient_id+'&contact='+contact,
+								'success': function(text) {
+									if (!text.match(/NO ADDRESS/)) {
+										if ($('#ElementLetter_cc').val().length >0) {
+											var cur = $('#ElementLetter_cc').val();
+	
+											if (cur.indexOf(text) == -1) {
+												if (!$('#ElementLetter_cc').val().match(/[\n\r]$/)) {
+													cur += "\n";
+												}
+	
+												$('#ElementLetter_cc').val(cur+text);
+												$('#cc_targets').append('<input type="hidden" name="CC_Targets[]" value="gp" />');
 											}
-
-											$('#ElementLetter_cc').val(cur+text);
+	
+										} else {
+											$('#ElementLetter_cc').val(text);
 											$('#cc_targets').append('<input type="hidden" name="CC_Targets[]" value="gp" />');
 										}
-
 									} else {
-										$('#ElementLetter_cc').val(text);
-										$('#cc_targets').append('<input type="hidden" name="CC_Targets[]" value="gp" />');
+										new OpenEyes.Dialog.Alert({
+											content: "Warning: letters should be cc'd to the patient's GP, but the current patient's GP has no valid address."
+										}).open();
 									}
-								} else {
-									new OpenEyes.Dialog.Alert({
-										content: "Warning: letters should be cc'd to the patient's GP, but the current patient's GP has no valid address."
-									}).open();
 								}
-							}
-						});
+							});
+						}
 					} else {
 						// if the letter is to the GP we need to cc the patient
 						$.ajax({
