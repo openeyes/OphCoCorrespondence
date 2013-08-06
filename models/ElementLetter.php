@@ -150,6 +150,11 @@ class ElementLetter extends BaseEventTypeElement
 					if (!$cb->getAddress()) {
 						$options['CommissioningBody'.$cb->id] .= ' - NO ADDRESS';
 					}
+					if ($services = $cb->services) {
+						foreach ($services as $svc) {
+							$options['CommissioningBodyService'.$svc->id] = $svc->name . ' (' . $svc->getTypeShortName() . ')';
+						}
+					}
 				}
 			}
 		}
