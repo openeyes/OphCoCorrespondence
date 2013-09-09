@@ -99,7 +99,7 @@
 				$patient = Yii::app()->getController()->patient;
 			}
 
-			foreach (LetterStringGroup::model()->with(array(
+			$with = array(
 				'firmLetterStrings' => array(
 					'condition' => 'firm_id is null or firm_id = :firm_id',
 					'params' => array(
@@ -108,10 +108,7 @@
 					'order' => 'firmLetterStrings.display_order asc',
 				),
 				'subspecialtyLetterStrings' => array(
-					'condition' => 'subspecialty_id is null or subspecialty_id = :subspecialty_id',
-					'params' => array(
-						':subspecialty_id' => $firm->serviceSubspecialtyAssignment->subspecialty_id,
-					),
+					'condition' => 'subspecialty_id is null',
 					'order' => 'subspecialtyLetterStrings.display_order asc',
 				),
 				'siteLetterStrings' => array(
@@ -121,6 +118,12 @@
 					),
 					'order' => 'siteLetterStrings.display_order',
 				),
+			);
+			if ($firm->getSubspecialtyID()) {
+				$with['subspecialtyLetterStrings']['condition'] = 'subspecialty_id is null or subspecialty_id = :subspecialty_id';
+				$with['subspecialtyLetterStrings']['params'] = array(':subspecialty_id' => $firm->getSubspecialtyID());
+			} 
+			foreach (LetterStringGroup::model()->with(array(
 			))->findAll(array('order'=>'t.display_order')) as $string_group) {
 				$strings = $string_group->getStrings($patient,$event_types);
 				echo $form->dropDownListNoPost(strtolower($string_group->name), $strings, '', array('empty' => '- '.$string_group->name.' -', 'nowrapper' => true, 'class' => 'stringgroup', 'disabled' => empty($strings)))?>
