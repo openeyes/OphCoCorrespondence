@@ -135,7 +135,10 @@ class ElementLetter extends BaseEventTypeElement
 				$options['Gp'.$patient->gp_id] = $patient->gp->contact->fullname.' (GP)';
 			} else {
 				$options['Gp'.$patient->gp_id] = Gp::UNKNOWN_NAME.' (GP)';
-			}	
+			}
+			if (!$patient->practice || !@$patient->practice->contact->address) {
+				$options['Gp'.$patient->gp_id] .= ' - NO ADDRESS';
+			}
 		}
 		else {
 			if ($patient->practice) {
@@ -145,8 +148,8 @@ class ElementLetter extends BaseEventTypeElement
 				$options['Practice'.$patient->practice_id] .= ' - NO ADDRESS';
 			}
 		}
-		
-		
+
+
 
 		if ($cbs = $patient->getDistinctCommissioningBodiesByType()) {
 			$criteria = new CDbCriteria;
