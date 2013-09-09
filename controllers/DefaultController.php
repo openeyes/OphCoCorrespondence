@@ -19,6 +19,11 @@
 
 class DefaultController extends BaseEventTypeController
 {
+	public function printActions()
+	{
+		return array('print', 'doPrint', 'markPrinted');
+	}
+
 	public function actionCreate()
 	{
 		if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
@@ -37,7 +42,7 @@ class DefaultController extends BaseEventTypeController
 		}
 		$this->jsVars['OE_gp_id'] = $event->episode->patient->gp_id;
 		$this->jsVars['OE_practice_id'] = $event->episode->patient->practice_id;
-		
+
 		parent::actionUpdate($id);
 	}
 
@@ -340,7 +345,7 @@ class DefaultController extends BaseEventTypeController
 
 		if ($this->site->replyTo) {
 			$oeletter->addReplyToAddress($this->site->getReplyToAddress(array('delimiter' => ', ', 'include_telephone' => true)));
-			
+
 		}
 
 		$pdf_print->addLetter($oeletter);
