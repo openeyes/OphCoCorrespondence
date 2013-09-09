@@ -24,6 +24,18 @@ class DefaultController extends BaseEventTypeController
 		return array('print', 'doPrint', 'markPrinted');
 	}
 
+	//loads direct line phone numbers to trigger on drop down select
+	public function loadDirectLines()
+	{
+		$sfs = FirmSiteSecretary::model()->findAll('firm_id=?',array(Yii::app()->session['selected_firm_id']));
+		$vars[]=null;
+		foreach($sfs as $sf){
+			$vars[$sf->site_id]=$sf->direct_line;
+		}
+
+		$this->jsVars['correspondence_directlines']=$vars;
+	}
+
 	public function actionCreate()
 	{
 		if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
@@ -31,6 +43,8 @@ class DefaultController extends BaseEventTypeController
 		}
 		$this->jsVars['OE_gp_id'] = $patient->gp_id;
 		$this->jsVars['OE_practice_id'] = $patient->practice_id;
+
+		$this->loadDirectLines();
 
 		parent::actionCreate();
 	}
@@ -42,6 +56,8 @@ class DefaultController extends BaseEventTypeController
 		}
 		$this->jsVars['OE_gp_id'] = $event->episode->patient->gp_id;
 		$this->jsVars['OE_practice_id'] = $event->episode->patient->practice_id;
+
+		$this->loadDirectLines();
 
 		parent::actionUpdate($id);
 	}
