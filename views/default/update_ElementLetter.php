@@ -101,29 +101,31 @@
 				$patient = Yii::app()->getController()->patient;
 			}
 
-			foreach (LetterStringGroup::model()->with(array(
-				'firmLetterStrings' => array(
-					'condition' => 'firm_id is null or firm_id = :firm_id',
-					'params' => array(
-						':firm_id' => $firm->id,
-					),
-					'order' => 'firmLetterStrings.display_order asc',
-				),
-				'subspecialtyLetterStrings' => array(
-					'condition' => 'subspecialty_id is null or subspecialty_id = :subspecialty_id',
-					'params' => array(
-						':subspecialty_id' => $firm->serviceSubspecialtyAssignment->subspecialty_id,
-					),
-					'order' => 'subspecialtyLetterStrings.display_order asc',
-				),
-				'siteLetterStrings' => array(
-					'condition' => 'site_id is null or site_id = :site_id',
-					'params' => array(
-						':site_id' => Yii::app()->session['selected_site_id'],
-					),
-					'order' => 'siteLetterStrings.display_order',
-				),
-			))->findAll(array('order'=>'t.display_order')) as $string_group) {
+                        $with = array(
+                                'firmLetterStrings' => array(
+                                        'condition' => 'firm_id is null or firm_id = :firm_id',
+                                        'params' => array(
+                                                ':firm_id' => $firm->id,
+                                        ),
+                                        'order' => 'firmLetterStrings.display_order asc',
+                                ),
+                                'subspecialtyLetterStrings' => array(
+                                        'condition' => 'subspecialty_id is null',
+                                        'order' => 'subspecialtyLetterStrings.display_order asc',
+                                ),
+                                'siteLetterStrings' => array(
+                                        'condition' => 'site_id is null or site_id = :site_id',
+                                        'params' => array(
+                                                ':site_id' => Yii::app()->session['selected_site_id'],
+                                        ),
+                                        'order' => 'siteLetterStrings.display_order',
+                                ),
+                        );
+                        if ($firm->getSubspecialtyID()) {
+                                $with['subspecialtyLetterStrings']['condition'] = 'subspecialty_id is null or subspecialty_id = :subspecialty_id';
+                                $with['subspecialtyLetterStrings']['params'] = array(':subspecialty_id' => $firm->getSubspecialtyID());
+                        }
+                        foreach (LetterStringGroup::model()->with($with)->findAll(array('order'=>'t.display_order')) as $string_group) {
 				$strings = $string_group->getStrings($patient,$event_types);
 				echo $form->dropDownListNoPost(strtolower($string_group->name), $strings, '', array('empty' => '- '.$string_group->name.' -', 'nowrapper' => true, 'class' => 'stringgroup', 'disabled' => empty($strings)))?>
 			<?php }?>

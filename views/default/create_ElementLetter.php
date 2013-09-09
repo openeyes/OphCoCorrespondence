@@ -123,8 +123,7 @@
 				$with['subspecialtyLetterStrings']['condition'] = 'subspecialty_id is null or subspecialty_id = :subspecialty_id';
 				$with['subspecialtyLetterStrings']['params'] = array(':subspecialty_id' => $firm->getSubspecialtyID());
 			} 
-			foreach (LetterStringGroup::model()->with(array(
-			))->findAll(array('order'=>'t.display_order')) as $string_group) {
+			foreach (LetterStringGroup::model()->with($with)->findAll(array('order'=>'t.display_order')) as $string_group) {
 				$strings = $string_group->getStrings($patient,$event_types);
 				echo $form->dropDownListNoPost(strtolower($string_group->name), $strings, '', array('empty' => '- '.$string_group->name.' -', 'nowrapper' => true, 'class' => 'stringgroup', 'disabled' => empty($strings)))?>
 			<?php }?>
