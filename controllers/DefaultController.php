@@ -92,13 +92,19 @@ class DefaultController extends BaseEventTypeController
 			return;
 		}
 
-		$data = array(
-			'text_ElementLetter_address' => $contact->getLetterAddress(array(
+		$address = $contact->getLetterAddress(array(
 				'patient' => $patient,
 				'include_name' => true,
 				'include_label' => true,
 				'delimiter' => "\n",
-			)),
+			));
+
+		if(!$address){
+			$address = '';
+		}
+
+		$data = array(
+			'text_ElementLetter_address' => $address,
 			'text_ElementLetter_introduction' => $contact->getLetterIntroduction(array(
 				'nickname' => (boolean) @$_GET['nickname'],
 			)),
@@ -152,12 +158,20 @@ class DefaultController extends BaseEventTypeController
 		}
 
 		if (isset($contact)) {
-			$data['text_ElementLetter_address'] = $contact->getLetterAddress(array(
+			$address = $contact->getLetterAddress(array(
 				'patient' => $patient,
 				'include_name' => true,
 				'include_label' => true,
 				'delimiter' => "\n",
 			));
+
+			if($address){
+				$data['text_ElementLetter_address'] = $address;
+			}
+			else {
+				$data['alert'] = "The GP does not have a valid address.";
+				$data['text_ElementLetter_address'] = '';
+			}
 
 			$data['text_ElementLetter_introduction'] = $contact->getLetterIntroduction(array(
 				'nickname' => $macro->use_nickname,
