@@ -144,9 +144,9 @@ class ElementLetter extends BaseEventTypeElement
 		else {
 			if ($patient->practice) {
 				$options['Practice'.$patient->practice_id] = Gp::UNKNOWN_NAME.' (GP)';
-			}
-			if ($patient->practice_id && !@$patient->practice->contact->address) {
-				$options['Practice'.$patient->practice_id] .= ' - NO ADDRESS';
+				if (@$patient->practice->contact && !@$patient->practice->contact->address) {
+					$options['Practice'.$patient->practice_id] .= ' - NO ADDRESS';
+				}
 			}
 		}
 
