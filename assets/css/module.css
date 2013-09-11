@@ -21,9 +21,12 @@
 
 div.ElementLetter > .row > span.left { display: inline-block; width: 180px; }
 div.ElementLetter .row { background-color: #DAE6F1; }
-div.ElementLetter select,textarea,input { margin: 10px !important; }
+div.ElementLetter select,
+div.ElementLetter textarea,
+div.ElementLetter input { margin: 10px !important; }
 div.ElementLetter select { width: 160px; }
-div.ElementLetter textarea,input { font-family: courier !important; }
+div.ElementLetter textarea,
+div.ElementLetter input { font-family: courier !important; }
 
 #ElementLetter_site_id { width: 388px; }
 
