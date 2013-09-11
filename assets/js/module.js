@@ -410,7 +410,7 @@ $(document).ready(function() {
 			et_oph_correspondence_last_stringgroup_do = true;
 		}
 
-		if (m = $(this).val().match(/\[([a-z]{3})\]/)) {
+		if (m = $(this).val().match(/\[([a-z]{3})\]/i)) {
 
 			var text = $(this).val();
 
