@@ -352,9 +352,6 @@ class DefaultController extends BaseEventTypeController
 			'include_fax' => true,
 		));
 
-		if ($this->site->fax) {
-			$from_address .= "\nFax: ".CHtml::encode($this->site->fax);
-		}
 		if ($letter->direct_line) {
 			$from_address .= "\nDirect line: ".$letter->direct_line;
 		}
