@@ -347,6 +347,7 @@ class DefaultController extends BaseEventTypeController
 		), true);
 
 		$from_address = $this->site->getLetterAddress(array(
+			'include_name' => true,
 			'delimiter' => "\n",
 			'include_telephone' => true,
 			'include_fax' => true,
