@@ -28,3 +28,71 @@
 .event.correspondence .event-title {
   background-image: url('../img/new/medium.png?1379083751');
 }
+
+/* line 1, ../sass/components/_letter.scss */
+.correspondence-letter {
+  -webkit-box-shadow: 4px 4px 4px 0 #cccccc;
+  -moz-box-shadow: 4px 4px 4px 0 #cccccc;
+  box-shadow: 4px 4px 4px 0 #cccccc;
+  font-family: sans-serif;
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 40px;
+  max-width: 740px;
+  margin: 0 10px;
+}
+/* line 9, ../sass/components/_letter.scss */
+.correspondence-letter.draft {
+  background: white url('../img/new/bg_draft.png?1379083751') center top no-repeat;
+}
+/* line 12, ../sass/components/_letter.scss */
+.correspondence-letter .accessible {
+  font-size: 16pt;
+}
+/* line 15, ../sass/components/_letter.scss */
+.correspondence-letter pre {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+/* line 20, ../sass/components/_letter.scss */
+.correspondence-letter .banner {
+  background: #fff;
+  padding-bottom: 25px;
+}
+/* line 23, ../sass/components/_letter.scss */
+.correspondence-letter .banner .seal {
+  float: left;
+}
+/* line 26, ../sass/components/_letter.scss */
+.correspondence-letter .banner .logo {
+  float: right;
+}
+/* line 29, ../sass/components/_letter.scss */
+.correspondence-letter .banner .seal img {
+  width: 87px;
+}
+/* line 32, ../sass/components/_letter.scss */
+.correspondence-letter .banner .logo img {
+  width: 350px;
+}
+/* line 36, ../sass/components/_letter.scss */
+.correspondence-letter .to-address {
+  display: inline-block;
+  padding-left: 0;
+  margin-top: 4em;
+}
+/* line 41, ../sass/components/_letter.scss */
+.correspondence-letter .from-address {
+  float: right;
+  margin-bottom: 18px;
+  text-align: right;
+}
+/* line 46, ../sass/components/_letter.scss */
+.correspondence-letter .date, .correspondence-letter .clinic-date {
+  padding-top: 15px;
+}
+/* line 49, ../sass/components/_letter.scss */
+.correspondence-letter .big {
+  font-size: 14pt;
+}
