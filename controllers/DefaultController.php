@@ -372,8 +372,7 @@ class DefaultController extends BaseEventTypeController
 		$oeletter->addBody($body);
 
 		if ($this->site->replyTo) {
-			$oeletter->addReplyToAddress($this->site->getReplyToAddress(array('delimiter' => ', ', 'include_telephone' => true)));
-
+			$oeletter->addReplyToAddress($this->site->getReplyToAddress(array('include_name' => true, 'delimiter' => ', ', 'include_telephone' => true)));
 		}
 
 		$pdf_print->addLetter($oeletter);
@@ -391,7 +390,7 @@ class DefaultController extends BaseEventTypeController
 				$ccletter->addBody($body);
 
 				if ($this->site->replyTo) {
-					$ccletter->addReplyToAddress($this->site->getReplyToAddress(array('delimiter' => ', ', 'include_telephone' => true)));
+					$ccletter->addReplyToAddress($this->site->getReplyToAddress(array('include_name' => true, 'delimiter' => ', ', 'include_telephone' => true)));
 				}
 
 				$pdf_print->addLetter($ccletter);
