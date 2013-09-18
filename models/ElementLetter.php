@@ -343,8 +343,10 @@ class ElementLetter extends BaseEventTypeElement
 			$this->cc = $patient->getLetterAddress(array(
 				'include_name' => true,
 				'include_prefix' => true,
-				'delimiter'=>', ',
+				'delimiter'=>'| ',
 			));
+			$this->cc=str_replace(',',';',$this->cc);
+			$this->cc=str_replace('|',',',$this->cc);
 			$this->cc_targets[] = 'patient';
 		}
 
@@ -353,9 +355,11 @@ class ElementLetter extends BaseEventTypeElement
 				'patient' => $patient,
 				'include_name' => true,
 				'include_label' => true,
-				'delimiter' => ', ',
+				'delimiter' => '| ',
 				'include_prefix' => true,
 			));
+			$this->cc=str_replace(',',';',$this->cc);
+			$this->cc=str_replace('|',',',$this->cc);
 			$this->cc_targets[] = 'gp';
 		}
 	}

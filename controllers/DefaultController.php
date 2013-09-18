@@ -291,9 +291,12 @@ class DefaultController extends BaseEventTypeController
 			'patient' => $patient,
 			'include_name' => true,
 			'include_label' => true,
-			'delimiter' => ", ",
+			'delimiter' => "| ",
 			'include_prefix' => true,
 		));
+
+		$address=str_replace(',',';',$address);
+		$address=str_replace('|',',',$address);
 
 		echo $address ? $address : 'NO ADDRESS';
 	}
@@ -387,7 +390,7 @@ class DefaultController extends BaseEventTypeController
 
 			// Add CCs
 			foreach ($letter->getCcTargets() as $cc) {
-				$ccletter = new OELetter(implode("\n",preg_replace('/^[a-zA-Z]+: /','',$cc)),$from_address);
+				$ccletter = new OELetter(implode("\n",preg_replace('/^[a-zA-Z]+: /','',str_replace(';',',',$cc))),$from_address);
 				$ccletter->setHideDate(true);
 				$ccletter->setBarcode('E:'.$id);
 				$ccletter->addBody($body);
