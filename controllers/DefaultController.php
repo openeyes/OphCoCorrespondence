@@ -350,14 +350,12 @@ class DefaultController extends BaseEventTypeController
 		), true);
 
 		$from_address = $this->site->getLetterAddress(array(
+			'include_name' => true,
 			'delimiter' => "\n",
 			'include_telephone' => true,
 			'include_fax' => true,
 		));
 
-		if ($this->site->fax) {
-			$from_address .= "\nFax: ".CHtml::encode($this->site->fax);
-		}
 		if ($letter->direct_line) {
 			$from_address .= "\nDirect line: ".$letter->direct_line;
 		}
@@ -377,8 +375,7 @@ class DefaultController extends BaseEventTypeController
 		$oeletter->addBody($body);
 
 		if ($this->site->replyTo) {
-			$oeletter->addReplyToAddress($this->site->getReplyToAddress(array('delimiter' => ', ', 'include_telephone' => true)));
-
+			$oeletter->addReplyToAddress($this->site->getReplyToAddress(array('include_name' => true, 'delimiter' => ', ', 'include_telephone' => true)));
 		}
 
 		$pdf_print->addLetter($oeletter);
@@ -396,7 +393,7 @@ class DefaultController extends BaseEventTypeController
 				$ccletter->addBody($body);
 
 				if ($this->site->replyTo) {
-					$ccletter->addReplyToAddress($this->site->getReplyToAddress(array('delimiter' => ', ', 'include_telephone' => true)));
+					$ccletter->addReplyToAddress($this->site->getReplyToAddress(array('include_name' => true, 'delimiter' => ', ', 'include_telephone' => true)));
 				}
 
 				$pdf_print->addLetter($ccletter);
