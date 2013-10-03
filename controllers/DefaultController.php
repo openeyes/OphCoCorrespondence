@@ -211,6 +211,31 @@ class DefaultController extends BaseEventTypeController
 			$data['elementappend_cc_targets'] = '<input type="hidden" name="CC_Targets[]" value="Gp'.$patient->gp_id.'" />';
 		}
 
+		if ($macro->cc_drss && $patient->commissioningbodies) {
+			$drss = null;
+			foreach($patient->commissioningbodies as $commissioningbody) {
+				foreach($commissioningbody->services as $service) {
+					if($service->type->shortname == 'DRSS') {
+						$drss = $service;
+						break;
+					}
+				}
+				if($drss) {
+					break;
+				}
+			}
+			if($drss) {
+				$data['textappend_ElementLetter_cc'] = $drss->getLetterAddress(array(
+						'include_name' => true,
+						'include_label' => true,
+						'delimiter' => ", ",
+						'include_prefix' => true,
+					));
+				$data['elementappend_cc_targets'] = '<input type="hidden" name="CC_Targets[]" value="CommissioningBodyService'.$drss->id.'" />';
+
+			}
+		}
+
 		echo json_encode($data);
 	}
 
