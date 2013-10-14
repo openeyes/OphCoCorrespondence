@@ -184,33 +184,63 @@ class DefaultController extends BaseEventTypeController
 			$data['text_ElementLetter_body'] = $macro->body;
 		}
 
+		$cc = array(
+			'text' => array(),
+			'targets' => array()
+		);
 		if ($macro->cc_patient) {
 			if ($patient->date_of_death) {
 				$data['alert'] = "Warning: the patient cannot be cc'd because they are deceased.";
 			} elseif ($patient->contact->address) {
-				$data['textappend_ElementLetter_cc'] = $patient->getLetterAddress(array(
+				$cc['text'][] = $patient->getLetterAddress(array(
 					'include_name' => true,
 					'include_label' => true,
 					'delimiter' => ", ",
 					'include_prefix' => true,
 				));
-				$data['elementappend_cc_targets'] = '<input type="hidden" name="CC_Targets[]" value="Patient'.$patient->id.'" />';
+				$cc['targets'][] = '<input type="hidden" name="CC_Targets[]" value="Patient'.$patient->id.'" />';
 			} else {
 				$data['alert'] = "Letters to the GP should be cc'd to the patient, but this patient does not have a valid address.";
 			}
 		}
 
 		if ($macro->cc_doctor && $patient->gp && @$patient->practice->contact->address) {
-			$data['textappend_ElementLetter_cc'] = $patient->gp->getLetterAddress(array(
+			$cc['text'][] = $patient->gp->getLetterAddress(array(
 				'patient' => $patient,
 				'include_name' => true,
 				'include_label' => true,
 				'delimiter' => ", ",
 				'include_prefix' => true,
 			));
-			$data['elementappend_cc_targets'] = '<input type="hidden" name="CC_Targets[]" value="Gp'.$patient->gp_id.'" />';
+			$cc['targets'][] = '<input type="hidden" name="CC_Targets[]" value="Gp'.$patient->gp_id.'" />';
 		}
 
+		if ($macro->cc_drss && $patient->commissioningbodies) {
+			$drss = null;
+			foreach($patient->commissioningbodies as $commissioningbody) {
+				foreach($commissioningbody->services as $service) {
+					if($service->type->shortname == 'DRSS') {
+						$drss = $service;
+						break;
+					}
+				}
+				if($drss) {
+					break;
+				}
+			}
+			if($drss) {
+				$cc['text'][] = $drss->getLetterAddress(array(
+						'include_name' => true,
+						'include_label' => true,
+						'delimiter' => ", ",
+						'include_prefix' => true,
+					));
+				$cc['targets'][] = '<input type="hidden" name="CC_Targets[]" value="CommissioningBodyService'.$drss->id.'" />';
+
+			}
+		}
+		$data['textappend_ElementLetter_cc'] = implode("\n",$cc['text']);
+		$data['elementappend_cc_targets'] = implode("\n",$cc['targets']);
 		echo json_encode($data);
 	}
 
