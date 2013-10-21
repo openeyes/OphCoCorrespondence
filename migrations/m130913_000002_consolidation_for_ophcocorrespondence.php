@@ -1,4 +1,4 @@
-cd <?php
+<?php
 
 class m130913_000002_consolidation_for_ophcocorrespondence extends OEMigration
 {
