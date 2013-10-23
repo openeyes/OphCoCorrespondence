@@ -150,7 +150,11 @@ class ElementLetter extends BaseEventTypeElement
 			}
 		}
 
-
+		// get the ids of the commissioning body types that should be shown as potential recipients to filter against
+		$cbt_ids = array();
+		foreach (OphCoCorrespondence_CommissioningBodyType_Recipient::model()->getCommissioningBodyTypes() as $cbt) {
+			$cbt_ids[] = $cbt->id;
+		}
 
 		if ($cbs = $patient->getDistinctCommissioningBodiesByType()) {
 			$criteria = new CDbCriteria;
@@ -159,10 +163,14 @@ class ElementLetter extends BaseEventTypeElement
 
 			foreach ($cbs as $cb_type_id => $cb_list) {
 				foreach ($cb_list as $cb) {
-					$options['CommissioningBody'.$cb->id] = $cb->name . ' (' . $cbtype_lookup[$cb_type_id] . ')';
-					if (!$cb->getAddress()) {
-						$options['CommissioningBody'.$cb->id] .= ' - NO ADDRESS';
+					if (in_array($cb_type_id, $cbt_ids) ) {
+						$options['CommissioningBody'.$cb->id] = $cb->name . ' (' . $cbtype_lookup[$cb_type_id] . ')';
+						if (!$cb->getAddress()) {
+							$options['CommissioningBody'.$cb->id] .= ' - NO ADDRESS';
+						}
 					}
+
+					// include all services at the moment, regardless of whether the commissioning body type is filtered
 					if ($services = $cb->services) {
 						foreach ($services as $svc) {
 							$options['CommissioningBodyService'.$svc->id] = $svc->name . ' (' . $svc->getTypeShortName() . ')';
@@ -343,8 +351,10 @@ class ElementLetter extends BaseEventTypeElement
 			$this->cc = $patient->getLetterAddress(array(
 				'include_name' => true,
 				'include_prefix' => true,
-				'delimiter'=>', ',
+				'delimiter'=>'| ',
 			));
+			$this->cc=str_replace(',',';',$this->cc);
+			$this->cc=str_replace('|',',',$this->cc);
 			$this->cc_targets[] = 'patient';
 		}
 
@@ -353,9 +363,11 @@ class ElementLetter extends BaseEventTypeElement
 				'patient' => $patient,
 				'include_name' => true,
 				'include_label' => true,
-				'delimiter' => ', ',
+				'delimiter' => '| ',
 				'include_prefix' => true,
 			));
+			$this->cc=str_replace(',',';',$this->cc);
+			$this->cc=str_replace('|',',',$this->cc);
 			$this->cc_targets[] = 'gp';
 		}
 	}

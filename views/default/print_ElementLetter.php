@@ -38,7 +38,7 @@
 	<?php foreach (explode("\n",trim(CHtml::encode($element->cc))) as $line) {
 			if (trim($line)) { ?>
 	<br />CC:
-	<?php echo $line ?>
+	<?php echo str_replace(';',',',$line) ?>
 	<?php }
 	foreach ($element->enclosures as $enclosure) {?>
 		<br/>Enc: <?php echo $enclosure->content?>
