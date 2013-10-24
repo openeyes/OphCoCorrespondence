@@ -17,16 +17,16 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html The GNU General Public License V3.0
  */
 /* line 2, ../sass/components/_event.scss */
-.event.correspondence {
+.event.ophcocorrespondence {
   border-color: #86cdff;
 }
 /* line 4, ../sass/components/_event.scss */
-.event.correspondence .event-content {
-  background-image: url('../img/new/watermark.png?1379084058');
+.event.ophcocorrespondence .event-content {
+  background-image: url('../img/new/watermark.png?1382511137');
 }
 /* line 7, ../sass/components/_event.scss */
-.event.correspondence .event-title {
-  background-image: url('../img/new/medium.png?1379083751');
+.event.ophcocorrespondence .event-title {
+  background-image: url('../img/new/medium.png?1382511137');
 }
 
 /* line 1, ../sass/components/_letter.scss */
@@ -43,7 +43,7 @@
 }
 /* line 9, ../sass/components/_letter.scss */
 .correspondence-letter.draft {
-  background: white url('../img/new/bg_draft.png?1379083751') center top no-repeat;
+  background: white url('../img/new/bg_draft.png?1382511137') center top no-repeat;
 }
 /* line 12, ../sass/components/_letter.scss */
 .correspondence-letter .accessible {
