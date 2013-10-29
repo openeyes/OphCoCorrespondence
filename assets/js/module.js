@@ -186,16 +186,16 @@ $(document).ready(function() {
 									if (!text.match(/NO ADDRESS/)) {
 										if ($('#ElementLetter_cc').val().length >0) {
 											var cur = $('#ElementLetter_cc').val();
-	
+
 											if (cur.indexOf(text) == -1) {
 												if (!$('#ElementLetter_cc').val().match(/[\n\r]$/)) {
 													cur += "\n";
 												}
-	
+
 												$('#ElementLetter_cc').val(cur+text);
 												$('#cc_targets').append('<input type="hidden" name="CC_Targets[]" value="gp" />');
 											}
-	
+
 										} else {
 											$('#ElementLetter_cc').val(text);
 											$('#cc_targets').append('<input type="hidden" name="CC_Targets[]" value="gp" />');
@@ -500,23 +500,35 @@ $(document).ready(function() {
 
 	$('button.addEnclosure').die('click').live('click',function() {
 		var id = -1;
-		$('#enclosureItems').children('div.enclosureItem').map(function() {
-			$(this).children('input').map(function() {
-				m = $(this).attr('name').match(/[0-9]+/);
-				if (parseInt(m[0]) > id) {
-					id = parseInt(m[0]);
-				}
-			});
+		$('#enclosureItems').find('.enclosureItem input').each(function() {
+			var m = $(this).attr('name').match(/[0-9]+/);
+			if (parseInt(m[0]) > id) {
+				id = parseInt(m[0]);
+			}
 		});
 
 		id += 1;
 
-		$('#enclosureItems').append('<div class="enclosureItem"><input size="60" type="text" value="" name="EnclosureItems[enclosure'+id+']"><a href="#" class="removeEnclosure">Remove</a></div>');
+		var html = [
+			'<div class="field-row row collapse enclosureItem">',
+			'		<div class="large-8 column">',
+			'			<input type="text" value="" name="EnclosureItems[enclosure'+id+']">',
+			'		</div>',
+			'		<div class="large-4 column end">',
+			'			<div class="postfix align"><a href="#" class="field-info removeEnclosure">Remove</a></div>',
+			'		</div>',
+			'	</div>'
+		].join('');
+
+		$('#enclosureItems').append(html).show();
 		$('input[name="EnclosureItems[enclosure'+id+']"]').select().focus();
 	});
 
 	$('a.removeEnclosure').die('click').live('click',function(e) {
-		$(this).parent().remove();
+		$(this).closest('.enclosureItem').remove();
+		if (!$('#enclosureItems').children().length) {
+			$('#enclosureItems').hide();
+		}
 		e.preventDefault();
 	});
 
