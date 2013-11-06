@@ -1,4 +1,3 @@
-<?php /* DEPRECATED */ ?>
 <?php
 /**
  * OpenEyes
@@ -19,8 +18,8 @@
  */
 ?>
 
-<div id="correspondence_out"<?php if ($element->draft) {?> class="draft"<?php }?>>
-	<div class="letter_header">
+<div id="correspondence_out" class="correspondence-letter<?php if ($element->draft) {?> draft<?php }?>">
+	<header>
 		<?php $this->renderPartial("letter_start", array(
 			'site' => $element->site,
 			'toAddress' => CHtml::encode($element->address),
@@ -30,7 +29,7 @@
 			'directLine' => $element->direct_line,
 			'faxNumber' => $element->fax,
 		))?>
-	</div>
+	</header>
 
 	<?php $this->renderPartial("reply_address", array(
 			'site' => $element->site,
