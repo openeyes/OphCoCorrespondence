@@ -22,11 +22,11 @@
 }
 /* line 4, ../sass/components/_event.scss */
 .event.ophcocorrespondence .event-content {
-  background-image: url('../img/new/watermark.png?1382511137');
+  background-image: url('../img/watermark.png?1383822439');
 }
 /* line 7, ../sass/components/_event.scss */
 .event.ophcocorrespondence .event-title {
-  background-image: url('../img/new/medium.png?1382511137');
+  background-image: url('../img/medium.png?1383822439');
 }
 
 /* line 1, ../sass/components/_letter.scss */
@@ -43,7 +43,7 @@
 }
 /* line 9, ../sass/components/_letter.scss */
 .correspondence-letter.draft {
-  background: white url('../img/new/bg_draft.png?1382511137') center top no-repeat;
+  background: white url('../img/bg_draft.png?1383822439') center top no-repeat;
 }
 /* line 12, ../sass/components/_letter.scss */
 .correspondence-letter .accessible {
