@@ -6,7 +6,7 @@ module.exports = function(grunt) {
 				cssDir: 'assets/css',
 				imagesDir: 'assets/img',
 				generatedImagesDir: 'assets/img/sprites',
-				importPath: '../../../sass/new',
+				importPath: '../../../sass',
 				outputStyle: 'expanded',
 				relativeAssets: true,
 				httpPath: '',
