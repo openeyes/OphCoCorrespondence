@@ -2,7 +2,54 @@
 
 class m130913_000002_consolidation_for_ophcocorrespondence extends OEMigration
 {
+
 	public function up()
+	{
+		if (!$this->consolidate(
+			array(
+				"m120510_102418_ophcocorrespondence_consolidated",
+				"m120515_085148_add_locked_field_to_letter_element",
+				"m120515_122109_store_site_id_with_letter",
+				"m120515_134047_store_previously_edited_letters",
+				"m120613_090046_letter_macro_should_have_a_site_id_column",
+				"m120613_090658_letter_string_site_id_field",
+				"m120625_121556_add_missing_site_id_foreign_key",
+				"m120625_122414_add_missing_site_id_foreign_key",
+				"m120821_092310_firm_site_secretary_table",
+				"m120828_140031_enable_macro_cc_to_gp",
+				"m120920_071943_add_direct_line_number_to_correspondence_element",
+				"m121025_104309_findings_letter_string_group",
+				"m121105_095011_add_findings_options_for_history_and_adnexal_comorbidity",
+				"m121108_132537_letter_enc_list",
+				"m121128_103043_firm_secretary_fax_numbers",
+				"m121128_110606_add_fax_field_to_letter_element",
+				"m121129_145842_clinic_date",
+				"m130423_135641_print_all_flag",
+				"m130531_134251_mark_as_support_service_event_type",
+				"m130603_103105_dr_function_setup"
+			))
+		) {
+			$this->createTables();
+		}
+	}
+
+	public function down()
+	{
+		echo "You cannot migrate down past a consolidation migration\n";
+		return false;
+	}
+
+	public function safeUp()
+	{
+		$this->up();
+	}
+
+	public function safeDown()
+	{
+		$this->down();
+	}
+
+	protected function createTables()
 	{
 		//disable foreign keys check
 		$this->execute("SET foreign_key_checks = 0");
@@ -17,15 +64,14 @@ class m130913_000002_consolidation_for_ophcocorrespondence extends OEMigration
 
 		$this->insertOEElementType($element_types, $event_type_id);
 
-
 		$this->execute("CREATE TABLE `et_ophcocorrespondence_firm_letter_macro` (
 			  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 			  `firm_id` int(10) unsigned NOT NULL,
-			  `name` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+			  `name` varchar(64) DEFAULT NULL,
 			  `recipient_patient` tinyint(1) unsigned NOT NULL DEFAULT '0',
 			  `recipient_doctor` tinyint(1) unsigned NOT NULL DEFAULT '0',
 			  `use_nickname` tinyint(1) unsigned NOT NULL DEFAULT '0',
-			  `body` text COLLATE utf8_bin,
+			  `body` text,
 			  `cc_patient` tinyint(1) unsigned NOT NULL DEFAULT '0',
 			  `display_order` tinyint(3) unsigned NOT NULL DEFAULT '1',
 			  `last_modified_user_id` int(10) unsigned NOT NULL DEFAULT '1',
@@ -48,15 +94,15 @@ class m130913_000002_consolidation_for_ophcocorrespondence extends OEMigration
 			  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 			  `letter_string_group_id` int(10) unsigned NOT NULL,
 			  `firm_id` int(10) unsigned NOT NULL,
-			  `name` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-			  `body` text COLLATE utf8_bin,
+			  `name` varchar(64) DEFAULT NULL,
+			  `body` text,
 			  `display_order` tinyint(3) unsigned NOT NULL DEFAULT '1',
 			  `last_modified_user_id` int(10) unsigned NOT NULL DEFAULT '1',
 			  `last_modified_date` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
 			  `created_user_id` int(10) unsigned NOT NULL DEFAULT '1',
 			  `created_date` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
-			  `event_type` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-			  `element_type` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+			  `event_type` varchar(64) DEFAULT NULL,
+			  `element_type` varchar(64) DEFAULT NULL,
 			  PRIMARY KEY (`id`),
 			  KEY `et_ophcocorrespondence_fls_letter_string_group_id_fk` (`letter_string_group_id`),
 			  KEY `et_ophcocorrespondence_fls_firm_id_fk` (`firm_id`),
@@ -73,12 +119,12 @@ class m130913_000002_consolidation_for_ophcocorrespondence extends OEMigration
 			  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 			  `firm_id` int(10) unsigned NOT NULL,
 			  `site_id` int(10) unsigned DEFAULT NULL,
-			  `direct_line` varchar(64) COLLATE utf8_bin NOT NULL,
+			  `direct_line` varchar(64) NOT NULL,
 			  `last_modified_user_id` int(10) unsigned NOT NULL DEFAULT '1',
 			  `last_modified_date` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
 			  `created_user_id` int(10) unsigned NOT NULL DEFAULT '1',
 			  `created_date` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
-			  `fax` varchar(64) COLLATE utf8_bin NOT NULL,
+			  `fax` varchar(64) NOT NULL,
 			  PRIMARY KEY (`id`),
 			  KEY `et_ophcocorrespondence_fss_firm_id_fk` (`firm_id`),
 			  KEY `et_ophcocorrespondence_fss_site_id_fk` (`site_id`),
@@ -96,12 +142,12 @@ class m130913_000002_consolidation_for_ophcocorrespondence extends OEMigration
 			  `event_id` int(10) unsigned NOT NULL,
 			  `use_nickname` tinyint(1) unsigned NOT NULL DEFAULT '0',
 			  `date` datetime NOT NULL,
-			  `address` varchar(1024) COLLATE utf8_bin DEFAULT NULL,
-			  `introduction` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-			  `re` varchar(1024) COLLATE utf8_bin DEFAULT NULL,
-			  `body` text COLLATE utf8_bin,
-			  `footer` varchar(2048) COLLATE utf8_bin DEFAULT NULL,
-			  `cc` text COLLATE utf8_bin,
+			  `address` varchar(1024) DEFAULT NULL,
+			  `introduction` varchar(255) DEFAULT NULL,
+			  `re` varchar(1024) DEFAULT NULL,
+			  `body` text,
+			  `footer` varchar(2048) DEFAULT NULL,
+			  `cc` text,
 			  `draft` tinyint(1) unsigned NOT NULL DEFAULT '0',
 			  `last_modified_user_id` int(10) unsigned NOT NULL DEFAULT '1',
 			  `last_modified_date` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
@@ -110,8 +156,8 @@ class m130913_000002_consolidation_for_ophcocorrespondence extends OEMigration
 			  `print` tinyint(1) unsigned NOT NULL DEFAULT '0',
 			  `locked` tinyint(1) unsigned NOT NULL DEFAULT '0',
 			  `site_id` int(10) NOT NULL,
-			  `direct_line` varchar(32) COLLATE utf8_bin DEFAULT NULL,
-			  `fax` varchar(64) COLLATE utf8_bin NOT NULL,
+			  `direct_line` varchar(32) DEFAULT NULL,
+			  `fax` varchar(64) NOT NULL,
 			  `clinic_date` date DEFAULT NULL,
 			  `print_all` tinyint(1) unsigned NOT NULL DEFAULT '0',
 			  PRIMARY KEY (`id`),
@@ -126,11 +172,11 @@ class m130913_000002_consolidation_for_ophcocorrespondence extends OEMigration
 
 		$this->execute("CREATE TABLE `et_ophcocorrespondence_letter_macro` (
 			  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-			  `name` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+			  `name` varchar(64) DEFAULT NULL,
 			  `recipient_patient` tinyint(1) unsigned NOT NULL DEFAULT '0',
 			  `recipient_doctor` tinyint(1) unsigned NOT NULL DEFAULT '0',
 			  `use_nickname` tinyint(1) unsigned NOT NULL DEFAULT '0',
-			  `body` text COLLATE utf8_bin,
+			  `body` text,
 			  `cc_patient` tinyint(1) unsigned NOT NULL DEFAULT '0',
 			  `display_order` tinyint(3) unsigned NOT NULL DEFAULT '1',
 			  `last_modified_user_id` int(10) unsigned NOT NULL DEFAULT '1',
@@ -155,12 +201,12 @@ class m130913_000002_consolidation_for_ophcocorrespondence extends OEMigration
 			  `letter_id` int(10) unsigned NOT NULL,
 			  `use_nickname` tinyint(1) unsigned NOT NULL DEFAULT '0',
 			  `date` datetime NOT NULL,
-			  `address` varchar(1024) COLLATE utf8_bin DEFAULT NULL,
-			  `introduction` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-			  `re` varchar(1024) COLLATE utf8_bin DEFAULT NULL,
-			  `body` text COLLATE utf8_bin,
-			  `footer` varchar(2048) COLLATE utf8_bin DEFAULT NULL,
-			  `cc` text COLLATE utf8_bin,
+			  `address` varchar(1024) DEFAULT NULL,
+			  `introduction` varchar(255) DEFAULT NULL,
+			  `re` varchar(1024) DEFAULT NULL,
+			  `body` text,
+			  `footer` varchar(2048) DEFAULT NULL,
+			  `cc` text,
 			  `draft` tinyint(1) unsigned NOT NULL DEFAULT '0',
 			  `last_modified_user_id` int(10) unsigned NOT NULL DEFAULT '1',
 			  `last_modified_date` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
@@ -184,16 +230,16 @@ class m130913_000002_consolidation_for_ophcocorrespondence extends OEMigration
 		$this->execute("CREATE TABLE `et_ophcocorrespondence_letter_string` (
 			  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 			  `letter_string_group_id` int(10) unsigned NOT NULL,
-			  `name` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-			  `body` text COLLATE utf8_bin,
+			  `name` varchar(64) DEFAULT NULL,
+			  `body` text,
 			  `display_order` tinyint(3) unsigned NOT NULL DEFAULT '1',
 			  `last_modified_user_id` int(10) unsigned NOT NULL DEFAULT '1',
 			  `last_modified_date` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
 			  `created_user_id` int(10) unsigned NOT NULL DEFAULT '1',
 			  `created_date` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
 			  `site_id` int(10) unsigned NOT NULL,
-			  `event_type` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-			  `element_type` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+			  `event_type` varchar(64) DEFAULT NULL,
+			  `element_type` varchar(64) DEFAULT NULL,
 			  PRIMARY KEY (`id`),
 			  KEY `et_ophcocorrespondence_ls2_created_user_id_fk` (`created_user_id`),
 			  KEY `et_ophcocorrespondence_ls2_last_modified_user_id_fk` (`last_modified_user_id`),
@@ -208,7 +254,7 @@ class m130913_000002_consolidation_for_ophcocorrespondence extends OEMigration
 
 		$this->execute("CREATE TABLE `et_ophcocorrespondence_letter_string_group` (
 			  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-			  `name` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+			  `name` varchar(64) DEFAULT NULL,
 			  `display_order` tinyint(3) unsigned NOT NULL DEFAULT '1',
 			  `last_modified_user_id` int(10) unsigned NOT NULL DEFAULT '1',
 			  `last_modified_date` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
@@ -225,11 +271,11 @@ class m130913_000002_consolidation_for_ophcocorrespondence extends OEMigration
 		$this->execute("CREATE TABLE `et_ophcocorrespondence_subspecialty_letter_macro` (
 			  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 			  `subspecialty_id` int(10) unsigned NOT NULL,
-			  `name` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+			  `name` varchar(64) DEFAULT NULL,
 			  `recipient_patient` tinyint(1) unsigned NOT NULL DEFAULT '0',
 			  `recipient_doctor` tinyint(1) unsigned NOT NULL DEFAULT '0',
 			  `use_nickname` tinyint(1) unsigned NOT NULL DEFAULT '0',
-			  `body` text COLLATE utf8_bin,
+			  `body` text,
 			  `cc_patient` tinyint(1) unsigned NOT NULL DEFAULT '0',
 			  `display_order` tinyint(3) unsigned NOT NULL DEFAULT '1',
 			  `last_modified_user_id` int(10) unsigned NOT NULL DEFAULT '1',
@@ -252,15 +298,15 @@ class m130913_000002_consolidation_for_ophcocorrespondence extends OEMigration
 			  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 			  `letter_string_group_id` int(10) unsigned NOT NULL,
 			  `subspecialty_id` int(10) unsigned NOT NULL,
-			  `name` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-			  `body` text COLLATE utf8_bin,
+			  `name` varchar(64) DEFAULT NULL,
+			  `body` text,
 			  `display_order` tinyint(3) unsigned NOT NULL DEFAULT '1',
 			  `last_modified_user_id` int(10) unsigned NOT NULL DEFAULT '1',
 			  `last_modified_date` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
 			  `created_user_id` int(10) unsigned NOT NULL DEFAULT '1',
 			  `created_date` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
-			  `event_type` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-			  `element_type` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+			  `event_type` varchar(64) DEFAULT NULL,
+			  `element_type` varchar(64) DEFAULT NULL,
 			  PRIMARY KEY (`id`),
 			  KEY `et_ophcocorrespondence_sls_created_user_id_fk` (`created_user_id`),
 			  KEY `et_ophcocorrespondence_sls_last_modified_user_id_fk` (`last_modified_user_id`),
@@ -276,7 +322,7 @@ class m130913_000002_consolidation_for_ophcocorrespondence extends OEMigration
 		$this->execute("CREATE TABLE `ophcocorrespondence_letter_enclosure` (
 			  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 			  `element_letter_id` int(10) unsigned NOT NULL,
-			  `content` varchar(128) COLLATE utf8_bin DEFAULT NULL,
+			  `content` varchar(128) DEFAULT NULL,
 			  `display_order` int(10) unsigned NOT NULL DEFAULT '0',
 			  `last_modified_user_id` int(10) unsigned NOT NULL DEFAULT '1',
 			  `last_modified_date` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
@@ -300,40 +346,4 @@ class m130913_000002_consolidation_for_ophcocorrespondence extends OEMigration
 
 	}
 
-	public function down()
-	{
-		$this->execute("SET foreign_key_checks = 0");
-
-		$tables = array(
-			'et_ophcocorrespondence_firm_letter_macro',
-			'et_ophcocorrespondence_firm_letter_string',
-			'et_ophcocorrespondence_firm_site_secretary',
-			'et_ophcocorrespondence_letter',
-			'et_ophcocorrespondence_letter_macro',
-			'et_ophcocorrespondence_letter_old',
-			'et_ophcocorrespondence_letter_string',
-			'et_ophcocorrespondence_letter_string_group',
-			'et_ophcocorrespondence_subspecialty_letter_macro',
-			'et_ophcocorrespondence_subspecialty_letter_string',
-			'ophcocorrespondence_letter_enclosure'
-		);
-
-		foreach ($tables as $table) {
-			$this->dropTable($table);
-		}
-
-		$event_type_id = $this->dbConnection->createCommand()
-			->select('id')
-			->from('event_type')
-			->where('class_name=:class_name', array(':class_name' => 'OphCoCorrespondence'))
-			->queryScalar();
-
-		// Delete the element types
-		$this->delete('element_type', 'event_type_id = ' . $event_type_id);
-
-		// Delete the event type
-		$this->delete('event_type', 'id = ' . $event_type_id);
-
-		$this->execute("SET foreign_key_checks = 1");
-	}
 }
