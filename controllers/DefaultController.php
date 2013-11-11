@@ -215,30 +215,25 @@ class DefaultController extends BaseEventTypeController
 			$cc['targets'][] = '<input type="hidden" name="CC_Targets[]" value="Gp'.$patient->gp_id.'" />';
 		}
 
-		if ($macro->cc_drss && $patient->commissioningbodies) {
-			$drss = null;
-			foreach($patient->commissioningbodies as $commissioningbody) {
+		if ($macro->cc_drss) {
+			$commissioningbodytype = CommissioningBodyType::model()->find('shortname = ?', array('CCG'));
+			if($commissioningbodytype && $commissioningbody = $patient->getCommissioningBodyOfType($commissioningbodytype)) {
+				$drss = null;
 				foreach($commissioningbody->services as $service) {
 					if($service->type->shortname == 'DRSS') {
-						$drss = $service;
+						$cc['text'][] = $service->getLetterAddress(array(
+								'include_name' => true,
+								'include_label' => true,
+								'delimiter' => ", ",
+								'include_prefix' => true,
+							));
+						$cc['targets'][] = '<input type="hidden" name="CC_Targets[]" value="CommissioningBodyService'.$service->id.'" />';
 						break;
 					}
 				}
-				if($drss) {
-					break;
-				}
-			}
-			if($drss) {
-				$cc['text'][] = $drss->getLetterAddress(array(
-						'include_name' => true,
-						'include_label' => true,
-						'delimiter' => ", ",
-						'include_prefix' => true,
-					));
-				$cc['targets'][] = '<input type="hidden" name="CC_Targets[]" value="CommissioningBodyService'.$drss->id.'" />';
-
 			}
 		}
+
 		$data['textappend_ElementLetter_cc'] = implode("\n",$cc['text']);
 		$data['elementappend_cc_targets'] = implode("\n",$cc['targets']);
 		echo json_encode($data);
