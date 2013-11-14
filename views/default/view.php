@@ -29,7 +29,6 @@
 
 	<input type="hidden" id="moduleCSSPath" value="<?php echo $this->assetPath?>css" />
 
-	<?php $this->renderDefaultElements($this->action->id); ?>
-	<?php $this->renderOptionalElements($this->action->id); ?>
+	<?php $this->renderOpenElements($this->action->id); ?>
 
 <?php $this->endContent() ;?>

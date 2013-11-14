@@ -24,7 +24,9 @@ class DefaultController extends BaseEventTypeController
 		return array('print', 'doPrint', 'markPrinted');
 	}
 
-	//loads direct line phone numbers to trigger on drop down select
+	/**
+	 * Adds direct line phone numbers to jsvars to be used in dropdown select
+	 */
 	public function loadDirectLines()
 	{
 		$sfs = FirmSiteSecretary::model()->findAll('firm_id=?',array(Yii::app()->session['selected_firm_id']));
@@ -36,39 +38,33 @@ class DefaultController extends BaseEventTypeController
 		$this->jsVars['correspondence_directlines']=$vars;
 	}
 
-	public function actionCreate()
+	protected function initAction($action)
 	{
-		if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
-			throw new Exception("Unknown patient: ".@$_GET['patient_id']);
+		parent::initAction($action);
+
+		if (in_array($action, array("create", "update"))) {
+			$this->jsVars['OE_gp_id'] = $this->patient->gp_id;
+			$this->jsVars['OE_practice_id'] = $this->patient->practice_id;
+
+			$this->loadDirectLines();
 		}
-		$this->jsVars['OE_gp_id'] = $patient->gp_id;
-		$this->jsVars['OE_practice_id'] = $patient->practice_id;
-
-		$this->loadDirectLines();
-
-		parent::actionCreate();
 	}
 
-	public function actionUpdate($id)
+	/**
+	 *
+	 */
+	public function initActionView()
 	{
-		if (!$event = Event::model()->findByPk($id)) {
-			throw new Exception("Unknown event: " . $id);
-		}
-		$this->jsVars['OE_gp_id'] = $event->episode->patient->gp_id;
-		$this->jsVars['OE_practice_id'] = $event->episode->patient->practice_id;
-
-		$this->loadDirectLines();
-
-		parent::actionUpdate($id);
+		parent::initActionView();
+		$this->jsVars['correspondence_markprinted_url'] = Yii::app()->createUrl('OphCoCorrespondence/Default/markPrinted/'.$this->event->id);
+		$this->jsVars['correspondence_print_url'] = Yii::app()->createUrl('OphCoCorrespondence/Default/print/'.$this->event->id);
 	}
 
-	public function actionView($id)
-	{
-		$this->jsVars['correspondence_markprinted_url'] = Yii::app()->createUrl('OphCoCorrespondence/Default/markPrinted/'.$id);
-		$this->jsVars['correspondence_print_url'] = Yii::app()->createUrl('OphCoCorrespondence/Default/print/'.$id);
-		parent::actionView($id);
-	}
-
+	/**
+	 * Ajax action to get the address for a contact
+	 *
+	 * @throws Exception
+	 */
 	public function actionGetAddress()
 	{
 		if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
@@ -113,6 +109,11 @@ class DefaultController extends BaseEventTypeController
 		echo json_encode($data);
 	}
 
+	/**
+	 * Ajax action to get macro data for populating the letter elements
+	 *
+	 * @throws Exception
+	 */
 	public function actionGetMacroData()
 	{
 		if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
@@ -238,6 +239,11 @@ class DefaultController extends BaseEventTypeController
 		echo json_encode($data);
 	}
 
+	/**
+	 * Ajax action to process a selected string request
+	 *
+	 * @throws Exception
+	 */
 	public function actionGetString()
 	{
 		if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
@@ -272,6 +278,11 @@ class DefaultController extends BaseEventTypeController
 		echo $string->body;
 	}
 
+	/**
+	 * Ajax action to get from text for letter
+	 *
+	 * @throws Exception
+	 */
 	public function actionGetFrom()
 	{
 		if (!$user = User::model()->findByPk(@$_GET['user_id'])) {
@@ -288,6 +299,11 @@ class DefaultController extends BaseEventTypeController
 		$ssa = $firm->serviceSubspecialtyAssignment;
 	}
 
+	/**
+	 * Ajax action to get cc contact details
+	 *
+	 * @throws Exception
+	 */
 	public function actionGetCc()
 	{
 		if (!$patient = Patient::model()->findByPk(@$_GET['patient_id'])) {
@@ -325,6 +341,11 @@ class DefaultController extends BaseEventTypeController
 		echo $address ? $address : 'NO ADDRESS';
 	}
 
+	/**
+	 * Ajax action to expand shortcodes in letter string for a patient
+	 *
+	 * @throws Exception
+	 */
 	public function actionExpandStrings()
 	{
 		if (!$patient = Patient::model()->findByPk(@$_POST['patient_id'])) {
@@ -339,6 +360,10 @@ class DefaultController extends BaseEventTypeController
 		}
 	}
 
+	/**
+	 * @param $id
+	 * @throws Exception
+	 */
 	public function actionMarkPrinted($id)
 	{
 		if ($letter = ElementLetter::model()->find('event_id=?',array($id))) {
@@ -350,6 +375,13 @@ class DefaultController extends BaseEventTypeController
 		}
 	}
 
+	/**
+	 * Always print PDF for letter
+	 *
+	 * @param int $id
+	 * @param BaseEventTypeElement[] $elements
+	 * @param string $template
+	 */
 	protected function printHTML($id, $elements, $template='print')
 	{
 		$this->printPDF($id, $elements);
@@ -427,6 +459,9 @@ class DefaultController extends BaseEventTypeController
 		$pdf_print->output();
 	}
 
+	/**
+	 * Ajax action to get user data list
+	 */
 	public function actionUsers()
 	{
 		$users = array();
@@ -474,6 +509,14 @@ class DefaultController extends BaseEventTypeController
 		echo json_encode($users);
 	}
 
+	/**
+	 * Use the examination API to retrieve findings for the patient and element type
+	 *
+	 * @param $patient_id
+	 * @param $element_type_id
+	 * @return mixed
+	 * @throws Exception
+	 */
 	public function process_examination_findings($patient_id, $element_type_id)
 	{
 		if ($api = Yii::app()->moduleAPI->get('OphCiExamination')) {
@@ -493,6 +536,12 @@ class DefaultController extends BaseEventTypeController
 		}
 	}
 
+	/**
+	 * Ajax action to mark an element as printed
+	 *
+	 * @param $id
+	 * @throws Exception
+	 */
 	public function actionDoPrint($id)
 	{
 		if (!$letter = ElementLetter::model()->find('event_id=?',array($id))) {
