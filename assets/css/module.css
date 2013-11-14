@@ -16,88 +16,20 @@
  * @copyright Copyright (c) 2011-2013, OpenEyes Foundation
  * @license http://www.gnu.org/licenses/gpl-3.0.html The GNU General Public License V3.0
  */
-/**
- * OpenEyes
- *
- * (C) Moorfields Eye Hospital NHS Foundation Trust, 2008-2011
- * (C) OpenEyes Foundation, 2011-2013
- * This file is part of OpenEyes.
- * OpenEyes is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * OpenEyes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License along with OpenEyes in a file titled COPYING. If not, see <http://www.gnu.org/licenses/>.
- *
- * @package OpenEyes
- * @link http://www.openeyes.org.uk
- * @author OpenEyes <info@openeyes.org.uk>
- * @copyright Copyright (c) 2008-2011, Moorfields Eye Hospital NHS Foundation Trust
- * @copyright Copyright (c) 2011-2013, OpenEyes Foundation
- * @license http://www.gnu.org/licenses/gpl-3.0.html The GNU General Public License V3.0
- */
-/**
- * OpenEyes
- *
- * (C) Moorfields Eye Hospital NHS Foundation Trust, 2008-2011
- * (C) OpenEyes Foundation, 2011-2013
- * This file is part of OpenEyes.
- * OpenEyes is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * OpenEyes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License along with OpenEyes in a file titled COPYING. If not, see <http://www.gnu.org/licenses/>.
- *
- * @package OpenEyes
- * @link http://www.openeyes.org.uk
- * @author OpenEyes <info@openeyes.org.uk>
- * @copyright Copyright (c) 2008-2011, Moorfields Eye Hospital NHS Foundation Trust
- * @copyright Copyright (c) 2011-2013, OpenEyes Foundation
- * @license http://www.gnu.org/licenses/gpl-3.0.html The GNU General Public License V3.0
- */
-/**
- * OpenEyes
- *
- * (C) Moorfields Eye Hospital NHS Foundation Trust, 2008-2011
- * (C) OpenEyes Foundation, 2011-2013
- * This file is part of OpenEyes.
- * OpenEyes is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * OpenEyes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License along with OpenEyes in a file titled COPYING. If not, see <http://www.gnu.org/licenses/>.
- *
- * @package OpenEyes
- * @link http://www.openeyes.org.uk
- * @author OpenEyes <info@openeyes.org.uk>
- * @copyright Copyright (c) 2008-2011, Moorfields Eye Hospital NHS Foundation Trust
- * @copyright Copyright (c) 2011-2013, OpenEyes Foundation
- * @license http://www.gnu.org/licenses/gpl-3.0.html The GNU General Public License V3.0
- */
-/**
- * OpenEyes
- *
- * (C) Moorfields Eye Hospital NHS Foundation Trust, 2008-2011
- * (C) OpenEyes Foundation, 2011-2013
- * This file is part of OpenEyes.
- * OpenEyes is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * OpenEyes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License along with OpenEyes in a file titled COPYING. If not, see <http://www.gnu.org/licenses/>.
- *
- * @package OpenEyes
- * @link http://www.openeyes.org.uk
- * @author OpenEyes <info@openeyes.org.uk>
- * @copyright Copyright (c) 2008-2011, Moorfields Eye Hospital NHS Foundation Trust
- * @copyright Copyright (c) 2011-2013, OpenEyes Foundation
- * @license http://www.gnu.org/licenses/gpl-3.0.html The GNU General Public License V3.0
- */
-/* line 1, ../sass/components/_event.scss */
+/* line 17, ../sass/components/_event.scss */
 .event {
   border-color: #86cdff;
 }
-/* line 3, ../sass/components/_event.scss */
+/* line 19, ../sass/components/_event.scss */
 .event .event-content {
   background-image: url('../img/watermark.png?1384433912');
 }
-/* line 6, ../sass/components/_event.scss */
+/* line 22, ../sass/components/_event.scss */
 .event .event-title {
   background-image: url('../img/medium.png?1383822439');
 }
 
-/* line 1, ../sass/components/_letter.scss */
+/* line 17, ../sass/components/_letter.scss */
 .correspondence-letter {
   -webkit-box-shadow: 4px 4px 4px 0 #cccccc;
   -moz-box-shadow: 4px 4px 4px 0 #cccccc;
@@ -109,58 +41,58 @@
   max-width: 740px;
   margin: 0 10px;
 }
-/* line 9, ../sass/components/_letter.scss */
+/* line 25, ../sass/components/_letter.scss */
 .correspondence-letter.draft {
   background: white url('../img/bg_draft.png?1383822439') center top no-repeat;
 }
-/* line 12, ../sass/components/_letter.scss */
+/* line 28, ../sass/components/_letter.scss */
 .correspondence-letter .accessible {
   font-size: 16pt;
 }
-/* line 15, ../sass/components/_letter.scss */
+/* line 31, ../sass/components/_letter.scss */
 .correspondence-letter pre {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
 }
-/* line 20, ../sass/components/_letter.scss */
+/* line 36, ../sass/components/_letter.scss */
 .correspondence-letter .banner {
   background: #fff;
   padding-bottom: 25px;
 }
-/* line 23, ../sass/components/_letter.scss */
+/* line 39, ../sass/components/_letter.scss */
 .correspondence-letter .banner .seal {
   float: left;
 }
-/* line 26, ../sass/components/_letter.scss */
+/* line 42, ../sass/components/_letter.scss */
 .correspondence-letter .banner .logo {
   float: right;
 }
-/* line 29, ../sass/components/_letter.scss */
+/* line 45, ../sass/components/_letter.scss */
 .correspondence-letter .banner .seal img {
   width: 87px;
 }
-/* line 32, ../sass/components/_letter.scss */
+/* line 48, ../sass/components/_letter.scss */
 .correspondence-letter .banner .logo img {
   width: 350px;
 }
-/* line 36, ../sass/components/_letter.scss */
+/* line 52, ../sass/components/_letter.scss */
 .correspondence-letter .to-address {
   display: inline-block;
   padding-left: 0;
   margin-top: 4em;
 }
-/* line 41, ../sass/components/_letter.scss */
+/* line 57, ../sass/components/_letter.scss */
 .correspondence-letter .from-address {
   float: right;
   margin-bottom: 18px;
   text-align: right;
 }
-/* line 46, ../sass/components/_letter.scss */
+/* line 62, ../sass/components/_letter.scss */
 .correspondence-letter .date, .correspondence-letter .clinic-date {
   padding-top: 15px;
 }
-/* line 49, ../sass/components/_letter.scss */
+/* line 65, ../sass/components/_letter.scss */
 .correspondence-letter .big {
   font-size: 14pt;
 }
