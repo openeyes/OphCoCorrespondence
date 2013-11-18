@@ -307,22 +307,6 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#from').change(function() {
-		var	user_id = $(this).children('option:selected').val();
-		var obj = $(this);
-
-		if (user_id != '') {
-			$.ajax({
-				'type': 'GET',
-				'url': baseUrl+'/OphCoCorrespondence/Default/getFrom?user_id='+user_id,
-				'success': function(text) {
-					$('#ElementLetter_footer').html(text);
-					obj.val('');
-				}
-			});
-		}
-	});
-
 	$('#cc').change(function() {
 		var contact_id = $(this).children('option:selected').val();
 		var obj = $(this);

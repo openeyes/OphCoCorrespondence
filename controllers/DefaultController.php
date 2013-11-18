@@ -19,10 +19,16 @@
 
 class DefaultController extends BaseEventTypeController
 {
-	public function printActions()
-	{
-		return array('print', 'doPrint', 'markPrinted');
-	}
+	static protected $action_types = array(
+		'getAddress' => self::ACTION_TYPE_FORM,
+		'getMacroData' => self::ACTION_TYPE_FORM,
+		'getString' => self::ACTION_TYPE_FORM,
+		'getCc' => self::ACTION_TYPE_FORM,
+		'expandStrings' => self::ACTION_TYPE_FORM,
+		'users' => self::ACTION_TYPE_FORM,
+		'doPrint' => self::ACTION_TYPE_PRINT,
+		'markPrinted' => self::ACTION_TYPE_PRINT,
+	);
 
 	/**
 	 * Adds direct line phone numbers to jsvars to be used in dropdown select
@@ -282,27 +288,6 @@ class DefaultController extends BaseEventTypeController
 		$string->substitute($patient);
 
 		echo $string->body;
-	}
-
-	/**
-	 * Ajax action to get from text for letter
-	 *
-	 * @throws Exception
-	 */
-	public function actionGetFrom()
-	{
-		if (!$user = User::model()->findByPk(@$_GET['user_id'])) {
-			throw new Exception('User not found: '.@$_GET['user_id']);
-		}
-
-		if (!($contact = $user->contact)) {
-			throw new Exception('User has no contact: '.@$_GET['user_id']);
-		}
-
-		echo "Yours sincerely\n\n\n\n\n".trim($contact->title.' '.$contact->first_name.' '.$contact->last_name.' '.$contact->qualifications)."\n".$user->role;
-
-		$firm = Firm::model()->findByPk(Yii::app()->session['selected_firm_id']);
-		$ssa = $firm->serviceSubspecialtyAssignment;
 	}
 
 	/**
