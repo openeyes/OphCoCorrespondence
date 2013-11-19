@@ -38,6 +38,11 @@ class DefaultController extends BaseEventTypeController
 		$this->jsVars['correspondence_directlines']=$vars;
 	}
 
+	/**
+	 * Set up some key js vars
+	 *
+	 * @param string $action
+	 */
 	protected function initAction($action)
 	{
 		parent::initAction($action);
@@ -51,6 +56,7 @@ class DefaultController extends BaseEventTypeController
 	}
 
 	/**
+	 * Set up some js vars
 	 *
 	 */
 	public function initActionView()
@@ -361,6 +367,8 @@ class DefaultController extends BaseEventTypeController
 	}
 
 	/**
+	 * Ajax action to mark a letter as printed
+	 *
 	 * @param $id
 	 * @throws Exception
 	 */
@@ -387,6 +395,17 @@ class DefaultController extends BaseEventTypeController
 		$this->printPDF($id, $elements);
 	}
 
+	/**
+	 * PDF print method
+	 *
+	 * @TODO: integrate with controller stateful behaviour
+	 * 
+	 * @param int $id
+	 * @param BaseEventTypeElement[] $elements
+	 * @param string $template
+	 * @param array $params
+	 * @throws Exception
+	 */
 	protected function printPDF($id, $elements, $template='print', $params=array())
 	{
 		// Remove any existing css
