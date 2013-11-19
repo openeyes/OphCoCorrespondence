@@ -78,10 +78,7 @@
 				<?php echo $form->textArea($element, 'introduction', array('rows' => 2, 'label' => false, 'nowrapper' => true), false, array('class' => 'address'))?>
 			</div>
 			<div class="large-3 column">
-				<label>
-					<?php echo $form->checkBox($element, 'use_nickname', array('nowrapper' => true))?>
-					<?php echo $element->getAttributeLabel('use_nickname')?>
-				</label>
+				<?php echo $form->checkBox($element, 'use_nickname', array('nowrapper' => true))?>
 			</div>
 		</div>
 
