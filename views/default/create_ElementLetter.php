@@ -35,8 +35,8 @@
 	<div class="element-fields">
 
 		<div class="row field-row">
-			<div class="large-<?php echo $layoutColumns['field'];?> column large-offset-<?php echo $layoutColumns['label'];?> end">
-				<?php echo $form->dropDownList($element, 'site_id', Site::model()->getLongListForCurrentInstitution(), array('nowrapper'=>true))?>
+			<div class="large-4 column large-offset-<?php echo $layoutColumns['label'];?> end">
+				<?php echo $form->dropDownList($element, 'site_id', Site::model()->getLongListForCurrentInstitution(), array('nowrapper'=>true),false,array('field'=>2))?>
 			</div>
 		</div>
 
