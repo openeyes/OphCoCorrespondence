@@ -152,9 +152,8 @@ class DefaultController extends BaseEventTypeController
 			}
 		}
 
-		if ($macro->recipient_doctor && $patient->gp) {
-			$data['sel_address_target'] = 'Gp'.$patient->gp_id;
-			$contact = $patient->gp;
+		if ($macro->recipient_doctor && $contact = ($patient->gp) ? $patient->gp : $patient->practice) {
+			$data['sel_address_target'] = get_class($contact).$contact->id;
 		}
 
 		if (isset($contact)) {
@@ -169,7 +168,7 @@ class DefaultController extends BaseEventTypeController
 				$data['text_ElementLetter_address'] = $address;
 			}
 			else {
-				$data['alert'] = "The GP does not have a valid address.";
+				$data['alert'] = "The contact does not have a valid address.";
 				$data['text_ElementLetter_address'] = '';
 			}
 
@@ -204,15 +203,15 @@ class DefaultController extends BaseEventTypeController
 			}
 		}
 
-		if ($macro->cc_doctor && $patient->gp && @$patient->practice->contact->address) {
-			$cc['text'][] = $patient->gp->getLetterAddress(array(
-				'patient' => $patient,
-				'include_name' => true,
-				'include_label' => true,
-				'delimiter' => ", ",
-				'include_prefix' => true,
-			));
-			$cc['targets'][] = '<input type="hidden" name="CC_Targets[]" value="Gp'.$patient->gp_id.'" />';
+		if ($macro->cc_doctor && $cc_contact = ($patient->gp) ? $patient->gp : $patient->practice) {
+			$cc['text'][] = $cc_contact->getLetterAddress(array(
+					'patient' => $patient,
+					'include_name' => true,
+					'include_label' => true,
+					'delimiter' => ", ",
+					'include_prefix' => true,
+				));
+			$cc['targets'][] = '<input type="hidden" name="CC_Targets[]" value="'.get_class($cc_contact).$cc_contact->id.'" />';
 		}
 
 		if ($macro->cc_drss) {
