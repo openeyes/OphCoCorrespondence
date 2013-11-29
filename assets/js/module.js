@@ -75,7 +75,7 @@ $(document).ready(function() {
 		if ($(this).children('option:selected').val() != '') {
 			if ($(this).children('option:selected').text().match(/NO ADDRESS/)) {
 
-				new OpenEyes.Dialog.Alert({
+				new OpenEyes.UI.Dialog.Alert({
 					content: "Sorry, this contact has no address so you can't send a letter to them."
 				}).open();
 
@@ -102,7 +102,7 @@ $(document).ready(function() {
 				'success': function(data) {
 					if (data['error'] == 'DECEASED') {
 
-						new OpenEyes.Dialog.Alert({
+						new OpenEyes.UI.Dialog.Alert({
 							content: "This patient is deceased and cannot be written to."
 						}).open();
 
@@ -130,7 +130,7 @@ $(document).ready(function() {
 							'url': baseUrl+'/OphCoCorrespondence/Default/getCc?patient_id='+OE_patient_id+'&contact='+val,
 							'success': function(text) {
 								if (text.match(/DECEASED/)) {
-									new OpenEyes.Dialog.Alert({
+									new OpenEyes.UI.Dialog.Alert({
 										content: "This patient is deceased and cannot be cc'd."
 									}).open();
 									target.val(selected_recipient);
@@ -201,7 +201,7 @@ $(document).ready(function() {
 											$('#cc_targets').append('<input type="hidden" name="CC_Targets[]" value="gp" />');
 										}
 									} else {
-										new OpenEyes.Dialog.Alert({
+										new OpenEyes.UI.Dialog.Alert({
 											content: "Warning: letters should be cc'd to the patient's GP, but the current patient's GP has no valid address."
 										}).open();
 									}
@@ -215,7 +215,7 @@ $(document).ready(function() {
 							'url': baseUrl+'/OphCoCorrespondence/Default/getCc?patient_id='+OE_patient_id+'&contact=Patient'+OE_patient_id,
 							'success': function(text) {
 								if (text.match(/DECEASED/)) {
-									new OpenEyes.Dialog.Alert({
+									new OpenEyes.UI.Dialog.Alert({
 										content: "The patient is deceased so cannot be cc'd."
 									}).open();
 									target.val(selected_recipient);
@@ -238,7 +238,7 @@ $(document).ready(function() {
 										$('#cc_targets').append('<input type="hidden" name="CC_Targets[]" value="patient" />');
 									}
 								} else {
-									new OpenEyes.Dialog.Alert({
+									new OpenEyes.UI.Dialog.Alert({
 										content: "Warning: letters to the GP should be cc'd to the patient's, but the patient has no valid address."
 									}).open();
 								}
@@ -263,7 +263,7 @@ $(document).ready(function() {
 				'url': baseUrl+'/OphCoCorrespondence/Default/getMacroData?patient_id='+OE_patient_id+'&macro_type='+m[1]+'&macro_id='+m[2]+'&nickname='+nickname,
 				'success': function(data) {
 					if (data['error'] == 'DECEASED') {
-						new OpenEyes.Dialog.Alert({
+						new OpenEyes.UI.Dialog.Alert({
 							content: "The patient is deceased so this macro cannot be used."
 						}).open();
 						obj.val('');
@@ -370,7 +370,7 @@ $(document).ready(function() {
 				'url': baseUrl+'/OphCoCorrespondence/Default/getCc?patient_id='+OE_patient_id+'&contact='+contact_id,
 				'success': function(text) {
 					if (text.match(/DECEASED/)) {
-						new OpenEyes.Dialog.Alert({
+						new OpenEyes.UI.Dialog.Alert({
 							content: "The patient is deceased so cannot be cc'd."
 						}).open();
 						obj.val('');
@@ -390,7 +390,7 @@ $(document).ready(function() {
 
 						$('#cc_targets').append('<input type="hidden" name="CC_Targets[]" value="'+contact_id+'" />');
 					} else {
-						new OpenEyes.Dialog.Alert({
+						new OpenEyes.UI.Dialog.Alert({
 							content: "Sorry, this contact has no address and so cannot be cc'd."
 						}).open();
 					}
@@ -448,7 +448,7 @@ $(document).ready(function() {
 					if (html == "1") {
 						window.location.reload();
 					} else {
-						new OpenEyes.Dialog.Alert({
+						new OpenEyes.UI.Dialog.Alert({
 							content: "Something went wrong trying to print the letter, please try again or contact support for assistance."
 						}).open();
 					}
@@ -469,7 +469,7 @@ $(document).ready(function() {
 					if (html == "1") {
 						window.location.reload();
 					} else {
-						new OpenEyes.Dialog.Alert({
+						new OpenEyes.UI.Dialog.Alert({
 							content: "Something went wrong trying to print the letter, please try again or contact support for assistance."
 						}).open();
 					}
@@ -487,7 +487,7 @@ $(document).ready(function() {
 			'url': baseUrl+'/OphCoCorrespondence/Default/confirmPrinted/'+OE_event_id,
 			'success': function(html) {
 				if (html != "1") {
-					new OpenEyes.Dialog.Alert({
+					new OpenEyes.UI.Dialog.Alert({
 						content: "Sorry, something went wrong. Please try again or contact support for assistance."
 					}).open();
 					enableButtons();
@@ -576,7 +576,7 @@ function correspondence_load_data(data) {
 		} else if (m = i.match(/^elementappend_(.*)$/)) {
 			$('#'+m[1]).append(data[i]);
 		} else if (i == 'alert') {
-			new OpenEyes.Dialog.Alert({
+			new OpenEyes.UI.Dialog.Alert({
 				content: data[i]
 			}).open();
 		}
