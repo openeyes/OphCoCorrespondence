@@ -26,7 +26,7 @@
  * @property CommissioningBodyType $commissioning_body_type
  */
 
-class OphCoCorrespondence_CommissioningBodyType_Recipient extends BaseActiveRecord
+class OphCoCorrespondence_CommissioningBodyType_Recipient extends BaseActiveRecordVersioned
 {
 	/**
 	 * Returns the static model of the specified AR class.
