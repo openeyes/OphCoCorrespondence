@@ -410,7 +410,12 @@ CREATE TABLE `ophcocorrespondence_letter_enclosure_version` (
 		$this->addPrimaryKey('version_id','ophcocorrespondence_letter_enclosure_version','version_id');
 		$this->alterColumn('ophcocorrespondence_letter_enclosure_version','version_id','int(10) unsigned NOT NULL AUTO_INCREMENT');
 
-		foreach (Yii::app()->db->createCommand()->select("*")->from("et_ophcocorrespondence_letter_old")->order("id asc")->queryAll() as $old_letter) {
+		foreach (Yii::app()->db->createCommand()
+			->select("et_ophcocorrespondence_letter_old.*, et_ophcocorrespondence_letter.event_id")
+			->from("et_ophcocorrespondence_letter_old")
+			->join("et_ophcocorrespondence_letter","et_ophcocorrespondence_letter.id = et_ophcocorrespondence_letter_old.letter_id")
+			->order("id asc")
+			->queryAll() as $old_letter) {
 			$old_letter['id'] = $old_letter['letter_id'];
 			unset($old_letter['letter_id']);
 
