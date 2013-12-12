@@ -423,10 +423,58 @@ CREATE TABLE `ophcocorrespondence_letter_enclosure_version` (
 		}
 
 		$this->dropTable('et_ophcocorrespondence_letter_old');
+
+		$this->addColumn('et_ophcocorrespondence_firm_letter_macro','deleted','tinyint(1) unsigned not null');
+		$this->addColumn('et_ophcocorrespondence_firm_letter_macro_version','deleted','tinyint(1) unsigned not null');
+		$this->addColumn('et_ophcocorrespondence_firm_letter_string','deleted','tinyint(1) unsigned not null');
+		$this->addColumn('et_ophcocorrespondence_firm_letter_string_version','deleted','tinyint(1) unsigned not null');
+		$this->addColumn('et_ophcocorrespondence_firm_site_secretary','deleted','tinyint(1) unsigned not null');
+		$this->addColumn('et_ophcocorrespondence_firm_site_secretary_version','deleted','tinyint(1) unsigned not null');
+		$this->addColumn('et_ophcocorrespondence_letter','deleted','tinyint(1) unsigned not null');
+		$this->addColumn('et_ophcocorrespondence_letter_version','deleted','tinyint(1) unsigned not null');
+		$this->addColumn('et_ophcocorrespondence_letter_macro','deleted','tinyint(1) unsigned not null');
+		$this->addColumn('et_ophcocorrespondence_letter_macro_version','deleted','tinyint(1) unsigned not null');
+		$this->addColumn('et_ophcocorrespondence_letter_string','deleted','tinyint(1) unsigned not null');
+		$this->addColumn('et_ophcocorrespondence_letter_string_version','deleted','tinyint(1) unsigned not null');
+		$this->addColumn('et_ophcocorrespondence_letter_string_group','deleted','tinyint(1) unsigned not null');
+		$this->addColumn('et_ophcocorrespondence_letter_string_group_version','deleted','tinyint(1) unsigned not null');
+		$this->addColumn('et_ophcocorrespondence_subspecialty_letter_macro','deleted','tinyint(1) unsigned not null');
+		$this->addColumn('et_ophcocorrespondence_subspecialty_letter_macro_version','deleted','tinyint(1) unsigned not null');
+		$this->addColumn('et_ophcocorrespondence_subspecialty_letter_string','deleted','tinyint(1) unsigned not null');
+		$this->addColumn('et_ophcocorrespondence_subspecialty_letter_string_version','deleted','tinyint(1) unsigned not null');
+
+		$this->addColumn('ophcocorrespondence_cbt_recipient','deleted','tinyint(1) unsigned not null');
+		$this->addColumn('ophcocorrespondence_cbt_recipient_version','deleted','tinyint(1) unsigned not null');
+		$this->addColumn('ophcocorrespondence_letter_enclosure','deleted','tinyint(1) unsigned not null');
+		$this->addColumn('ophcocorrespondence_letter_enclosure_version','deleted','tinyint(1) unsigned not null');
 	}
 
 	public function down()
 	{
+		$this->dropColumn('ophcocorrespondence_cbt_recipient','deleted');
+		$this->dropColumn('ophcocorrespondence_cbt_recipient_version','deleted');
+		$this->dropColumn('ophcocorrespondence_letter_enclosure','deleted');
+		$this->dropColumn('ophcocorrespondence_letter_enclosure_version','deleted');
+
+		$this->dropColumn('et_ophcocorrespondence_firm_letter_macro','deleted');
+		$this->dropColumn('et_ophcocorrespondence_firm_letter_macro_version','deleted');
+		$this->dropColumn('et_ophcocorrespondence_firm_letter_string','deleted');
+		$this->dropColumn('et_ophcocorrespondence_firm_letter_string_version','deleted');
+		$this->dropColumn('et_ophcocorrespondence_firm_site_secretary','deleted');
+		$this->dropColumn('et_ophcocorrespondence_firm_site_secretary_version','deleted');
+		$this->dropColumn('et_ophcocorrespondence_letter','deleted');
+		$this->dropColumn('et_ophcocorrespondence_letter_version','deleted');
+		$this->dropColumn('et_ophcocorrespondence_letter_macro','deleted');
+		$this->dropColumn('et_ophcocorrespondence_letter_macro_version','deleted');
+		$this->dropColumn('et_ophcocorrespondence_letter_string','deleted');
+		$this->dropColumn('et_ophcocorrespondence_letter_string_version','deleted');
+		$this->dropColumn('et_ophcocorrespondence_letter_string_group','deleted');
+		$this->dropColumn('et_ophcocorrespondence_letter_string_group_version','deleted');
+		$this->dropColumn('et_ophcocorrespondence_subspecialty_letter_macro','deleted');
+		$this->dropColumn('et_ophcocorrespondence_subspecialty_letter_macro_version','deleted');
+		$this->dropColumn('et_ophcocorrespondence_subspecialty_letter_string','deleted');
+		$this->dropColumn('et_ophcocorrespondence_subspecialty_letter_string_version','deleted');
+
 		$this->execute("
 CREATE TABLE `et_ophcocorrespondence_letter_old` (
 	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
