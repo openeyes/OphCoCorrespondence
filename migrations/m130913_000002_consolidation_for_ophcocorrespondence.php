@@ -73,10 +73,20 @@ class m130913_000002_consolidation_for_ophcocorrespondence extends OEMigration
 
 		Yii::app()->cache->flush();
 
-		$event_type_id = $this->insertOEEventType( 'Correspondence', 'OphCoCorrespondence', 'Co');
+		$event_group_id = $this->dbConnection->createCommand()->select('id')->from('event_group')->where('code = ?', array('Co'))->queryScalar();
+		$this->insert(
+			'event_type',
+			array(
+				'name' => 'Correspondence',
+				'event_group_id' => $event_group_id,
+				'class_name' => 'OphCoCorrespondence',
+				'support_services' => 1,
+			)
+		);
+		$event_type_id = $this->dbConnection->getLastInsertID();
 
 		$element_types = array(
-			'ElementLetter' => array('name' => 'Letter'),
+			'ElementLetter' => array('name' => 'Letter', 'display_order' => 1),
 		);
 
 		$this->insertOEElementType($element_types, $event_type_id);
