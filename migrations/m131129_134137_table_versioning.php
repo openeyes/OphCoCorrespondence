@@ -452,28 +452,17 @@ CREATE TABLE `ophcocorrespondence_letter_enclosure_version` (
 	public function down()
 	{
 		$this->dropColumn('ophcocorrespondence_cbt_recipient','deleted');
-		$this->dropColumn('ophcocorrespondence_cbt_recipient_version','deleted');
 		$this->dropColumn('ophcocorrespondence_letter_enclosure','deleted');
-		$this->dropColumn('ophcocorrespondence_letter_enclosure_version','deleted');
 
 		$this->dropColumn('et_ophcocorrespondence_firm_letter_macro','deleted');
-		$this->dropColumn('et_ophcocorrespondence_firm_letter_macro_version','deleted');
 		$this->dropColumn('et_ophcocorrespondence_firm_letter_string','deleted');
-		$this->dropColumn('et_ophcocorrespondence_firm_letter_string_version','deleted');
 		$this->dropColumn('et_ophcocorrespondence_firm_site_secretary','deleted');
-		$this->dropColumn('et_ophcocorrespondence_firm_site_secretary_version','deleted');
 		$this->dropColumn('et_ophcocorrespondence_letter','deleted');
-		$this->dropColumn('et_ophcocorrespondence_letter_version','deleted');
 		$this->dropColumn('et_ophcocorrespondence_letter_macro','deleted');
-		$this->dropColumn('et_ophcocorrespondence_letter_macro_version','deleted');
 		$this->dropColumn('et_ophcocorrespondence_letter_string','deleted');
-		$this->dropColumn('et_ophcocorrespondence_letter_string_version','deleted');
 		$this->dropColumn('et_ophcocorrespondence_letter_string_group','deleted');
-		$this->dropColumn('et_ophcocorrespondence_letter_string_group_version','deleted');
 		$this->dropColumn('et_ophcocorrespondence_subspecialty_letter_macro','deleted');
-		$this->dropColumn('et_ophcocorrespondence_subspecialty_letter_macro_version','deleted');
 		$this->dropColumn('et_ophcocorrespondence_subspecialty_letter_string','deleted');
-		$this->dropColumn('et_ophcocorrespondence_subspecialty_letter_string_version','deleted');
 
 		$this->execute("
 CREATE TABLE `et_ophcocorrespondence_letter_old` (
