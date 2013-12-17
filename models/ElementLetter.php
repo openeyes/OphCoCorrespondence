@@ -553,4 +553,13 @@ class ElementLetter extends BaseEventTypeElement
 	{
 		return preg_replace('/[\r\n]+/',', ',CHtml::encode($this->address));
 	}
+
+	public function afterValidate()
+	{
+		if (strtotime($this->clinic_date) > time()) {
+			$this->addError('clinic_date', 'Clinic date cannot be in the future');
+		}
+
+		return parent::afterValidate();
+	}
 }
