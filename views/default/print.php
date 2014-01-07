@@ -17,4 +17,4 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html The GNU General Public License V3.0
  */
 ?>
-<?php $this->renderDefaultElements($this->action->id); ?>
+<?php $this->renderOpenElements($this->action->id); ?>
