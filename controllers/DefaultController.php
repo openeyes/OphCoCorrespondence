@@ -384,7 +384,7 @@ class DefaultController extends BaseEventTypeController
 	 * PDF print method
 	 *
 	 * @TODO: integrate with controller stateful behaviour
-	 * 
+	 *
 	 * @param int $id
 	 * @param BaseEventTypeElement[] $elements
 	 * @param string $template
@@ -394,7 +394,7 @@ class DefaultController extends BaseEventTypeController
 	protected function printPDF($id, $elements, $template='print', $params=array())
 	{
 		// Remove any existing css
-		Yii::app()->getClientScript()->reset();
+		Yii::app()->assetManager->reset();
 
 		if (!$letter = ElementLetter::model()->find('event_id=?',array($id))) {
 			throw new Exception('Letter not found were event_id = '.$id);
