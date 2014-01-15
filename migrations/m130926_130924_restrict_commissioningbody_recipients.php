@@ -18,7 +18,7 @@ class m130926_130924_restrict_commissioningbody_recipients extends CDbMigration
 				'CONSTRAINT `ophcocorrespondence_cbt_recipient_lmui_fk` FOREIGN KEY (`last_modified_user_id`) REFERENCES `user` (`id`)',
 				'CONSTRAINT `ophcocorrespondence_cbt_recipient_cui_fk` FOREIGN KEY (`created_user_id`) REFERENCES `user` (`id`)',
 				'CONSTRAINT `ophcocorrespondence_cbt_recipient_cbti_fk` FOREIGN KEY (`commissioning_body_type_id`) REFERENCES `commissioning_body_type` (`id`)',
-			), 'ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin');
+			), 'ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
 	}
 
 	public function down()
