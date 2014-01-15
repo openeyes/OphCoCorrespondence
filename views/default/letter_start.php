@@ -19,10 +19,10 @@
 ?>
 <div class="banner clearfix">
 	<div class="seal">
-		<img src="<?php echo Yii::app()->createUrl('img/_print/letterhead_seal.jpg')?>" alt="letterhead_seal" />
+		<img src="<?php echo Yii::app()->assetManager->createUrl('img/_print/letterhead_seal.jpg')?>" alt="letterhead_seal" />
 	</div>
 	<div class="logo">
-		<img src="<?php echo Yii::app()->createUrl('img/_print/letterhead_Moorfields_NHS.jpg')?>" alt="letterhead_Moorfields_NHS" />
+		<img src="<?php echo Yii::app()->assetManager->createUrl('img/_print/letterhead_Moorfields_NHS.jpg')?>" alt="letterhead_Moorfields_NHS" />
 	</div>
 </div>
 <?php if (isset($site)) {?>
