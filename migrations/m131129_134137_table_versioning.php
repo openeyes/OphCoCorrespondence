@@ -8,11 +8,11 @@ class m131129_134137_table_versioning extends OEMigration
 CREATE TABLE `et_ophcocorrespondence_firm_letter_macro_version` (
 	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 	`firm_id` int(10) unsigned NOT NULL,
-	`name` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+	`name` varchar(64) DEFAULT NULL,
 	`recipient_patient` tinyint(1) unsigned NOT NULL DEFAULT '0',
 	`recipient_doctor` tinyint(1) unsigned NOT NULL DEFAULT '0',
 	`use_nickname` tinyint(1) unsigned NOT NULL DEFAULT '0',
-	`body` text COLLATE utf8_bin,
+	`body` text,
 	`cc_patient` tinyint(1) unsigned NOT NULL DEFAULT '0',
 	`display_order` tinyint(3) unsigned NOT NULL DEFAULT '1',
 	`last_modified_user_id` int(10) unsigned NOT NULL DEFAULT '1',
@@ -29,7 +29,7 @@ CREATE TABLE `et_ophcocorrespondence_firm_letter_macro_version` (
 	CONSTRAINT `acv_et_ophcocorrespondence_flm_last_modified_user_id_fk` FOREIGN KEY (`last_modified_user_id`) REFERENCES `user` (`id`),
 	CONSTRAINT `acv_et_ophcocorrespondence_flm_created_user_id_fk` FOREIGN KEY (`created_user_id`) REFERENCES `user` (`id`),
 	CONSTRAINT `acv_et_ophcocorrespondence_flm_firm_id_fk` FOREIGN KEY (`firm_id`) REFERENCES `firm` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 		");
 
 		$this->alterColumn('et_ophcocorrespondence_firm_letter_macro_version','id','int(10) unsigned NOT NULL');
@@ -49,15 +49,15 @@ CREATE TABLE `et_ophcocorrespondence_firm_letter_string_version` (
 	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 	`letter_string_group_id` int(10) unsigned NOT NULL,
 	`firm_id` int(10) unsigned NOT NULL,
-	`name` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-	`body` text COLLATE utf8_bin,
+	`name` varchar(64) DEFAULT NULL,
+	`body` text,
 	`display_order` tinyint(3) unsigned NOT NULL DEFAULT '1',
 	`last_modified_user_id` int(10) unsigned NOT NULL DEFAULT '1',
 	`last_modified_date` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
 	`created_user_id` int(10) unsigned NOT NULL DEFAULT '1',
 	`created_date` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
-	`event_type` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-	`element_type` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+	`event_type` varchar(64) DEFAULT NULL,
+	`element_type` varchar(64) DEFAULT NULL,
 	PRIMARY KEY (`id`),
 	KEY `acv_et_ophcocorrespondence_fls_letter_string_group_id_fk` (`letter_string_group_id`),
 	KEY `acv_et_ophcocorrespondence_fls_firm_id_fk` (`firm_id`),
@@ -67,7 +67,7 @@ CREATE TABLE `et_ophcocorrespondence_firm_letter_string_version` (
 	CONSTRAINT `acv_et_ophcocorrespondence_fls_created_user_id_fk` FOREIGN KEY (`created_user_id`) REFERENCES `user` (`id`),
 	CONSTRAINT `acv_et_ophcocorrespondence_fls_firm_id_fk` FOREIGN KEY (`firm_id`) REFERENCES `firm` (`id`),
 	CONSTRAINT `acv_et_ophcocorrespondence_fls_letter_string_group_id_fk` FOREIGN KEY (`letter_string_group_id`) REFERENCES `et_ophcocorrespondence_letter_string_group` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 		");
 
 		$this->alterColumn('et_ophcocorrespondence_firm_letter_string_version','id','int(10) unsigned NOT NULL');
@@ -87,12 +87,12 @@ CREATE TABLE `et_ophcocorrespondence_firm_site_secretary_version` (
 	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 	`firm_id` int(10) unsigned NOT NULL,
 	`site_id` int(10) unsigned DEFAULT NULL,
-	`direct_line` varchar(64) COLLATE utf8_bin NOT NULL,
+	`direct_line` varchar(64) NOT NULL,
 	`last_modified_user_id` int(10) unsigned NOT NULL DEFAULT '1',
 	`last_modified_date` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
 	`created_user_id` int(10) unsigned NOT NULL DEFAULT '1',
 	`created_date` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
-	`fax` varchar(64) COLLATE utf8_bin NOT NULL,
+	`fax` varchar(64) NOT NULL,
 	PRIMARY KEY (`id`),
 	KEY `acv_et_ophcocorrespondence_fss_firm_id_fk` (`firm_id`),
 	KEY `acv_et_ophcocorrespondence_fss_site_id_fk` (`site_id`),
@@ -102,7 +102,7 @@ CREATE TABLE `et_ophcocorrespondence_firm_site_secretary_version` (
 	CONSTRAINT `acv_et_ophcocorrespondence_fss_firm_id_fk` FOREIGN KEY (`firm_id`) REFERENCES `firm` (`id`),
 	CONSTRAINT `acv_et_ophcocorrespondence_fss_last_modified_user_id_fk` FOREIGN KEY (`last_modified_user_id`) REFERENCES `user` (`id`),
 	CONSTRAINT `acv_et_ophcocorrespondence_fss_site_id_fk` FOREIGN KEY (`site_id`) REFERENCES `site` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 		");
 
 		$this->alterColumn('et_ophcocorrespondence_firm_site_secretary_version','id','int(10) unsigned NOT NULL');
@@ -123,12 +123,12 @@ CREATE TABLE `et_ophcocorrespondence_letter_version` (
 	`event_id` int(10) unsigned NOT NULL,
 	`use_nickname` tinyint(1) unsigned NOT NULL DEFAULT '0',
 	`date` datetime NOT NULL,
-	`address` varchar(1024) COLLATE utf8_bin DEFAULT NULL,
-	`introduction` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-	`re` varchar(1024) COLLATE utf8_bin DEFAULT NULL,
-	`body` text COLLATE utf8_bin,
-	`footer` varchar(2048) COLLATE utf8_bin DEFAULT NULL,
-	`cc` text COLLATE utf8_bin,
+	`address` varchar(1024) DEFAULT NULL,
+	`introduction` varchar(255) DEFAULT NULL,
+	`re` varchar(1024) DEFAULT NULL,
+	`body` text,
+	`footer` varchar(2048) DEFAULT NULL,
+	`cc` text,
 	`draft` tinyint(1) unsigned NOT NULL DEFAULT '0',
 	`last_modified_user_id` int(10) unsigned NOT NULL DEFAULT '1',
 	`last_modified_date` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
@@ -137,8 +137,8 @@ CREATE TABLE `et_ophcocorrespondence_letter_version` (
 	`print` tinyint(1) unsigned NOT NULL DEFAULT '0',
 	`locked` tinyint(1) unsigned NOT NULL DEFAULT '0',
 	`site_id` int(10) NOT NULL,
-	`direct_line` varchar(32) COLLATE utf8_bin DEFAULT NULL,
-	`fax` varchar(64) COLLATE utf8_bin NOT NULL,
+	`direct_line` varchar(32) DEFAULT NULL,
+	`fax` varchar(64) NOT NULL,
 	`clinic_date` date DEFAULT NULL,
 	`print_all` tinyint(1) unsigned NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id`),
@@ -148,7 +148,7 @@ CREATE TABLE `et_ophcocorrespondence_letter_version` (
 	CONSTRAINT `acv_et_ophcocorrespondence_letter_last_modified_user_id_fk` FOREIGN KEY (`last_modified_user_id`) REFERENCES `user` (`id`),
 	CONSTRAINT `acv_et_ophcocorrespondence_letter_created_user_id_fk` FOREIGN KEY (`created_user_id`) REFERENCES `user` (`id`),
 	CONSTRAINT `acv_et_ophcocorrespondence_letter_event_id_fk` FOREIGN KEY (`event_id`) REFERENCES `event` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 		");
 
 		$this->alterColumn('et_ophcocorrespondence_letter_version','id','int(10) unsigned NOT NULL');
@@ -166,11 +166,11 @@ CREATE TABLE `et_ophcocorrespondence_letter_version` (
 		$this->execute("
 CREATE TABLE `et_ophcocorrespondence_letter_macro_version` (
 	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-	`name` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+	`name` varchar(64) DEFAULT NULL,
 	`recipient_patient` tinyint(1) unsigned NOT NULL DEFAULT '0',
 	`recipient_doctor` tinyint(1) unsigned NOT NULL DEFAULT '0',
 	`use_nickname` tinyint(1) unsigned NOT NULL DEFAULT '0',
-	`body` text COLLATE utf8_bin,
+	`body` text,
 	`cc_patient` tinyint(1) unsigned NOT NULL DEFAULT '0',
 	`display_order` tinyint(3) unsigned NOT NULL DEFAULT '1',
 	`last_modified_user_id` int(10) unsigned NOT NULL DEFAULT '1',
@@ -188,7 +188,7 @@ CREATE TABLE `et_ophcocorrespondence_letter_macro_version` (
 	CONSTRAINT `acv_et_ophcocorrespondence_lm_created_user_id_fk` FOREIGN KEY (`created_user_id`) REFERENCES `user` (`id`),
 	CONSTRAINT `acv_et_ophcocorrespondence_lm_last_modified_user_id_fk` FOREIGN KEY (`last_modified_user_id`) REFERENCES `user` (`id`),
 	CONSTRAINT `acv_et_ophcocorrespondence_lm_site_id_fk` FOREIGN KEY (`site_id`) REFERENCES `site` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 		");
 
 		$this->alterColumn('et_ophcocorrespondence_letter_macro_version','id','int(10) unsigned NOT NULL');
@@ -207,16 +207,16 @@ CREATE TABLE `et_ophcocorrespondence_letter_macro_version` (
 CREATE TABLE `et_ophcocorrespondence_letter_string_version` (
 	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 	`letter_string_group_id` int(10) unsigned NOT NULL,
-	`name` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-	`body` text COLLATE utf8_bin,
+	`name` varchar(64) DEFAULT NULL,
+	`body` text,
 	`display_order` tinyint(3) unsigned NOT NULL DEFAULT '1',
 	`last_modified_user_id` int(10) unsigned NOT NULL DEFAULT '1',
 	`last_modified_date` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
 	`created_user_id` int(10) unsigned NOT NULL DEFAULT '1',
 	`created_date` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
 	`site_id` int(10) unsigned NOT NULL,
-	`event_type` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-	`element_type` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+	`event_type` varchar(64) DEFAULT NULL,
+	`element_type` varchar(64) DEFAULT NULL,
 	PRIMARY KEY (`id`),
 	KEY `acv_et_ophcocorrespondence_ls2_created_user_id_fk` (`created_user_id`),
 	KEY `acv_et_ophcocorrespondence_ls2_last_modified_user_id_fk` (`last_modified_user_id`),
@@ -226,7 +226,7 @@ CREATE TABLE `et_ophcocorrespondence_letter_string_version` (
 	CONSTRAINT `acv_et_ophcocorrespondence_ls2_created_user_id_fk` FOREIGN KEY (`created_user_id`) REFERENCES `user` (`id`),
 	CONSTRAINT `acv_et_ophcocorrespondence_ls2_last_modified_user_id_fk` FOREIGN KEY (`last_modified_user_id`) REFERENCES `user` (`id`),
 	CONSTRAINT `acv_et_ophcocorrespondence_ls2_letter_string_group_id_fk` FOREIGN KEY (`letter_string_group_id`) REFERENCES `et_ophcocorrespondence_letter_string_group` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 		");
 
 		$this->alterColumn('et_ophcocorrespondence_letter_string_version','id','int(10) unsigned NOT NULL');
@@ -244,7 +244,7 @@ CREATE TABLE `et_ophcocorrespondence_letter_string_version` (
 		$this->execute("
 CREATE TABLE `et_ophcocorrespondence_letter_string_group_version` (
 	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-	`name` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+	`name` varchar(64) DEFAULT NULL,
 	`display_order` tinyint(3) unsigned NOT NULL DEFAULT '1',
 	`last_modified_user_id` int(10) unsigned NOT NULL DEFAULT '1',
 	`last_modified_date` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
@@ -255,7 +255,7 @@ CREATE TABLE `et_ophcocorrespondence_letter_string_group_version` (
 	KEY `acv_et_ophcocorrespondence_lsg_created_user_id_fk` (`created_user_id`),
 	CONSTRAINT `acv_et_ophcocorrespondence_lsg_last_modified_user_id_fk` FOREIGN KEY (`last_modified_user_id`) REFERENCES `user` (`id`),
 	CONSTRAINT `acv_et_ophcocorrespondence_lsg_created_user_id_fk` FOREIGN KEY (`created_user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 		");
 
 		$this->alterColumn('et_ophcocorrespondence_letter_string_group_version','id','int(10) unsigned NOT NULL');
@@ -274,11 +274,11 @@ CREATE TABLE `et_ophcocorrespondence_letter_string_group_version` (
 CREATE TABLE `et_ophcocorrespondence_subspecialty_letter_macro_version` (
 	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 	`subspecialty_id` int(10) unsigned NOT NULL,
-	`name` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+	`name` varchar(64) DEFAULT NULL,
 	`recipient_patient` tinyint(1) unsigned NOT NULL DEFAULT '0',
 	`recipient_doctor` tinyint(1) unsigned NOT NULL DEFAULT '0',
 	`use_nickname` tinyint(1) unsigned NOT NULL DEFAULT '0',
-	`body` text COLLATE utf8_bin,
+	`body` text,
 	`cc_patient` tinyint(1) unsigned NOT NULL DEFAULT '0',
 	`display_order` tinyint(3) unsigned NOT NULL DEFAULT '1',
 	`last_modified_user_id` int(10) unsigned NOT NULL DEFAULT '1',
@@ -295,7 +295,7 @@ CREATE TABLE `et_ophcocorrespondence_subspecialty_letter_macro_version` (
 	CONSTRAINT `acv_et_ophcocorrespondence_slm2_last_modified_user_id_fk` FOREIGN KEY (`last_modified_user_id`) REFERENCES `user` (`id`),
 	CONSTRAINT `acv_et_ophcocorrespondence_slm2_created_user_id_fk` FOREIGN KEY (`created_user_id`) REFERENCES `user` (`id`),
 	CONSTRAINT `acv_et_ophcocorrespondence_slm2_subspecialty_id_fk` FOREIGN KEY (`subspecialty_id`) REFERENCES `subspecialty` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 		");
 
 		$this->alterColumn('et_ophcocorrespondence_subspecialty_letter_macro_version','id','int(10) unsigned NOT NULL');
@@ -315,15 +315,15 @@ CREATE TABLE `et_ophcocorrespondence_subspecialty_letter_string_version` (
 	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 	`letter_string_group_id` int(10) unsigned NOT NULL,
 	`subspecialty_id` int(10) unsigned NOT NULL,
-	`name` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-	`body` text COLLATE utf8_bin,
+	`name` varchar(64) DEFAULT NULL,
+	`body` text,
 	`display_order` tinyint(3) unsigned NOT NULL DEFAULT '1',
 	`last_modified_user_id` int(10) unsigned NOT NULL DEFAULT '1',
 	`last_modified_date` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
 	`created_user_id` int(10) unsigned NOT NULL DEFAULT '1',
 	`created_date` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
-	`event_type` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-	`element_type` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+	`event_type` varchar(64) DEFAULT NULL,
+	`element_type` varchar(64) DEFAULT NULL,
 	PRIMARY KEY (`id`),
 	KEY `acv_et_ophcocorrespondence_sls_created_user_id_fk` (`created_user_id`),
 	KEY `acv_et_ophcocorrespondence_sls_last_modified_user_id_fk` (`last_modified_user_id`),
@@ -333,7 +333,7 @@ CREATE TABLE `et_ophcocorrespondence_subspecialty_letter_string_version` (
 	CONSTRAINT `acv_et_ophcocorrespondence_sls_last_modified_user_id_fk` FOREIGN KEY (`last_modified_user_id`) REFERENCES `user` (`id`),
 	CONSTRAINT `acv_et_ophcocorrespondence_sls_letter_string_group_id_fk` FOREIGN KEY (`letter_string_group_id`) REFERENCES `et_ophcocorrespondence_letter_string_group` (`id`),
 	CONSTRAINT `acv_et_ophcocorrespondence_sls_subspecialty_id_fk` FOREIGN KEY (`subspecialty_id`) REFERENCES `subspecialty` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 		");
 
 		$this->alterColumn('et_ophcocorrespondence_subspecialty_letter_string_version','id','int(10) unsigned NOT NULL');
@@ -363,7 +363,7 @@ CREATE TABLE `ophcocorrespondence_cbt_recipient_version` (
 	CONSTRAINT `acv_ophcocorrespondence_cbt_recipient_lmui_fk` FOREIGN KEY (`last_modified_user_id`) REFERENCES `user` (`id`),
 	CONSTRAINT `acv_ophcocorrespondence_cbt_recipient_cui_fk` FOREIGN KEY (`created_user_id`) REFERENCES `user` (`id`),
 	CONSTRAINT `acv_ophcocorrespondence_cbt_recipient_cbti_fk` FOREIGN KEY (`commissioning_body_type_id`) REFERENCES `commissioning_body_type` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 		");
 
 		$this->alterColumn('ophcocorrespondence_cbt_recipient_version','id','int(10) unsigned NOT NULL');
@@ -382,7 +382,7 @@ CREATE TABLE `ophcocorrespondence_cbt_recipient_version` (
 CREATE TABLE `ophcocorrespondence_letter_enclosure_version` (
 	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 	`element_letter_id` int(10) unsigned NOT NULL,
-	`content` varchar(128) COLLATE utf8_bin DEFAULT NULL,
+	`content` varchar(128) DEFAULT NULL,
 	`display_order` int(10) unsigned NOT NULL DEFAULT '0',
 	`last_modified_user_id` int(10) unsigned NOT NULL DEFAULT '1',
 	`last_modified_date` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
@@ -395,7 +395,7 @@ CREATE TABLE `ophcocorrespondence_letter_enclosure_version` (
 	CONSTRAINT `acv_ophcocorrespondence_letter_enclosure_element_letter_id_fk` FOREIGN KEY (`element_letter_id`) REFERENCES `et_ophcocorrespondence_letter` (`id`),
 	CONSTRAINT `acv_ophcocorrespondence_letter_enclosure_lmiu_fk` FOREIGN KEY (`last_modified_user_id`) REFERENCES `user` (`id`),
 	CONSTRAINT `acv_ophcocorrespondence_letter_enclosure_cu_fk` FOREIGN KEY (`created_user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 		");
 
 		$this->alterColumn('ophcocorrespondence_letter_enclosure_version','id','int(10) unsigned NOT NULL');
@@ -470,12 +470,12 @@ CREATE TABLE `et_ophcocorrespondence_letter_old` (
 	`letter_id` int(10) unsigned NOT NULL,
 	`use_nickname` tinyint(1) unsigned NOT NULL DEFAULT '0',
 	`date` datetime NOT NULL,
-	`address` varchar(1024) COLLATE utf8_bin DEFAULT NULL,
-	`introduction` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-	`re` varchar(1024) COLLATE utf8_bin DEFAULT NULL,
-	`body` text COLLATE utf8_bin,
-	`footer` varchar(2048) COLLATE utf8_bin DEFAULT NULL,
-	`cc` text COLLATE utf8_bin,
+	`address` varchar(1024) DEFAULT NULL,
+	`introduction` varchar(255) DEFAULT NULL,
+	`re` varchar(1024) DEFAULT NULL,
+	`body` text,
+	`footer` varchar(2048) DEFAULT NULL,
+	`cc` text,
 	`draft` tinyint(1) unsigned NOT NULL DEFAULT '0',
 	`last_modified_user_id` int(10) unsigned NOT NULL DEFAULT '1',
 	`last_modified_date` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
@@ -493,7 +493,7 @@ CREATE TABLE `et_ophcocorrespondence_letter_old` (
 	CONSTRAINT `et_ophcocorrespondence_letter_old_created_user_id_fk` FOREIGN KEY (`created_user_id`) REFERENCES `user` (`id`),
 	CONSTRAINT `et_ophcocorrespondence_letter_old_letter_id_fk` FOREIGN KEY (`letter_id`) REFERENCES `et_ophcocorrespondence_letter` (`id`),
 	CONSTRAINT `et_ophcocorrespondence_letter_old_site_id_fk` FOREIGN KEY (`site_id`) REFERENCES `site` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 		");
 
 		foreach (Yii::app()->db->createCommand()->select("*")->from("et_ophcocorrespondence_letter_version")->order("id asc")->queryAll() as $versiond_letter) {
