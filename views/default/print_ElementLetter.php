@@ -35,7 +35,7 @@
 <p nobr="true">
 	To:
 	<?php echo $element->renderToAddress()?>
-	<?php foreach (explode("\n",trim(CHtml::encode($element->cc))) as $line) {
+	<?php foreach (explode("\n",trim($element->cc)) as $line) {
 			if (trim($line)) { ?>
 	<br />CC:
 	<?php echo str_replace(';',',',$line) ?>
