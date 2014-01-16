@@ -48,3 +48,6 @@
 	</div>
 
 <?php $this->endContent() ?>
+<script type="text/javascript">
+	$('#delete_reason').focus();
+</script>
