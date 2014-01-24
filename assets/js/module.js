@@ -59,15 +59,7 @@ $(document).ready(function() {
 	});
 
 	handleButton($('#et_deleteevent'));
-
-	handleButton($('#et_canceldelete'),function(e) {
-		if (m = window.location.href.match(/\/delete\/[0-9]+/)) {
-			window.location.href = window.location.href.replace('/delete/','/view/');
-		} else {
-			window.location.href = baseUrl+'/patient/episodes/'+OE_patient_id;
-		}
-		e.preventDefault();
-	});
+	handleButton($('#et_canceldelete'));
 
 	$('#address_target').change(function() {
 		var nickname = $('input[id="ElementLetter_use_nickname"][type="checkbox"]').is(':checked') ? '1' : '0';
