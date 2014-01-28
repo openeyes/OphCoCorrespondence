@@ -16,25 +16,13 @@
  * @copyright Copyright (c) 2011-2013, OpenEyes Foundation
  * @license http://www.gnu.org/licenses/gpl-3.0.html The GNU General Public License V3.0
  */
-?>
-<?php $this->beginContent('//patient/event_container'); ?>
 
-	<?php
-		// Event actions
-		if ($this->checkPrintAccess()) {
-			$this->event_actions[] = EventAction::button('Print', 'print', null, array('class' => 'small'));
-			$this->event_actions[] = EventAction::button('Print all', 'printall', null, array('id' => 'et_print_all', 'class' => 'small'));
-		}
-	?>
+class OphCoCorrespondence_API extends BaseAPI
+{
+	public function canUpdate($event_id)
+	{
+		$letter = ElementLetter::model()->find('event_id=?',array($event_id));
 
-	<?php if ($this->event->delete_pending) {?>
-		<div class="alert-box alert with-icon">
-			This event is pending deletion and has been locked.
-		</div>
-	<?php }?>
-
-	<input type="hidden" id="moduleCSSPath" value="<?php echo $this->assetPath?>css" />
-
-	<?php $this->renderOpenElements($this->action->id); ?>
-
-<?php $this->endContent() ;?>
+		return $letter->isEditable();
+	}
+}
