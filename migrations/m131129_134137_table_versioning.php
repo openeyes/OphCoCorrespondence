@@ -410,16 +410,28 @@ CREATE TABLE `ophcocorrespondence_letter_enclosure_version` (
 		$this->addPrimaryKey('version_id','ophcocorrespondence_letter_enclosure_version','version_id');
 		$this->alterColumn('ophcocorrespondence_letter_enclosure_version','version_id','int(10) unsigned NOT NULL AUTO_INCREMENT');
 
-		foreach ($this->dbConnection->createCommand()
-			->select("et_ophcocorrespondence_letter_old.*, et_ophcocorrespondence_letter.event_id")
-			->from("et_ophcocorrespondence_letter_old")
-			->join("et_ophcocorrespondence_letter","et_ophcocorrespondence_letter.id = et_ophcocorrespondence_letter_old.letter_id")
-			->order("id asc")
-			->queryAll() as $old_letter) {
-			$old_letter['id'] = $old_letter['letter_id'];
-			unset($old_letter['letter_id']);
+		$offset = 0;
 
-			$this->insert('et_ophcocorrespondence_letter_version', $old_letter);
+		while (1) {
+			$letters = $this->dbConnection->createCommand()
+				->select("et_ophcocorrespondence_letter_old.*, et_ophcocorrespondence_letter.event_id")
+				->from("et_ophcocorrespondence_letter_old")
+				->join("et_ophcocorrespondence_letter","et_ophcocorrespondence_letter.id = et_ophcocorrespondence_letter_old.letter_id")
+				->order("id asc")
+				->offset($offset)
+				->limit(1000)
+				->queryAll();
+
+			if (empty($letters)) break;
+
+			foreach ($letters as $old_letter) {
+				$old_letter['id'] = $old_letter['letter_id'];
+				unset($old_letter['letter_id']);
+
+				$this->insert('et_ophcocorrespondence_letter_version', $old_letter);
+			}
+
+			$offset += 1000;
 		}
 
 		$this->dropTable('et_ophcocorrespondence_letter_old');
