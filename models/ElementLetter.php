@@ -496,7 +496,7 @@ class ElementLetter extends BaseEventTypeElement
 
 	public function isEditable()
 	{
-		return !$this->event->episode->patient->date_of_death;
+		return $this->draft;
 	}
 
 	public function getFirm_members()
