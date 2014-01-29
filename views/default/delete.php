@@ -19,6 +19,7 @@
  ?>
 <?php $this->beginContent('//patient/event_container'); ?>
 
+	<?php echo CHtml::form(array('Default/delete/'.$this->event->id), 'post', array('id' => 'deleteForm'))?>
 	<div id="delete_event">
 		<h3>Delete event</h3>
 		<div class="alert-box alert with-icon">
