@@ -198,6 +198,8 @@ class ElementLetter extends BaseEventTypeElement
 			if ($pca->location) {
 				$options['ContactLocation'.$pca->location_id] = $pca->location->contact->fullName.' ('.$pca->location->contact->label->name.', '.$pca->location.')';
 			} else {
+				// Note that this index will always be the basis for a Person model search - if PCA has a wider use case than this,
+				// this will need to be revisited
 				$options['Contact'.$pca->contact_id] = $pca->contact->fullName.' ('.$pca->contact->label->name;
 				if ($pca->contact->address) {
 					$options['Contact'.$pca->contact_id] .= ', '.$pca->contact->address->address1.')';
