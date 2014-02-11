@@ -18,7 +18,7 @@
  */
 
 /**
- * The followings are the available columns in table 'et_ophcocorrespondence_firm_site_secretary':
+ * The followings are the available columns in table 'ophcocorrespondence_firm_site_secretary':
  * @property string $id
  * @property integer $firm_id
  * @property integer $site_id
@@ -43,7 +43,7 @@ class FirmSiteSecretary extends BaseEventTypeElement
 	 */
 	public function tableName()
 	{
-		return 'et_ophcocorrespondence_firm_site_secretary';
+		return 'ophcocorrespondence_firm_site_secretary';
 	}
 
 	/**

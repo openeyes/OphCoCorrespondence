@@ -41,7 +41,7 @@ class LetterMacro extends BaseEventTypeElement
 	 */
 	public function tableName()
 	{
-		return 'et_ophcocorrespondence_letter_macro';
+		return 'ophcocorrespondence_letter_macro';
 	}
 
 	/**

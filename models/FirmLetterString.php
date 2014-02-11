@@ -41,7 +41,7 @@ class FirmLetterString extends LetterStringBase
 	 */
 	public function tableName()
 	{
-		return 'et_ophcocorrespondence_firm_letter_string';
+		return 'ophcocorrespondence_firm_letter_string';
 	}
 
 	/**
