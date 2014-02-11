@@ -39,10 +39,10 @@ class m140211_103657_fix_table_names extends CDbMigration
 
 		//
 
-		$this->dropForeignKey('ophcocorrespondence_fss_firm_id_fk','et_ophcocorrespondence_firm_site_secretary');
-		$this->dropForeignKey('ophcocorrespondence_fss_site_id_fk','et_ophcocorrespondence_firm_site_secretary');
-		$this->dropForeignKey('ophcocorrespondence_fss_last_modified_user_id_fk','et_ophcocorrespondence_firm_site_secretary');
-		$this->dropForeignKey('ophcocorrespondence_fss_created_user_id_fk','et_ophcocorrespondence_firm_site_secretary');
+		$this->dropForeignKey('et_ophcocorrespondence_fss_firm_id_fk','et_ophcocorrespondence_firm_site_secretary');
+		$this->dropForeignKey('et_ophcocorrespondence_fss_site_id_fk','et_ophcocorrespondence_firm_site_secretary');
+		$this->dropForeignKey('et_ophcocorrespondence_fss_last_modified_user_id_fk','et_ophcocorrespondence_firm_site_secretary');
+		$this->dropForeignKey('et_ophcocorrespondence_fss_created_user_id_fk','et_ophcocorrespondence_firm_site_secretary');
 
 		$this->dropIndex('et_ophcocorrespondence_fss_firm_id_fk','et_ophcocorrespondence_firm_site_secretary');
 		$this->dropIndex('et_ophcocorrespondence_fss_site_id_fk','et_ophcocorrespondence_firm_site_secretary');
@@ -275,15 +275,10 @@ class m140211_103657_fix_table_names extends CDbMigration
 
 		$this->renameTable('ophcocorrespondence_firm_site_secretary','et_ophcocorrespondence_firm_site_secretary');
 
-		$this->createIndex('et_ophcocorrespondence_fss_created_user_id_fk','et_ophcocorrespondence_firm_site_secretary','created_user_id');
-		$this->createIndex('et_ophcocorrespondence_fss_last_modified_user_id_fk','et_ophcocorrespondence_firm_site_secretary','last_modified_user_id');
-		$this->createIndex('et_ophcocorrespondence_fss_site_id_fk','et_ophcocorrespondence_firm_site_secretary','site_id');
-		$this->createIndex('et_ophcocorrespondence_fss_firm_id_fk','et_ophcocorrespondence_firm_site_secretary','firm_id');
-
-		$this->addForeignKey('ophcocorrespondence_fss_created_user_id_fk','et_ophcocorrespondence_firm_site_secretary','created_user_id','user','id');
-		$this->addForeignKey('ophcocorrespondence_fss_last_modified_user_id_fk','et_ophcocorrespondence_firm_site_secretary','last_modified_user_id','user','id');
-		$this->addForeignKey('ophcocorrespondence_fss_site_id_fk','et_ophcocorrespondence_firm_site_secretary','site_id','site','id');
-		$this->addForeignKey('ophcocorrespondence_fss_firm_id_fk','et_ophcocorrespondence_firm_site_secretary','firm_id','firm','id');
+		$this->addForeignKey('et_ophcocorrespondence_fss_created_user_id_fk','et_ophcocorrespondence_firm_site_secretary','created_user_id','user','id');
+		$this->addForeignKey('et_ophcocorrespondence_fss_last_modified_user_id_fk','et_ophcocorrespondence_firm_site_secretary','last_modified_user_id','user','id');
+		$this->addForeignKey('et_ophcocorrespondence_fss_site_id_fk','et_ophcocorrespondence_firm_site_secretary','site_id','site','id');
+		$this->addForeignKey('et_ophcocorrespondence_fss_firm_id_fk','et_ophcocorrespondence_firm_site_secretary','firm_id','firm','id');
 
 		//
 
