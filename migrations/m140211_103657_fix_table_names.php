@@ -74,25 +74,6 @@ class m140211_103657_fix_table_names extends CDbMigration
 
 		//
 
-		$this->dropForeignKey('et_ophcocorrespondence_letter_old_letter_id_fk','et_ophcocorrespondence_letter_old');
-		$this->dropForeignKey('et_ophcocorrespondence_letter_old_last_modified_user_id_fk','et_ophcocorrespondence_letter_old');
-		$this->dropForeignKey('et_ophcocorrespondence_letter_old_created_user_id_fk','et_ophcocorrespondence_letter_old');
-		$this->dropForeignKey('et_ophcocorrespondence_letter_old_site_id_fk','et_ophcocorrespondence_letter_old');
-
-		$this->dropIndex('et_ophcocorrespondence_letter_old_letter_id_fk','et_ophcocorrespondence_letter_old');
-		$this->dropIndex('et_ophcocorrespondence_letter_old_last_modified_user_id_fk','et_ophcocorrespondence_letter_old');
-		$this->dropIndex('et_ophcocorrespondence_letter_old_created_user_id_fk','et_ophcocorrespondence_letter_old');
-		$this->dropIndex('et_ophcocorrespondence_letter_old_site_id_fk','et_ophcocorrespondence_letter_old');
-
-		$this->renameTable('et_ophcocorrespondence_letter_old','ophcocorrespondence_letter_old');
-
-		$this->addForeignKey('ophcocorrespondence_letter_old_site_id_fk','ophcocorrespondence_letter_old','site_id','site','id');
-		$this->addForeignKey('ophcocorrespondence_letter_old_created_user_id_fk','ophcocorrespondence_letter_old','created_user_id','user','id');
-		$this->addForeignKey('ophcocorrespondence_letter_old_last_modified_user_id_fk','ophcocorrespondence_letter_old','last_modified_user_id','user','id');
-		$this->addForeignKey('ophcocorrespondence_letter_old_letter_id_fk','ophcocorrespondence_letter_old','letter_id','et_ophcocorrespondence_letter','id');
-
-		//
-
 		$this->dropForeignKey('et_ophcocorrespondence_ls2_created_user_id_fk','et_ophcocorrespondence_letter_string');
 		$this->dropForeignKey('et_ophcocorrespondence_ls2_last_modified_user_id_fk','et_ophcocorrespondence_letter_string');
 		$this->dropForeignKey('et_ophcocorrespondence_ls2_letter_string_group_id_fk','et_ophcocorrespondence_letter_string');
@@ -225,25 +206,6 @@ class m140211_103657_fix_table_names extends CDbMigration
 		$this->addForeignKey('et_ophcocorrespondence_ls2_letter_string_group_id_fk','et_ophcocorrespondence_letter_string','letter_string_group_id','et_ophcocorrespondence_letter_string_group','id');
 		$this->addForeignKey('et_ophcocorrespondence_ls2_last_modified_user_id_fk','et_ophcocorrespondence_letter_string','last_modified_user_id','user','id');
 		$this->addForeignKey('et_ophcocorrespondence_ls2_created_user_id_fk','et_ophcocorrespondence_letter_string','created_user_id','user','id');
-
-		//
-
-		$this->dropForeignKey('ophcocorrespondence_letter_old_letter_id_fk','ophcocorrespondence_letter_old');
-		$this->dropForeignKey('ophcocorrespondence_letter_old_last_modified_user_id_fk','ophcocorrespondence_letter_old');
-		$this->dropForeignKey('ophcocorrespondence_letter_old_created_user_id_fk','ophcocorrespondence_letter_old');
-		$this->dropForeignKey('ophcocorrespondence_letter_old_site_id_fk','ophcocorrespondence_letter_old');
-
-		$this->dropIndex('ophcocorrespondence_letter_old_letter_id_fk','ophcocorrespondence_letter_old');
-		$this->dropIndex('ophcocorrespondence_letter_old_last_modified_user_id_fk','ophcocorrespondence_letter_old');
-		$this->dropIndex('ophcocorrespondence_letter_old_created_user_id_fk','ophcocorrespondence_letter_old');
-		$this->dropIndex('ophcocorrespondence_letter_old_site_id_fk','ophcocorrespondence_letter_old');
-
-		$this->renameTable('ophcocorrespondence_letter_old','et_ophcocorrespondence_letter_old');
-
-		$this->addForeignKey('et_ophcocorrespondence_letter_old_site_id_fk','et_ophcocorrespondence_letter_old','site_id','site','id');
-		$this->addForeignKey('et_ophcocorrespondence_letter_old_created_user_id_fk','et_ophcocorrespondence_letter_old','created_user_id','user','id');
-		$this->addForeignKey('et_ophcocorrespondence_letter_old_last_modified_user_id_fk','et_ophcocorrespondence_letter_old','last_modified_user_id','user','id');
-		$this->addForeignKey('et_ophcocorrespondence_letter_old_letter_id_fk','et_ophcocorrespondence_letter_old','letter_id','et_ophcocorrespondence_letter','id');
 
 		//
 

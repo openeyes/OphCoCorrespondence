@@ -45,7 +45,7 @@ class ElementLetterOld extends BaseEventTypeElement
 	 */
 	public function tableName()
 	{
-		return 'ophcocorrespondence_letter_old';
+		return 'et_ophcocorrespondence_letter_old';
 	}
 
 	/**
