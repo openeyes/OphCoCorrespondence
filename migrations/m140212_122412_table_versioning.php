@@ -404,9 +404,9 @@ CREATE TABLE `ophcocorrespondence_letter_enclosure_version` (
 
 		while (1) {
 			$letters = $this->dbConnection->createCommand()
-				->select("ophcocorrespondence_letter_old.*, et_ophcocorrespondence_letter.event_id")
-				->from("ophcocorrespondence_letter_old")
-				->join("et_ophcocorrespondence_letter","et_ophcocorrespondence_letter.id = ophcocorrespondence_letter_old.letter_id")
+				->select("et_ophcocorrespondence_letter_old.*, et_ophcocorrespondence_letter.event_id")
+				->from("et_ophcocorrespondence_letter_old")
+				->join("et_ophcocorrespondence_letter","et_ophcocorrespondence_letter.id = et_ophcocorrespondence_letter_old.letter_id")
 				->order("id asc")
 				->offset($offset)
 				->limit(1000)
@@ -424,7 +424,7 @@ CREATE TABLE `ophcocorrespondence_letter_enclosure_version` (
 			$offset += 1000;
 		}
 
-		$this->dropTable('ophcocorrespondence_letter_old');
+		$this->dropTable('et_ophcocorrespondence_letter_old');
 
 		$this->addColumn('ophcocorrespondence_cbt_recipient','deleted','tinyint(1) unsigned not null');
 		$this->addColumn('ophcocorrespondence_cbt_recipient_version','deleted','tinyint(1) unsigned not null');
@@ -435,7 +435,7 @@ CREATE TABLE `ophcocorrespondence_letter_enclosure_version` (
 		$this->dropColumn('ophcocorrespondence_cbt_recipient','deleted');
 
 		$this->execute("
-CREATE TABLE `ophcocorrespondence_letter_old` (
+CREATE TABLE `et_ophcocorrespondence_letter_old` (
 	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 	`letter_id` int(10) unsigned NOT NULL,
 	`use_nickname` tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -455,14 +455,14 @@ CREATE TABLE `ophcocorrespondence_letter_old` (
 	`locked` tinyint(1) unsigned NOT NULL DEFAULT '0',
 	`site_id` int(10) unsigned NOT NULL,
 	PRIMARY KEY (`id`),
-	KEY `ophcocorrespondence_letter_old_letter_id_fk` (`letter_id`),
-	KEY `ophcocorrespondence_letter_old_last_modified_user_id_fk` (`last_modified_user_id`),
-	KEY `ophcocorrespondence_letter_old_created_user_id_fk` (`created_user_id`),
-	KEY `ophcocorrespondence_letter_old_site_id_fk` (`site_id`),
-	CONSTRAINT `ophcocorrespondence_letter_old_last_modified_user_id_fk` FOREIGN KEY (`last_modified_user_id`) REFERENCES `user` (`id`),
-	CONSTRAINT `ophcocorrespondence_letter_old_created_user_id_fk` FOREIGN KEY (`created_user_id`) REFERENCES `user` (`id`),
-	CONSTRAINT `ophcocorrespondence_letter_old_letter_id_fk` FOREIGN KEY (`letter_id`) REFERENCES `et_ophcocorrespondence_letter` (`id`),
-	CONSTRAINT `ophcocorrespondence_letter_old_site_id_fk` FOREIGN KEY (`site_id`) REFERENCES `site` (`id`)
+	KEY `et_ophcocorrespondence_letter_old_letter_id_fk` (`letter_id`),
+	KEY `et_ophcocorrespondence_letter_old_last_modified_user_id_fk` (`last_modified_user_id`),
+	KEY `et_ophcocorrespondence_letter_old_created_user_id_fk` (`created_user_id`),
+	KEY `et_ophcocorrespondence_letter_old_site_id_fk` (`site_id`),
+	CONSTRAINT `et_ophcocorrespondence_letter_old_last_modified_user_id_fk` FOREIGN KEY (`last_modified_user_id`) REFERENCES `user` (`id`),
+	CONSTRAINT `et_ophcocorrespondence_letter_old_created_user_id_fk` FOREIGN KEY (`created_user_id`) REFERENCES `user` (`id`),
+	CONSTRAINT `et_ophcocorrespondence_letter_old_letter_id_fk` FOREIGN KEY (`letter_id`) REFERENCES `et_ophcocorrespondence_letter` (`id`),
+	CONSTRAINT `et_ophcocorrespondence_letter_old_site_id_fk` FOREIGN KEY (`site_id`) REFERENCES `site` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 		");
 
@@ -474,7 +474,7 @@ CREATE TABLE `ophcocorrespondence_letter_old` (
 				unset($versiond_letter[$field]);
 			}
 
-			$this->insert('ophcocorrespondence_letter_old', $versiond_letter);
+			$this->insert('et_ophcocorrespondence_letter_old', $versiond_letter);
 		}
 
 		$this->dropTable('ophcocorrespondence_firm_letter_macro_version');
