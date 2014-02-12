@@ -41,7 +41,7 @@ class SubspecialtyLetterMacro extends BaseEventTypeElement
 	 */
 	public function tableName()
 	{
-		return 'et_ophcocorrespondence_subspecialty_letter_macro';
+		return 'ophcocorrespondence_subspecialty_letter_macro';
 	}
 
 	/**

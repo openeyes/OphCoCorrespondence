@@ -41,7 +41,7 @@ class LetterStringGroup extends BaseEventTypeElement
 	 */
 	public function tableName()
 	{
-		return 'et_ophcocorrespondence_letter_string_group';
+		return 'ophcocorrespondence_letter_string_group';
 	}
 
 	/**

@@ -88,6 +88,7 @@ class DefaultController extends BaseEventTypeController
 		}
 
 		if ($m[1] == 'Contact') {
+			// NOTE we are assuming that Contact must be a Person model here
 			$contact = Person::model()->find('contact_id=?',array($m[2]));
 		} else {
 			if (!$contact = $m[1]::model()->findByPk($m[2])) {
@@ -95,7 +96,7 @@ class DefaultController extends BaseEventTypeController
 			}
 		}
 
-		if ($contact->isDeceased()) {
+		if (method_exists($contact, 'isDeceased') && $contact->isDeceased()) {
 			echo json_encode(array('errors'=>'DECEASED'));
 			return;
 		}

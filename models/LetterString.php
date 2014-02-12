@@ -41,7 +41,7 @@ class LetterString extends LetterStringBase
 	 */
 	public function tableName()
 	{
-		return 'et_ophcocorrespondence_letter_string';
+		return 'ophcocorrespondence_letter_string';
 	}
 
 	/**

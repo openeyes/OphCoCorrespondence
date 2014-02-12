@@ -41,7 +41,7 @@ class FirmLetterMacro extends BaseEventTypeElement
 	 */
 	public function tableName()
 	{
-		return 'et_ophcocorrespondence_firm_letter_macro';
+		return 'ophcocorrespondence_firm_letter_macro';
 	}
 
 	/**
