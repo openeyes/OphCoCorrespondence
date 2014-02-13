@@ -491,7 +491,7 @@ class DefaultController extends BaseEventTypeController
 			}
 		}
 
-		foreach (User::model()->findAll($criteria) as $user) {
+		foreach (User::model()->active()->findAll($criteria) as $user) {
 			if ($contact = $user->contact) {
 
 				$consultant_name = false;
