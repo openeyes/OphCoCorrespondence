@@ -111,7 +111,7 @@ class OphCoCorrespondence_CommissioningBodyType_Recipient extends BaseActiveReco
 	public static function getCommissioningBodyTypes()
 	{
 		$cbts = array();
-		foreach (OphCoCorrespondence_CommissioningBodyType_Recipient::model()->with('commissioning_body_type')->findAll() as $recip) {
+		foreach (OphCoCorrespondence_CommissioningBodyType_Recipient::model()->with('commissioning_body_type')->active()->findAll() as $recip) {
 			$cbts[] = $recip->commissioning_body_type;
 		}
 		return $cbts;

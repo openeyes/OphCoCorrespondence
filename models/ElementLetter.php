@@ -152,7 +152,7 @@ class ElementLetter extends BaseEventTypeElement
 
 		// get the ids of the commissioning body types that should be shown as potential recipients to filter against
 		$cbt_ids = array();
-		foreach (OphCoCorrespondence_CommissioningBodyType_Recipient::model()->getCommissioningBodyTypes() as $cbt) {
+		foreach (OphCoCorrespondence_CommissioningBodyType_Recipient::model()->active()->getCommissioningBodyTypes() as $cbt) {
 			$cbt_ids[] = $cbt->id;
 		}
 
