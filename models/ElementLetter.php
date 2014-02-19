@@ -546,6 +546,21 @@ class ElementLetter extends BaseEventTypeElement
 		return implode('<br/>', $body);
 	}
 
+	public function getCreate_view()
+	{
+		return 'create_'.$this->getDefaultView();
+	}
+
+	public function getUpdate_view()
+	{
+		return 'update_'.$this->getDefaultView();
+	}
+
+	public function getContainer_view_view()
+	{
+		return false;
+	}
+
 	public function renderFooter()
 	{
 		return str_replace("\n","<br/>",CHtml::encode($this->footer));
