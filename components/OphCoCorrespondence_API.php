@@ -19,8 +19,15 @@
 
 class OphCoCorrespondence_API extends BaseAPI
 {
+	/**
+	 * @param integer $event_id
+	 * @return boolean
+	 */
 	public function canUpdate($event_id)
 	{
+		// FIXME: Correspondence locking is suspended while draft usage is discussed
+		return true;
+
 		$letter = ElementLetter::model()->find('event_id=?',array($event_id));
 
 		return $letter->isEditable();
