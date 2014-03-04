@@ -64,8 +64,7 @@ CREATE TABLE `ophcocorrespondence_firm_letter_string_version` (
 	KEY `acv_ophcocorrespondence_fls_created_user_id_fk` (`created_user_id`),
 	CONSTRAINT `acv_ophcocorrespondence_fls_last_modified_user_id_fk` FOREIGN KEY (`last_modified_user_id`) REFERENCES `user` (`id`),
 	CONSTRAINT `acv_ophcocorrespondence_fls_created_user_id_fk` FOREIGN KEY (`created_user_id`) REFERENCES `user` (`id`),
-	CONSTRAINT `acv_ophcocorrespondence_fls_firm_id_fk` FOREIGN KEY (`firm_id`) REFERENCES `firm` (`id`),
-	CONSTRAINT `acv_ophcocorrespondence_fls_letter_string_group_id_fk` FOREIGN KEY (`letter_string_group_id`) REFERENCES `ophcocorrespondence_letter_string_group` (`id`)
+	CONSTRAINT `acv_ophcocorrespondence_fls_firm_id_fk` FOREIGN KEY (`firm_id`) REFERENCES `firm` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 		");
 
@@ -219,8 +218,7 @@ CREATE TABLE `ophcocorrespondence_letter_string_version` (
 	KEY `acv_ophcocorrespondence_ls2_created_site_id_fk` (`site_id`),
 	CONSTRAINT `acv_ophcocorrespondence_ls2_created_site_id_fk` FOREIGN KEY (`site_id`) REFERENCES `site` (`id`),
 	CONSTRAINT `acv_ophcocorrespondence_ls2_created_user_id_fk` FOREIGN KEY (`created_user_id`) REFERENCES `user` (`id`),
-	CONSTRAINT `acv_ophcocorrespondence_ls2_last_modified_user_id_fk` FOREIGN KEY (`last_modified_user_id`) REFERENCES `user` (`id`),
-	CONSTRAINT `acv_ophcocorrespondence_ls2_letter_string_group_id_fk` FOREIGN KEY (`letter_string_group_id`) REFERENCES `ophcocorrespondence_letter_string_group` (`id`)
+	CONSTRAINT `acv_ophcocorrespondence_ls2_last_modified_user_id_fk` FOREIGN KEY (`last_modified_user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 		");
 
@@ -323,7 +321,6 @@ CREATE TABLE `ophcocorrespondence_subspecialty_letter_string_version` (
 	KEY `acv_ophcocorrespondence_sls_subspecialty_id_fk` (`subspecialty_id`),
 	CONSTRAINT `acv_ophcocorrespondence_sls_created_user_id_fk` FOREIGN KEY (`created_user_id`) REFERENCES `user` (`id`),
 	CONSTRAINT `acv_ophcocorrespondence_sls_last_modified_user_id_fk` FOREIGN KEY (`last_modified_user_id`) REFERENCES `user` (`id`),
-	CONSTRAINT `acv_ophcocorrespondence_sls_letter_string_group_id_fk` FOREIGN KEY (`letter_string_group_id`) REFERENCES `ophcocorrespondence_letter_string_group` (`id`),
 	CONSTRAINT `acv_ophcocorrespondence_sls_subspecialty_id_fk` FOREIGN KEY (`subspecialty_id`) REFERENCES `subspecialty` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 		");
@@ -383,7 +380,6 @@ CREATE TABLE `ophcocorrespondence_letter_enclosure_version` (
 	KEY `acv_ophcocorrespondence_letter_enclosure_element_letter_id_fk` (`element_letter_id`),
 	KEY `acv_ophcocorrespondence_letter_enclosure_lmiu_fk` (`last_modified_user_id`),
 	KEY `acv_ophcocorrespondence_letter_enclosure_cu_fk` (`created_user_id`),
-	CONSTRAINT `acv_ophcocorrespondence_letter_enclosure_element_letter_id_fk` FOREIGN KEY (`element_letter_id`) REFERENCES `et_ophcocorrespondence_letter` (`id`),
 	CONSTRAINT `acv_ophcocorrespondence_letter_enclosure_lmiu_fk` FOREIGN KEY (`last_modified_user_id`) REFERENCES `user` (`id`),
 	CONSTRAINT `acv_ophcocorrespondence_letter_enclosure_cu_fk` FOREIGN KEY (`created_user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
