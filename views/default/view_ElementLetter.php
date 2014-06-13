@@ -22,7 +22,7 @@
 	<header>
 		<?php $this->renderPartial("letter_start", array(
 			'site' => $element->site,
-			'toAddress' => CHtml::encode($element->address),
+			'toAddress' => $element->address,
 			'patient' => $this->patient,
 			'date' => $element->date,
 			'clinicDate' => $element->clinic_date,
