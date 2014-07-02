@@ -556,6 +556,10 @@ class ElementLetter extends BaseEventTypeElement
 		return 'update_'.$this->getDefaultView();
 	}
 
+	public function getPrint_view() {
+		return 'print_'.$this->getDefaultView();
+	}
+
 	public function getContainer_view_view()
 	{
 		return false;
