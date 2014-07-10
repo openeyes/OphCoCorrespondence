@@ -59,6 +59,8 @@ class ElementLetter extends BaseEventTypeElement
 		return array(
 			array('event_id, site_id, print, address, use_nickname, date, introduction, cc, re, body, footer, draft, direct_line, fax, clinic_date, print_all', 'safe'),
 			array('use_nickname, site_id, date, address, introduction, body, footer', 'required'),
+			array('date','OEDateValidator'),
+			array('clinic_date','OEDateValidatorNotFuture'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, event_id, site_id, use_nickname, date, introduction, re, body, footer, draft, direct_line', 'safe', 'on' => 'search'),
@@ -573,14 +575,5 @@ class ElementLetter extends BaseEventTypeElement
 	public function renderToAddress()
 	{
 		return preg_replace('/[\r\n]+/',', ',CHtml::encode($this->address));
-	}
-
-	public function afterValidate()
-	{
-		if (strtotime($this->clinic_date) > time()) {
-			$this->addError('clinic_date', 'Clinic date cannot be in the future');
-		}
-
-		return parent::afterValidate();
 	}
 }
