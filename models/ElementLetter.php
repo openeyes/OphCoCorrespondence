@@ -567,6 +567,11 @@ class ElementLetter extends BaseEventTypeElement
 		return false;
 	}
 
+	public function getContainer_print_view()
+	{
+		return false;
+	}
+
 	public function renderFooter()
 	{
 		return str_replace("\n","<br/>",CHtml::encode($this->footer));
