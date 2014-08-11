@@ -210,11 +210,11 @@ $layoutColumns = $form->layoutColumns;
 			<div id="enclosureItems">
 				<?php if (is_array(@$_POST['EnclosureItems'])) {?>
 					<?php foreach ($_POST['EnclosureItems'] as $key => $value) {?>
-						<div class="enclosureItem"><?php echo CHtml::textField("EnclosureItems[$key]",$value,array('size'=>60))?><a href="#" class="removeEnclosure">Remove</a></div>
+						<div class="enclosureItem"><?php echo CHtml::textField("EnclosureItems[$key]",$value,array('autocomplete' => Yii::app()->params['html_autocomplete'], 'size'=>60))?><a href="#" class="removeEnclosure">Remove</a></div>
 					<?php }?>
 				<?php } else {?>
 					<?php foreach ($element->enclosures as $i => $item) {?>
-						<div class="enclosureItem"><?php echo CHtml::textField("EnclosureItems[enclosure$i]",$item->content,array('size'=>60))?><a href="#" class="removeEnclosure">Remove</a></div>
+						<div class="enclosureItem"><?php echo CHtml::textField("EnclosureItems[enclosure$i]",$item->content,array('autocomplete' => Yii::app()->params['html_autocomplete'], 'size'=>60))?><a href="#" class="removeEnclosure">Remove</a></div>
 					<?php }?>
 				<?php }?>
 			</div>
@@ -238,7 +238,7 @@ $layoutColumns = $form->layoutColumns;
 					<?php foreach ($_POST['EnclosureItems'] as $key => $value) {?>
 						<div class="field-row row collapse enclosureItem">
 							<div class="large-8 column">
-								<?php echo CHtml::textField("EnclosureItems[$key]",$value)?>
+								<?php echo CHtml::textField("EnclosureItems[$key]",$value,array('autocomplete' => Yii::app()->params['html_autocomplete']))?>
 							</div>
 							<div class="large-4 column end">
 								<div class="postfix align"><a href="#" class="field-info removeEnclosure">Remove</a></div>
@@ -249,7 +249,7 @@ $layoutColumns = $form->layoutColumns;
 					<?php foreach ($element->enclosures as $i => $item) {?>
 						<div class="field-row row collapse enclosureItem">
 							<div class="large-8 column">
-								<?php echo CHtml::textField("EnclosureItems[enclosure$i]",$item->content)?>
+								<?php echo CHtml::textField("EnclosureItems[enclosure$i]",$item->content,array('autocomplete' => Yii::app()->params['html_autocomplete']))?>
 							</div>
 							<div class="large-4 column end">
 								<div class="postfix align"><a href="#" class="field-info removeEnclosure">Remove</a></div>
