@@ -29,7 +29,8 @@ class OphCoCorrespondence_ReportLettersTest extends CDbTestCase
 
 	public function setUp()
 	{
-		if (!file_exists(Yii::app()->basePath."/modules/OphLeEpatientletter/models/Element_OphLeEpatientletter_EpatientLetter.php")) {
+		if (!file_exists(Yii::app()->basePath."/modules/OphLeEpatientletter/models/Element_OphLeEpatientletter_EpatientLetter.php") ||
+			!Yii::app()->db->schema->getTable('et_ophleepatientletter_epatientletter')) {
 			unset($this->fixtures['legacy_letters']);
 		}
 
@@ -676,6 +677,8 @@ class OphCoCorrespondence_ReportLettersTest extends CDbTestCase
 
 	public function testRun_Correspondence_MatchLegacy()
 	{
+		if (!isset($this->fixtures['legacy_letters'])) return;
+
 		$r = new OphCoCorrespondence_ReportLetters;
 		$r->condition_type = 'or';
 		$r->match_legacy_letters = 1;
@@ -708,6 +711,8 @@ class OphCoCorrespondence_ReportLettersTest extends CDbTestCase
 
 	public function testRun_Correspondence_MatchCorrespondenceAndLegacy()
 	{
+		if (!isset($this->fixtures['legacy_letters'])) return;
+
 		$r = new OphCoCorrespondence_ReportLetters;
 		$r->condition_type = 'or';
 		$r->match_correspondence = 1;
@@ -765,8 +770,10 @@ class OphCoCorrespondence_ReportLettersTest extends CDbTestCase
 		$this->assertEquals('http:///OphLeEpatientletter/default/view/9',$r->letters[3]['link']);
 	}
 
-	public function testRun_Correspondence_DateFrom()
+	public function testRun_CorrespondenceAndLegacy_DateFrom()
 	{
+		if (!isset($this->fixtures['legacy_letters'])) return;
+
 		$r = new OphCoCorrespondence_ReportLetters;
 		$r->condition_type = 'or';
 		$r->match_correspondence = 1;
@@ -794,8 +801,10 @@ class OphCoCorrespondence_ReportLettersTest extends CDbTestCase
 		$this->assertCount(0,$r->letters);
 	}
 
-	public function testRun_Correspondence_DateTo()
+	public function testRun_CorrespondenceAndLegacy_DateTo()
 	{
+		if (!isset($this->fixtures['legacy_letters'])) return;
+
 		$r = new OphCoCorrespondence_ReportLetters;
 		$r->condition_type = 'or';
 		$r->match_correspondence = 1;
@@ -823,8 +832,10 @@ class OphCoCorrespondence_ReportLettersTest extends CDbTestCase
 		$this->assertCount(0,$r->letters);
 	}
 
-	public function testRun_Correspondence_Author()
+	public function testRun_CorrespondenceAndLegacy_Author()
 	{
+		if (!isset($this->fixtures['legacy_letters'])) return;
+
 		$r = new OphCoCorrespondence_ReportLetters;
 		$r->condition_type = 'or';
 		$r->match_correspondence = 1;
