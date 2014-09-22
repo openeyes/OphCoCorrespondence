@@ -18,7 +18,6 @@
 
 var correspondence_markprinted_url, correspondence_print_url;
 $(document).ready(function() {
-
 	$(this).delegate('#ElementLetter_site_id', 'change', function() {
 		if (correspondence_directlines) {
 			$('#ElementLetter_direct_line').val(correspondence_directlines[$('#ElementLetter_site_id').val()]);
@@ -488,7 +487,7 @@ $(document).ready(function() {
 		var html = [
 			'<div class="field-row row collapse enclosureItem">',
 			'		<div class="large-8 column">',
-			'			<input type="text" value="" autocomplete="' + OE_html_complete + '" name="EnclosureItems[enclosure'+id+']">',
+			'			<input type="text" value="" autocomplete="' + window.OE_html_complete + '" name="EnclosureItems[enclosure'+id+']">',
 			'		</div>',
 			'		<div class="large-4 column end">',
 			'			<div class="postfix align"><a href="#" class="field-info removeEnclosure">Remove</a></div>',
