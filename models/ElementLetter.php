@@ -98,6 +98,8 @@ class ElementLetter extends BaseEventTypeElement
 			'body' => 'Body',
 			'footer' => 'Footer',
 			'draft' => 'Draft',
+			'direct_line' => 'Direct line',
+			'fax' => 'Direct fax',
 		);
 	}
 
@@ -310,6 +312,10 @@ class ElementLetter extends BaseEventTypeElement
 			if ($dl = FirmSiteSecretary::model()->find('firm_id=? and site_id=?',array(Yii::app()->session['selected_firm_id'],$this->site_id))) {
 				$this->direct_line = $dl->direct_line;
 			}
+
+			if ($dl = FirmSiteSecretary::model()->find('firm_id=? and site_id=?',array(Yii::app()->session['selected_firm_id'],$this->site_id))) {
+				$this->fax = $dl->fax;
+			}
 		}
 	}
 
@@ -424,12 +430,6 @@ class ElementLetter extends BaseEventTypeElement
 			if (!$this->draft) {
 				$this->print = 1;
 				$this->print_all = 1;
-			}
-		}
-
-		if (Yii::app()->getController()->getAction()->id == 'create') {
-			if ($dl = FirmSiteSecretary::model()->find('firm_id=? and site_id=?',array(Yii::app()->session['selected_firm_id'],$this->site_id))) {
-				$this->fax = $dl->fax;
 			}
 		}
 

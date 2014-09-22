@@ -21,13 +21,11 @@
 <div id="correspondence_out" class="correspondence-letter<?php if ($element->draft) {?> draft<?php }?>">
 	<header>
 		<?php $this->renderPartial("letter_start", array(
-			'site' => $element->site,
 			'toAddress' => $element->address,
 			'patient' => $this->patient,
 			'date' => $element->date,
 			'clinicDate' => $element->clinic_date,
-			'directLine' => $element->direct_line,
-			'faxNumber' => $element->fax,
+			'element' => $element,
 		))?>
 	</header>
 

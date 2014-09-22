@@ -417,11 +417,15 @@ class DefaultController extends BaseEventTypeController
 			'include_fax' => true,
 		));
 
+		if ($letter->direct_line || $letter->fax) {
+			$from_address .= "\n";
+		}
+
 		if ($letter->direct_line) {
-			$from_address .= "\nDirect line: ".$letter->direct_line;
+			$from_address .= "\n".$letter->getAttributeLabel('direct_line').": ".$letter->direct_line;
 		}
 		if ($letter->fax) {
-			$from_address .= "\nFax: ".$letter->fax;
+			$from_address .= "\n".$letter->getAttributeLabel('fax').": ".$letter->fax;
 		}
 
 		$from_address .= "\n\n".$letter->NHSDate('date');

@@ -25,20 +25,23 @@
 		<img src="<?php echo Yii::app()->assetManager->createUrl('img/_print/letterhead_Moorfields_NHS.jpg')?>" alt="letterhead_Moorfields_NHS" />
 	</div>
 </div>
-<?php if (isset($site)) {?>
+<?php if ($element->site) {?>
 	<div class="from-address">
 		<?php
-		echo $site->getLetterAddress(array(
+		echo $element->site->getLetterAddress(array(
 			'include_name' => true,
 			'delimiter' => '<br />',
 			'include_telephone' => true,
 			'include_fax' => true,
 		))?>
-		<?php if ($directLine) {?>
-			<br />Direct line: <?php echo $directLine?>
+		<?php if ($element->direct_line || $element->fax) {?>
+			<br/>
 		<?php }?>
-		<?php if ($faxNumber) {?>
-			<br/>Fax: <?php echo $faxNumber?>
+		<?php if ($element->direct_line) {?>
+			<br /><?php echo $element->getAttributeLabel('direct_line')?>: <?php echo $element->direct_line?>
+		<?php }?>
+		<?php if ($element->fax) {?>
+			<br/><?php echo $element->getAttributeLabel('fax')?>: <?php echo $element->fax?>
 		<?php }?>
 		<div class="date"><?php echo date(Helper::NHS_DATE_FORMAT,strtotime($date))?><?php if ($clinicDate) {?> (clinic date <?php echo date(Helper::NHS_DATE_FORMAT,strtotime($clinicDate))?>)<?php }?></div>
 	</div>
