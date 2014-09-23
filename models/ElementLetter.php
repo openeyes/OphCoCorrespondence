@@ -311,9 +311,6 @@ class ElementLetter extends BaseEventTypeElement
 
 			if ($dl = FirmSiteSecretary::model()->find('firm_id=? and site_id=?',array(Yii::app()->session['selected_firm_id'],$this->site_id))) {
 				$this->direct_line = $dl->direct_line;
-			}
-
-			if ($dl = FirmSiteSecretary::model()->find('firm_id=? and site_id=?',array(Yii::app()->session['selected_firm_id'],$this->site_id))) {
 				$this->fax = $dl->fax;
 			}
 		}
