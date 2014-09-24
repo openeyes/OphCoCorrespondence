@@ -31,18 +31,20 @@
 	<?php echo $element->renderFooter() ?>
 </p>
 
-<?php if ($element->cc) { ?>
+<?php if ($element->cc || $element->enclosures) { ?>
 <p nobr="true">
-	To:
-	<?php echo $element->renderToAddress()?>
-	<?php foreach (explode("\n",trim($element->cc)) as $line) {
-			if (trim($line)) { ?>
-	<br />CC:
-	<?php echo str_replace(';',',',$line) ?>
-	<?php }
+	<?php if ($element->cc) { ?>
+		To:
+		<?php echo $element->renderToAddress()?>
+		<?php foreach (explode("\n",trim($element->cc)) as $line) {
+				if (trim($line)) { ?>
+		<br />CC:
+		<?php echo str_replace(';',',',$line) ?>
+		<?php }
+		}
+	}
 	foreach ($element->enclosures as $enclosure) {?>
 		<br/>Enc: <?php echo $enclosure->content?>
-	<?php }
-} ?>
+	<?php } ?>
 </p>
 <?php } ?>
