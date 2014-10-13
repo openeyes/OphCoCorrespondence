@@ -632,6 +632,8 @@ function inArray(needle, haystack) {
 }
 
 function OphCoCorrespondence_do_print(all) {
+	OE_print_url = OE_print_url.replace(/\/PDFprint\//,'/print/');
+
 	$.ajax({
 		'type': 'GET',
 		'url': correspondence_markprinted_url,
