@@ -632,17 +632,14 @@ function inArray(needle, haystack) {
 }
 
 function OphCoCorrespondence_do_print(all) {
-	OE_print_url = OE_print_url.replace(/\/PDFprint\//,'/print/');
-
 	$.ajax({
 		'type': 'GET',
 		'url': correspondence_markprinted_url,
 		'success': function(html) {
 			if (all) {
-				printIFrameUrl(OE_print_url, {"all":1});
+				printEvent({"all":1});
 			} else {
-				printIFrameUrl(OE_print_url, null);
-				printIFrameUrl(correspondence_print_url, null);
+				printEvent(null);
 			}
 			enableButtons();
 		}

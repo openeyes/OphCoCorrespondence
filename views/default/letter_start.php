@@ -46,5 +46,12 @@
 		<div class="date"><?php echo date(Helper::NHS_DATE_FORMAT,strtotime($date))?><?php if ($clinicDate) {?> (clinic date <?php echo date(Helper::NHS_DATE_FORMAT,strtotime($clinicDate))?>)<?php }?></div>
 	</div>
 <?php }?>
-<div class="to-address"><?php echo str_replace("\n","<br/>",CHtml::encode($toAddress))?></div>
+<div class="to-address">
+	<div class="to-address-header">
+		To:
+	</div>
+	<div class="to-address-address">
+		<?php echo str_replace("\n","<br/>",CHtml::encode($toAddress))?>
+	</div>
+</div>
 <br/><br/>
