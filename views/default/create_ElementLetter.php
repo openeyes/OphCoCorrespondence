@@ -60,9 +60,8 @@ $layoutColumns = $form->layoutColumns;
 		</div>
 	</div>
 
-	<?php echo $form->textField($element, 'direct_line', array(), array(), array_merge($layoutColumns, array(
-		'field' => 2
-	)))?>
+	<?php echo $form->textField($element, 'direct_line', array(), array(), array_merge($layoutColumns, array('field' => 2)))?>
+	<?php echo $form->textField($element, 'fax', array(), array(), array_merge($layoutColumns, array('field' => 2)))?>
 
 	<div class="row field-row">
 		<div class="large-7 column large-offset-<?php echo $layoutColumns['label'];?>">
