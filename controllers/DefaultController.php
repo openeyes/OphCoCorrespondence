@@ -378,7 +378,7 @@ class DefaultController extends BaseEventTypeController
 
 		$this->render('print',array('element' => $letter));
 
-		if ($this->pdf_print_suffix == 'all') {
+		if ($this->pdf_print_suffix == 'all' || @$_GET['all']) {
 			$this->render('print',array('element' => $letter));
 
 			foreach ($letter->getCcTargets() as $cc) {
