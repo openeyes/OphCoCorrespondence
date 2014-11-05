@@ -151,23 +151,26 @@ body {
 	height: 70px;
 }
 
-.banner .seal {
-	float: left;
+.banner .letter-seal {
+	width: 50% !important;
+	display: inline-block;
 }
 
-.banner .seal img {
-	width: 80px;
+.banner .letter-seal img {
+	width: 80px !important;
 }
 
-.banner .logo {
-	float: right;
+.banner .correspondence-letter-logo {
+	/*float: right;*/
+	width: 49%;
+	display: inline-block;
 }
 
-.banner .logo img {
+.banner .correspondence-letter-logo img {
 	width: 350px;
 }
 
-.banner.compact .logo img {
+.banner.compact .correspondence-letter-logo img {
 	width: 250px;
 }
 
