@@ -17,11 +17,25 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html The GNU General Public License V3.0
  */
 ?>
+<?php if (!@$no_header) {?>
+	<header>
+		<?php $this->renderPartial("letter_start", array(
+			'toAddress' => $element->address,
+			'patient' => $this->patient,
+			'date' => $element->date,
+			'clinicDate' => $element->clinic_date,
+			'element' => $element,
+		))?>
+	</header>
+<?php }?>
+<?php $this->renderPartial("reply_address", array(
+		'site' => $element->site,
+))?>
 <p class="accessible">
 	<?php echo $element->renderIntroduction()?>
 </p>
-<p class="accessible"><strong><?php if ($element->re) { ?>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",CHtml::encode($element->re))?>
-<?php } else { ?>Hosp No: <?php echo $element->event->episode->patient->hos_num?>, NHS No: <?php echo $element->event->episode->patient->nhsnum?> <?php }?></strong></p>
+<p class="accessible"><strong><?php if ($element->re) {?>Re: <?php echo preg_replace("/\, DOB\:|DOB\:/","<br />\nDOB:",CHtml::encode($element->re))?>
+<?php } else {?>Hosp No: <?php echo $element->event->episode->patient->hos_num?>, NHS No: <?php echo $element->event->episode->patient->nhsnum?> <?php }?></strong></p>
 
 <p class="accessible">
 <?php echo $element->renderBody() ?>
@@ -31,13 +45,13 @@
 	<?php echo $element->renderFooter() ?>
 </p>
 
-<?php if ($element->cc || $element->enclosures) { ?>
+<?php if ($element->cc || $element->enclosures) {?>
 <p nobr="true">
-	<?php if ($element->cc) { ?>
+	<?php if ($element->cc) {?>
 		To:
 		<?php echo $element->renderToAddress()?>
 		<?php foreach (explode("\n",trim($element->cc)) as $line) {
-				if (trim($line)) { ?>
+				if (trim($line)) {?>
 		<br />CC:
 		<?php echo str_replace(';',',',$line) ?>
 		<?php }
@@ -45,6 +59,6 @@
 	}
 	foreach ($element->enclosures as $enclosure) {?>
 		<br/>Enc: <?php echo $enclosure->content?>
-	<?php } ?>
+	<?php }?>
 </p>
-<?php } ?>
+<?php }?>

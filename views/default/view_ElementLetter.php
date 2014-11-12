@@ -35,6 +35,7 @@
 
 	<?php $this->renderPartial("print_ElementLetter", array(
 			'element' => $element,
+			'no_header' => true,
 	))?>
 
 	<input type="hidden" name="OphCoCorrespondence_printLetter" id="OphCoCorrespondence_printLetter" value="<?php echo $element->print?>" />
