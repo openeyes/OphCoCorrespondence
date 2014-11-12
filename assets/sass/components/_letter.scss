@@ -39,11 +39,13 @@
 	.banner {
 		background: #fff;
 		padding-bottom: 25px;
-		.seal {
-			float: left;
+		.letter-seal {
+			width: 50% !important;
+			display: inline-block;
 		}
-		.logo {
-			float: right;
+		.correspondence-letter-logo {
+			width: 49%;
+			display: inline-block;
 		}
 		.seal img {
 			width: 87px;
