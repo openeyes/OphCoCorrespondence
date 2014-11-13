@@ -293,7 +293,7 @@ class ElementLetter extends BaseEventTypeElement
 				$this->populate_from_macro($patient);
 			}
 
-			if (Yii::app()->findModule('OphCiExamination')) {
+			if (Yii::app()->params['populate_clinic_date_from_last_examination'] && Yii::app()->findModule('OphCiExamination')) {
 				if ($episode = $patient->getEpisodeForCurrentSubspecialty()) {
 					if ($event_type = EventType::model()->find('class_name=?',array('OphCiExamination'))) {
 						$criteria = new CDbCriteria;
