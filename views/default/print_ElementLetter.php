@@ -27,10 +27,12 @@
 			'element' => $element,
 		))?>
 	</header>
-<?php }?>
+
 <?php $this->renderPartial("reply_address", array(
 		'site' => $element->site,
 ))?>
+
+<?php }?>
 <p class="accessible">
 	<?php echo $element->renderIntroduction()?>
 </p>
