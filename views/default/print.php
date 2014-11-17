@@ -17,6 +17,4 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html The GNU General Public License V3.0
  */
 ?>
-<div class="print-letter-div">
-	<?php echo $this->renderPartial('print_ElementLetter',array('element' => $element))?>
-</div>
+<?php $this->renderOpenElements($this->action->id); ?>

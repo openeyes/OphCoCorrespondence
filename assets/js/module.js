@@ -637,9 +637,10 @@ function OphCoCorrespondence_do_print(all) {
 		'url': correspondence_markprinted_url,
 		'success': function(html) {
 			if (all) {
-				printEvent({"all":1});
+				printIFrameUrl(OE_print_url, {"all":1});
 			} else {
-				printEvent(null);
+				printIFrameUrl(OE_print_url, null);
+				printIFrameUrl(correspondence_print_url, null);
 			}
 			enableButtons();
 		}

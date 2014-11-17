@@ -18,11 +18,11 @@
  */
 ?>
 <div class="banner clearfix">
-	<div class="letter-seal">
-		<img src="<?php echo Yii::app()->assetManager->createUrl('img/_print/letterhead_seal.jpg')?>" alt="letterhead_seal" width="80" />
+	<div class="seal">
+		<img src="<?php echo Yii::app()->assetManager->createUrl('img/_print/letterhead_seal.jpg')?>" alt="letterhead_seal" />
 	</div>
-	<div class="correspondence-letter-logo">
-		<img src="<?php echo Yii::app()->assetManager->createUrl('img/_print/letterhead_Moorfields_NHS.jpg')?>" alt="letterhead_Moorfields_NHS" width="350" />
+	<div class="logo">
+		<img src="<?php echo Yii::app()->assetManager->createUrl('img/_print/letterhead_Moorfields_NHS.jpg')?>" alt="letterhead_Moorfields_NHS" />
 	</div>
 </div>
 <?php if ($element->site) {?>
@@ -46,12 +46,5 @@
 		<div class="date"><?php echo date(Helper::NHS_DATE_FORMAT,strtotime($date))?><?php if ($clinicDate) {?> (clinic date <?php echo date(Helper::NHS_DATE_FORMAT,strtotime($clinicDate))?>)<?php }?></div>
 	</div>
 <?php }?>
-<div class="to-address">
-	<div class="to-address-header">
-		To:
-	</div>
-	<div class="to-address-address">
-		<?php echo str_replace("\n","<br/>",CHtml::encode($toAddress))?>
-	</div>
-</div>
+<div class="to-address"><?php echo str_replace("\n","<br/>",CHtml::encode($toAddress))?></div>
 <br/><br/>
