@@ -212,3 +212,20 @@ body {
 	font-size: 10pt;
 	margin-top: 40px;
 }
+
+.print-letter-div {
+	page-break-after: always;
+}
+
+.accessible {
+	font-size: 16pt;
+}
+
+.to-address {
+	margin-top: 2em;
+}
+
+.to-address-address {
+	margin-left: 1em;
+	margin-top: 0.3em;
+}
