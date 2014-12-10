@@ -151,29 +151,38 @@ body {
 	height: 70px;
 }
 
-.banner .seal {
-	float: left;
+.banner .letter-seal {
+	width: 50% !important;
+	display: inline-block;
 }
 
-.banner .seal img {
-	width: 96px;
+.banner .letter-seal img {
+	width: 80px !important;
 }
 
-.banner .logo {
-	float: right;
+.banner .correspondence-letter-logo {
+	width: 49%;
+	display: inline-block;
 }
 
-.banner .logo img {
-	width: 400px;
+.banner .correspondence-letter-logo img {
+	width: 350px;
 }
 
-.banner.compact .logo img {
+.banner.compact .correspondence-letter-logo img {
 	width: 250px;
 }
 
 .fromAddress {
-	width: 300px
+	width: 300px;
 	margin-top:30px;
+	text-align: right;
+	float: right;
+	text-align: right;
+}
+
+.from-address {
+	width: 400px;
 	text-align: right;
 	float: right;
 	text-align: right;
@@ -222,7 +231,7 @@ body {
 }
 
 .to-address {
-	margin-top: 2em;
+	margin-top: 4em;
 }
 
 .to-address-address {

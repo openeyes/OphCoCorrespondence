@@ -70,42 +70,44 @@
   padding-bottom: 25px;
 }
 /* line 42, ../sass/components/_letter.scss */
-.correspondence-letter .banner .seal {
-  float: left;
+.correspondence-letter .banner .letter-seal {
+  width: 50% !important;
+  display: inline-block;
 }
-/* line 45, ../sass/components/_letter.scss */
-.correspondence-letter .banner .logo {
-  float: right;
+/* line 46, ../sass/components/_letter.scss */
+.correspondence-letter .banner .correspondence-letter-logo {
+  width: 49%;
+  display: inline-block;
 }
-/* line 48, ../sass/components/_letter.scss */
+/* line 50, ../sass/components/_letter.scss */
 .correspondence-letter .banner .seal img {
   width: 87px;
 }
-/* line 51, ../sass/components/_letter.scss */
+/* line 53, ../sass/components/_letter.scss */
 .correspondence-letter .banner .logo img {
   width: 350px;
 }
-/* line 55, ../sass/components/_letter.scss */
+/* line 57, ../sass/components/_letter.scss */
 .correspondence-letter .reply-address {
   margin-bottom: 10px;
 }
-/* line 58, ../sass/components/_letter.scss */
+/* line 60, ../sass/components/_letter.scss */
 .correspondence-letter .to-address {
   display: inline-block;
   padding-left: 0;
   margin-top: 4em;
 }
-/* line 63, ../sass/components/_letter.scss */
+/* line 65, ../sass/components/_letter.scss */
 .correspondence-letter .from-address {
   float: right;
   margin-bottom: 18px;
   text-align: right;
 }
-/* line 68, ../sass/components/_letter.scss */
+/* line 70, ../sass/components/_letter.scss */
 .correspondence-letter .date, .correspondence-letter .clinic-date {
   padding-top: 15px;
 }
-/* line 71, ../sass/components/_letter.scss */
+/* line 73, ../sass/components/_letter.scss */
 .correspondence-letter .big {
   font-size: 14pt;
 }
