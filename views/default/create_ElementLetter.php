@@ -203,7 +203,7 @@ $layoutColumns = $form->layoutColumns;
 					<?php foreach ($_POST['EnclosureItems'] as $key => $value) {?>
 						<div class="field-row row collapse enclosureItem">
 							<div class="large-8 column">
-								<?php echo CHtml::textField("EnclosureItems[$key]",$value,array('size'=>60))?>
+								<?php echo CHtml::textField("EnclosureItems[$key]",$value,array('autocomplete' => Yii::app()->params['html_autocomplete'], 'size'=>60))?>
 							</div>
 							<div class="large-4 column end">
 								<div class="postfix align"><a href="#" class="field-info removeEnclosure">Remove</a></div>
