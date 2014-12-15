@@ -28,6 +28,7 @@ class DefaultController extends BaseEventTypeController
 		'users' => self::ACTION_TYPE_FORM,
 		'doPrint' => self::ACTION_TYPE_PRINT,
 		'markPrinted' => self::ACTION_TYPE_PRINT,
+		'doPrintAndView' => self::ACTION_TYPE_PRINT
 	);
 
 	/**
@@ -479,12 +480,13 @@ class DefaultController extends BaseEventTypeController
 	}
 
 	/**
-	 * Ajax action to mark an element as printed
+	 * Sets a letter element to print when it's next viewed.
 	 *
 	 * @param $id
+	 * @return bool
 	 * @throws Exception
 	 */
-	public function actionDoPrint($id)
+	protected function setPrintForEvent($id)
 	{
 		if (!$letter = ElementLetter::model()->find('event_id=?',array($id))) {
 			throw new Exception("Letter not found for event id: $id");
@@ -511,6 +513,32 @@ class DefaultController extends BaseEventTypeController
 			throw new Exception("Unable to save event: ".print_r($event->getErrors(),true));
 		}
 
-		echo "1";
+		return true;
+	}
+
+	/**
+	 * Wrapper action to mark letter for printing and then view the letter to trigger
+	 * printing behaviour client side
+	 *
+	 * @param $id
+	 */
+	public function actionDoPrintAndView($id)
+	{
+		if ($this->setPrintForEvent($id)) {
+			$this->redirect(array('default/view/'.$id));
+		}
+	}
+
+	/**
+	 * Ajax action to mark letter for printing
+	 *
+	 * @param $id
+	 * @throws Exception
+	 */
+	public function actionDoPrint($id)
+	{
+		if ($this->setPrintForEvent($id)) {
+			echo "1";
+		}
 	}
 }
