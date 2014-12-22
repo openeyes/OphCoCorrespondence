@@ -29,6 +29,12 @@
   background-image: url('../img/medium.png?1382439347');
 }
 
+/* line 27, ../sass/components/_event.scss */
+textarea[name="LetterMacro[body]"] {
+  width: 45em;
+  height: 20em;
+}
+
 /* line 17, ../sass/components/_forms.scss */
 textarea {
   font-size: 1rem;

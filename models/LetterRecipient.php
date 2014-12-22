@@ -17,11 +17,17 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html The GNU General Public License V3.0
  */
 
-return array(
-	'params' => array(
-		'populate_clinic_date_from_last_examination' => false,
-		'admin_menu' => array(
-			'Letter macros' => '/OphCoCorrespondence/admin/letterMacros',
-		),
-	)
-);
+class LetterRecipient extends BaseActiveRecordVersioned
+{
+	public function tableName()
+	{
+		return 'ophcocorrespondence_letter_recipient';
+	}
+
+	public function rules()
+	{
+		return array(
+			array('name', 'safe'),
+		);
+	}
+}

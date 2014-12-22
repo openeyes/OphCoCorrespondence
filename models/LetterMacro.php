@@ -49,14 +49,9 @@ class LetterMacro extends BaseEventTypeElement
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
-			array('name, recipient_patient, recipient_doctor, use_nickname, body, cc_patient, cc_doctor, display_order', 'safe'),
-			array('name, recipient_patient, recipient_doctor, use_nickname, body, cc_patient, cc_doctor', 'required'),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('name, recipient_patient, recipient_doctor, use_nickname, body, cc_patient, cc_doctor, display_order', 'safe', 'on' => 'search'),
+			array('name, recipient_id, use_nickname, body, cc_patient, cc_doctor, display_order, site_id, cc_drss, episode_status_id', 'safe'),
+			array('name, recipient_id, use_nickname, body, cc_patient, cc_doctor', 'required'),
 		);
 	}
 
@@ -68,11 +63,9 @@ class LetterMacro extends BaseEventTypeElement
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'element_type' => array(self::HAS_ONE, 'ElementType', 'id','on' => "element_type.class_name='".get_class($this)."'"),
-			'eventType' => array(self::BELONGS_TO, 'EventType', 'event_type_id'),
-			'event' => array(self::BELONGS_TO, 'Event', 'event_id'),
-			'user' => array(self::BELONGS_TO, 'User', 'created_user_id'),
-			'usermodified' => array(self::BELONGS_TO, 'User', 'last_modified_user_id'),
+			'site' => array(self::BELONGS_TO, 'Site', 'site_id'),
+			'episode_status' => array(self::BELONGS_TO, 'EpisodeStatus', 'episode_status_id'),
+			'recipient' => array(self::BELONGS_TO, 'LetterRecipient', 'recipient_id'),
 		);
 	}
 
@@ -82,6 +75,13 @@ class LetterMacro extends BaseEventTypeElement
 	public function attributeLabels()
 	{
 		return array(
+			'use_nickname' => 'Use nickname',
+			'cc_patient' => 'CC patient',
+			'cc_doctor' => 'CC doctor',
+			'cc_drss' => 'CC DRSS',
+			'site_id' => 'Site',
+			'episode_status_id' => 'Episode status',
+			'recipient_id' => 'Default recipient',
 		);
 	}
 
