@@ -323,13 +323,13 @@ class ElementLetter extends BaseEventTypeElement
 		}
 
 		$address_contact = null;
-		if ($this->macro->recipient_patient) {
+		if ($this->macro->recipient && $this->macro->recipient->name == 'Patient') {
 			$address_contact = $patient;
 			$this->address_target = 'patient';
 			$this->introduction = $patient->getLetterIntroduction(array(
 				'nickname' => $this->use_nickname,
 			));
-		} elseif ($this->macro->recipient_doctor) {
+		} elseif ($this->macro->recipient && $this->macro->recipient->name == 'GP') {
 			$this->address_target = 'gp';
 			if($patient->gp) {
 				$this->introduction = $patient->gp->getLetterIntroduction(array(

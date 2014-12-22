@@ -157,7 +157,7 @@ class DefaultController extends BaseEventTypeController
 
 		$macro->substitute($patient);
 
-		if ($macro->recipient_patient) {
+		if ($macro->recipient && $macro->recipient->name == 'Patient') {
 			$data['sel_address_target'] = 'Patient'.$patient->id;
 			$contact = $patient;
 			if ($patient->date_of_death) {
@@ -166,7 +166,7 @@ class DefaultController extends BaseEventTypeController
 			}
 		}
 
-		if ($macro->recipient_doctor && $contact = ($patient->gp) ? $patient->gp : $patient->practice) {
+		if ($macro->recipient && $macro->recipient->name == 'GP' && $contact = ($patient->gp) ? $patient->gp : $patient->practice) {
 			$data['sel_address_target'] = get_class($contact).$contact->id;
 		}
 
