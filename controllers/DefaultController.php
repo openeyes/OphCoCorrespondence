@@ -28,6 +28,7 @@ class DefaultController extends BaseEventTypeController
 		'users' => self::ACTION_TYPE_FORM,
 		'doPrint' => self::ACTION_TYPE_PRINT,
 		'markPrinted' => self::ACTION_TYPE_PRINT,
+		'doPrintAndView' => self::ACTION_TYPE_PRINT
 	);
 
 	/**
@@ -369,103 +370,36 @@ class DefaultController extends BaseEventTypeController
 		}
 	}
 
-	/**
-	 * Always print PDF for letter
-	 *
-	 * @param int $id
-	 * @param BaseEventTypeElement[] $elements
-	 * @param string $template
-	 */
-	protected function printHTML($id, $elements, $template='print')
+	public function actionPrint($id)
 	{
-		$this->printPDF($id, $elements);
-	}
+		$letter = ElementLetter::model()->find('event_id=?',array($id));
 
-	/**
-	 * PDF print method
-	 *
-	 * @TODO: integrate with controller stateful behaviour
-	 *
-	 * @param int $id
-	 * @param BaseEventTypeElement[] $elements
-	 * @param string $template
-	 * @param array $params
-	 * @throws Exception
-	 */
-	protected function printPDF($id, $elements, $template='print', $params=array())
-	{
-		// Remove any existing css
-		Yii::app()->assetManager->reset();
+		$this->printInit($id);
+		$this->layout = '//layouts/print';
 
-		if (!$letter = ElementLetter::model()->find('event_id=?',array($id))) {
-			throw new Exception('Letter not found were event_id = '.$id);
-		}
-		$this->site = $letter->site;
+		$this->render('print',array('element' => $letter));
 
-		$this->layout = '//layouts/pdf';
-		$pdf_print = new OEPDFPrint('Openeyes', 'Correspondence letters', 'Correspondence letters');
+		if ($this->pdf_print_suffix == 'all' || @$_GET['all']) {
+			$this->render('print',array('element' => $letter));
 
-		$body = $this->render('print', array(
-				'elements' => $elements,
-				'eventId' => $id,
-		), true);
-
-		$from_address = $this->site->getLetterAddress(array(
-			'include_name' => true,
-			'delimiter' => "\n",
-			'include_telephone' => true,
-			'include_fax' => true,
-		));
-
-		if ($letter->direct_line || $letter->fax) {
-			$from_address .= "\n";
-		}
-
-		if ($letter->direct_line) {
-			$from_address .= "\n".$letter->getAttributeLabel('direct_line').": ".$letter->direct_line;
-		}
-		if ($letter->fax) {
-			$from_address .= "\n".$letter->getAttributeLabel('fax').": ".$letter->fax;
-		}
-
-		$from_address .= "\n\n".$letter->NHSDate('date');
-
-		if ($letter->clinic_date) {
-			$from_address .= " (clinic date ".$letter->NHSDate('clinic_date').")";
-		}
-
-		$oeletter = new OELetter($letter->address,$from_address);
-		$oeletter->setHideDate(true);
-		$oeletter->setBarcode('E:'.$id);
-		$oeletter->addBody($body);
-
-		if ($this->site->replyTo) {
-			$oeletter->addReplyToAddress($this->site->getReplyToAddress(array('include_name' => true, 'delimiter' => ', ', 'include_telephone' => true)));
-		}
-
-		$pdf_print->addLetter($oeletter);
-
-		if (@$_GET['all']) {
-
-			// Add copy for file
-			$pdf_print->addLetter($oeletter);
-
-			// Add CCs
 			foreach ($letter->getCcTargets() as $cc) {
-				$ccletter = new OELetter(implode("\n",preg_replace('/^[a-zA-Z]+: /','',str_replace(';',',',$cc))),$from_address);
-				$ccletter->setHideDate(true);
-				$ccletter->setBarcode('E:'.$id);
-				$ccletter->addBody($body);
-
-				if ($this->site->replyTo) {
-					$ccletter->addReplyToAddress($this->site->getReplyToAddress(array('include_name' => true, 'delimiter' => ', ', 'include_telephone' => true)));
-				}
-
-				$pdf_print->addLetter($ccletter);
+				$letter->address = implode("\n",preg_replace('/^[a-zA-Z]+: /','',str_replace(';',',',$cc)));
+				$this->render('print',array('element' => $letter));
 			}
 		}
+	}
 
-		$pdf_print->output();
+	public function actionPDFPrint($id)
+	{
+		if (@$_GET['all']) {
+			$this->pdf_print_suffix = 'all';
+
+			$letter = ElementLetter::model()->find('event_id=?',array($id));
+
+			$this->pdf_print_documents = 2 + count($letter->getCcTargets());
+		}
+
+		return parent::actionPDFPrint($id);
 	}
 
 	/**
@@ -546,12 +480,13 @@ class DefaultController extends BaseEventTypeController
 	}
 
 	/**
-	 * Ajax action to mark an element as printed
+	 * Sets a letter element to print when it's next viewed.
 	 *
 	 * @param $id
+	 * @return bool
 	 * @throws Exception
 	 */
-	public function actionDoPrint($id)
+	protected function setPrintForEvent($id)
 	{
 		if (!$letter = ElementLetter::model()->find('event_id=?',array($id))) {
 			throw new Exception("Letter not found for event id: $id");
@@ -578,6 +513,32 @@ class DefaultController extends BaseEventTypeController
 			throw new Exception("Unable to save event: ".print_r($event->getErrors(),true));
 		}
 
-		echo "1";
+		return true;
+	}
+
+	/**
+	 * Wrapper action to mark letter for printing and then view the letter to trigger
+	 * printing behaviour client side
+	 *
+	 * @param $id
+	 */
+	public function actionDoPrintAndView($id)
+	{
+		if ($this->setPrintForEvent($id)) {
+			$this->redirect(array('default/view/'.$id));
+		}
+	}
+
+	/**
+	 * Ajax action to mark letter for printing
+	 *
+	 * @param $id
+	 * @throws Exception
+	 */
+	public function actionDoPrint($id)
+	{
+		if ($this->setPrintForEvent($id)) {
+			echo "1";
+		}
 	}
 }
