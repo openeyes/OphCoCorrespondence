@@ -278,12 +278,12 @@ class ElementLetter extends BaseEventTypeElement
 
 			// Look for a macro based on the episode_status
 			if ($episode = $patient->getEpisodeForCurrentSubspecialty()) {
-				if (!$this->macro = FirmLetterMacro::model()->find('firm_id=? and episode_status_id=?',array($firm->id, $episode->episode_status_id))) {
+				if (!$this->macro = LetterMacro::model()->find('firm_id=? and episode_status_id=?',array($firm->id, $episode->episode_status_id))) {
 					if ($firm->service_subspecialty_assignment_id) {
 						$subspecialty_id = $firm->serviceSubspecialtyAssignment->subspecialty_id;
 
-						if (!$this->macro = SubspecialtyLetterMacro::model()->find('subspecialty_id=? and episode_status_id=?',array($subspecialty_id, $episode->episode_status_id))) {
-							$this->macro = LetterMacro::model()->find('episode_status_id=?',array($episode->episode_status_id));
+						if (!$this->macro = LetterMacro::model()->find('subspecialty_id=? and episode_status_id=?',array($subspecialty_id, $episode->episode_status_id))) {
+							$this->macro = LetterMacro::model()->find('site_id=? and episode_status_id=?',array(Yii::app()->session['selected_site_id'],$episode->episode_status_id));
 						}
 					}
 				}
@@ -390,9 +390,9 @@ class ElementLetter extends BaseEventTypeElement
 		$criteria->compare('firm_id', $firm->id);
 		$criteria->order = 'display_order asc';
 
-		foreach (FirmLetterMacro::model()->findAll($criteria) as $flm) {
-			if (!in_array($flm->name, $macro_names)) {
-				$macros['firm'.$flm->id] = $macro_names[] = $flm->name;
+		foreach (LetterMacro::model()->findAll($criteria) as $macro) {
+			if (!in_array($macro->name, $macro_names)) {
+				$macros[$macro->id] = $macro_names[] = $macro->name;
 			}
 		}
 
@@ -401,9 +401,9 @@ class ElementLetter extends BaseEventTypeElement
 			$criteria->compare('subspecialty_id', $firm->serviceSubspecialtyAssignment->subspecialty_id);
 			$criteria->order = 'display_order asc';
 
-			foreach (SubspecialtyLetterMacro::model()->findAll($criteria) as $slm) {
-				if (!in_array($slm->name, $macro_names)) {
-					$macros['subspecialty'.$slm->id] = $macro_names[] = $slm->name;
+			foreach (LetterMacro::model()->findAll($criteria) as $macro) {
+				if (!in_array($macro->name, $macro_names)) {
+					$macros[$macro->id] = $macro_names[] = $macro->name;
 				}
 			}
 		}
@@ -412,9 +412,9 @@ class ElementLetter extends BaseEventTypeElement
 		$criteria->compare('site_id', Yii::app()->session['selected_site_id']);
 		$criteria->order = 'display_order asc';
 
-		foreach (LetterMacro::model()->findAll($criteria) as $slm) {
-			if (!in_array($slm->name, $macro_names)) {
-				$macros['site'.$slm->id] = $macro_names[] = $slm->name;
+		foreach (LetterMacro::model()->findAll($criteria) as $macro) {
+			if (!in_array($macro->name, $macro_names)) {
+				$macros[$macro->id] = $macro_names[] = $macro->name;
 			}
 		}
 

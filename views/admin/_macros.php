@@ -22,7 +22,9 @@ if (!empty($macros)) {
 		<tr class="clickable" data-id="<?php echo $macro->id?>" data-uri="OphCoCorrespondence/admin/editMacro/<?php echo $macro->id?>">
 			<td><input type="checkbox" name="macros[]" value="<?php echo $macro->id?>" /></td>
 			<td><?php echo $macro->id?></td>
-			<td><?php echo $macro->site->name?></td>
+			<td><?php echo $macro->site ? $macro->site->name : '-'?></td>
+			<td><?php echo $macro->subspecialty ? $macro->subspecialty->name : '-'?></td>
+			<td><?php echo $macro->firm ? $macro->firm->name : '-'?></td>
 			<td><?php echo $macro->name?></td>
 			<td><?php echo $macro->recipient ? $macro->recipient->name : '-'?></td>
 			<td><?php echo $macro->cc_patient ? 'Yes' : 'No'?></td>

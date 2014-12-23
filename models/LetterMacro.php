@@ -51,7 +51,7 @@ class LetterMacro extends BaseEventTypeElement
 	{
 		return array(
 			array('name, recipient_id, use_nickname, body, cc_patient, cc_doctor, display_order, site_id, cc_drss, episode_status_id', 'safe'),
-			array('name, recipient_id, use_nickname, body, cc_patient, cc_doctor', 'required'),
+			array('name, recipient_id, use_nickname, body, cc_patient, cc_doctor, site_id', 'required'),
 		);
 	}
 
@@ -64,6 +64,8 @@ class LetterMacro extends BaseEventTypeElement
 		// class name for the relations automatically generated below.
 		return array(
 			'site' => array(self::BELONGS_TO, 'Site', 'site_id'),
+			'subspecialty' => array(self::BELONGS_TO, 'Subspecialty', 'subspecialty_id'),
+			'firm' => array(self::BELONGS_TO, 'Firm', 'firm_id'),
 			'episode_status' => array(self::BELONGS_TO, 'EpisodeStatus', 'episode_status_id'),
 			'recipient' => array(self::BELONGS_TO, 'LetterRecipient', 'recipient_id'),
 		);

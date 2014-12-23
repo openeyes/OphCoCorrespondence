@@ -62,6 +62,36 @@ class AdminController extends \ModuleAdminController
 		return LetterMacro::model()->findAll($criteria);
 	}
 
+	public function actionAddMacro()
+	{
+		$macro = new LetterMacro;
+
+		$errors = array();
+
+		if (!empty($_POST)) {
+			$macro->attributes = $_POST['LetterMacro'];
+
+			if (!$macro->validate()) {
+				$errors = $macro->errors;
+			} else {
+				if (!$macro->save()) {
+					throw new Exception("Unable to save macro: ".print_r($macro->errors,true));
+				}
+
+				Audit::add('admin','create',$macro->id,null,array('module'=>'OphCoCorrespondence','model'=>'LetterMacro'));
+
+				$this->redirect('/OphCoCorrespondence/admin/letterMacros');
+			}
+		} else {
+			Audit::add('admin','view',$macro->id,null,array('module'=>'OphCoCorrespondence','model'=>'LetterMacro'));
+		}
+
+		$this->render('_macro',array(
+			'macro' => $macro,
+			'errors' => $errors,
+		));
+	}
+
 	public function actionEditMacro($id)
 	{
 		if (!$macro = LetterMacro::model()->findByPk($id)) {

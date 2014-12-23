@@ -2,11 +2,19 @@ $(document).ready(function() {
 	$('#site_id').change(function() {
 		updateMacroList();
 	});
+
 	$('#name').change(function() {
 		updateMacroList();
 	});
+
 	$('#episode_status_id').change(function() {
 		updateMacroList();
+	});
+
+	$('.addLetterMacro').click(function(e) {
+		e.preventDefault();
+
+		window.location.href = baseUrl + '/OphCoCorrespondence/admin/addMacro';
 	});
 });
 

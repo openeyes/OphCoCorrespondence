@@ -23,6 +23,11 @@
 			<h2>Letter macros</h2>
 		</div>
 	</div>
+	<div class="row data-row">
+		<div class="large-4 column end">
+			<?php echo CHtml::htmlButton("Add macro",array('class' => 'button small addLetterMacro'))?>
+		</div>
+	</div>
 	<form id="admin_sessions_filters" class="panel">
 		<div class="row field-row">
 			<div class="large-2 column">
@@ -44,6 +49,8 @@
 					<th><input type="checkbox" name="selectall" id="selectall" /></th>
 					<th>ID</th>
 					<th>Site</th>
+					<th>Subspecialty</th>
+					<th>Firm</th>
 					<th>Name</th>
 					<th>Recipient</th>
 					<th>CC patient</th>
