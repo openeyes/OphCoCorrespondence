@@ -31,7 +31,10 @@
 			'field' => 4
 		)
 	))?>
-		<?php echo $form->dropDownList($macro,'site_id',Site::model()->getListForCurrentInstitution(),array('empty' => '- Site -'))?>
+		<?php echo $form->dropDownList($macro,'type',array('site' => 'Site','subspecialty' => 'Subspecialty','firm' => 'Firm'),array('empty' => '- Type -'))?>
+		<?php echo $form->dropDownList($macro,'site_id',Site::model()->getListForCurrentInstitution(),array('empty' => '- Site -','div-class' => 'typeSite'),$macro->type != 'site')?>
+		<?php echo $form->dropDownList($macro,'subspecialty_id',CHtml::listData(Subspecialty::model()->findAll(array('order' => 'name asc')),'id','name'),array('empty' => '- Subspecialty -','div-class' => 'typeSubspecialty'),$macro->type != 'subspecialty')?>
+		<?php echo $form->dropDownList($macro,'firm_id',Firm::model()->getListWithSpecialties(),array('empty' => '- Firm -','div-class' => 'typeFirm'),$macro->type != 'firm')?>
 		<?php echo $form->textField($macro,'name',array('autocomplete'=>Yii::app()->params['html_autocomplete']))?>
 		<?php echo $form->radioButtons($macro,'recipient_id',CHtml::listData(LetterRecipient::model()->findAll(array('order' => 'display_order asc')),'id','name'),null,false,false,false,false,array('empty' => 'None','empty-after' => true))?>
 		<?php echo $form->checkBox($macro,'cc_patient',array('text-align' => 'right'))?>
@@ -40,6 +43,11 @@
 		<?php echo $form->checkBox($macro,'use_nickname',array('text-align' => 'right'))?>
 		<?php echo $form->dropDownList($macro,'episode_status_id',CHtml::listData(EpisodeStatus::model()->findAll(array('order' => 'id asc')),'id','name'),array('empty' => '- None -'))?>
 		<?php echo $form->textArea($macro,'body')?>
-		<?php echo $form->formActions()?>
+		<div class="row field-row">
+			<div class="large-10 large-offset-2 column">
+				<button class="button small primary event-action" name="save" type="submit" id="et_save">Save</button>
+				<button class="warning button small primary cancelEditMacro" name="cancel" type="submit">Cancel</button>
+			</div>
+		</div>
 	<?php $this->endWidget()?>
 </div>

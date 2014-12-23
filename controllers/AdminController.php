@@ -27,10 +27,29 @@ class AdminController extends \ModuleAdminController
 
 		Audit::add('admin','list',null,null,array('module'=>'OphCoCorrespondence','model'=>'LetterMacro'));
 
+		$unique_names = CHtml::listData($macros,'name','name');
+		asort($unique_names);
+
 		$this->render('letter_macros',array(
 			'macros' => $macros,
-			'unique_names' => CHtml::listData($macros,'name','name'),
+			'unique_names' => $unique_names,
+			'episode_statuses' => $this->getUniqueEpisodeStatuses($macros),
 		));
+	}
+
+	public function getUniqueEpisodeStatuses($macros)
+	{
+		$statuses = array();
+
+		foreach ($macros as $macro) {
+			if ($macro->episode_status_id && !isset($statuses[$macro->episode_status_id])) {
+				$statuses[$macro->episode_status_id] = $macro->episode_status->name;
+			}
+		}
+
+		ksort($statuses);
+
+		return $statuses;
 	}
 
 	public function actionFilterMacros()
@@ -38,26 +57,63 @@ class AdminController extends \ModuleAdminController
 		$this->renderPartial('_macros',array('macros' => $this->getMacros()));
 	}
 
-	public function getMacros()
+	public function actionFilterMacroNames()
+	{
+		$macros = $this->getMacros(false);
+
+		$unique_names = CHtml::listData($macros,'name','name');
+		asort($unique_names);
+
+		$this->renderPartial('_macro_names',array('names' => $unique_names));
+	}
+
+	public function actionFilterEpisodeStatuses()
+	{
+		$this->renderPartial('_episode_statuses',array('statuses' => $this->getUniqueEpisodeStatuses($this->getMacros(false))));
+	}
+
+	public function getMacros($filter_name_and_episode_status = true)
 	{
 		$criteria = new CDbCriteria;
+
+		if (@$_GET['type'] == 'site') {
+			$criteria->addCondition('site_id is not null');
+		}
+		if (@$_GET['type'] == 'subspecialty') {
+			$criteria->addCondition('subspecialty_id is not null');
+		}
+		if (@$_GET['type'] == 'firm') {
+			$criteria->addCondition('firm_id is not null');
+		}
 
 		if (@$_GET['site_id']) {
 			$criteria->addCondition('site_id = :site_id');
 			$criteria->params[':site_id'] = $_GET['site_id'];
 		}
 
-		if (@$_GET['name']) {
-			$criteria->addCondition('name = :name');
-			$criteria->params[':name'] = $_GET['name'];
+		if (@$_GET['subspecialty_id']) {
+			$criteria->addCondition('subspecialty_id = :subspecialty_id');
+			$criteria->params[':subspecialty_id'] = $_GET['subspecialty_id'];
 		}
 
-		if (@$_GET['episode_status_id']) {
-			$criteria->addCondition('episode_status_id = :esi');
-			$criteria->params[':esi'] = $_GET['episode_status_id'];
+		if (@$_GET['firm_id']) {
+			$criteria->addCondition('firm_id = :firm_id');
+			$criteria->params[':firm_id'] = $_GET['firm_id'];
 		}
 
-		$criteria->order = 'site_id asc, name asc';
+		if ($filter_name_and_episode_status) {
+			if (@$_GET['name']) {
+				$criteria->addCondition('name = :name');
+				$criteria->params[':name'] = $_GET['name'];
+			}
+
+			if (@$_GET['episode_status_id']) {
+				$criteria->addCondition('episode_status_id = :esi');
+				$criteria->params[':esi'] = $_GET['episode_status_id'];
+			}
+		}
+
+		$criteria->order = 'site_id asc, subspecialty_id asc, firm_id asc, name asc';
 
 		return LetterMacro::model()->findAll($criteria);
 	}

@@ -25,8 +25,10 @@
  * The followings are the available model relations:
  * @property Event $event
  */
-class LetterMacro extends BaseEventTypeElement
+class LetterMacro extends BaseActiveRecordVersioned
 {
+	public $type;
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @return ElementOperation the static model class
@@ -50,8 +52,11 @@ class LetterMacro extends BaseEventTypeElement
 	public function rules()
 	{
 		return array(
-			array('name, recipient_id, use_nickname, body, cc_patient, cc_doctor, display_order, site_id, cc_drss, episode_status_id', 'safe'),
-			array('name, recipient_id, use_nickname, body, cc_patient, cc_doctor, site_id', 'required'),
+			array('name, recipient_id, use_nickname, body, cc_patient, cc_doctor, display_order, site_id, subspecialty_id, firm_id, cc_drss, episode_status_id', 'safe'),
+			array('name, use_nickname, body, cc_patient, cc_doctor, type', 'required'),
+			array('site_id','RequiredIfFieldValidator','field' => 'type', 'value' => 'site'),
+			array('subspecialty_id','RequiredIfFieldValidator','field' => 'type', 'value' => 'subspecialty'),
+			array('firm_id','RequiredIfFieldValidator','field' => 'type', 'value' => 'firm'),
 		);
 	}
 
@@ -82,6 +87,8 @@ class LetterMacro extends BaseEventTypeElement
 			'cc_doctor' => 'CC doctor',
 			'cc_drss' => 'CC DRSS',
 			'site_id' => 'Site',
+			'subspecialty_id' => 'Subspecialty',
+			'firm_id' => 'Firm',
 			'episode_status_id' => 'Episode status',
 			'recipient_id' => 'Default recipient',
 		);
@@ -104,6 +111,37 @@ class LetterMacro extends BaseEventTypeElement
 		return new CActiveDataProvider(get_class($this), array(
 			'criteria' => $criteria,
 		));
+	}
+
+	public function afterFind()
+	{
+		if ($this->site_id) {
+			$this->type = 'site';
+		} else if ($this->subspecialty_id) {
+			$this->type = 'subspecialty';
+		} else if ($this->firm_id) {
+			$this->type = 'firm';
+		}
+	}
+
+	public function beforeSave()
+	{
+		switch ($this->type) {
+			case 'site':
+				$this->firm_id = null;
+				$this->subspecialty = null;
+				break;
+			case 'subspecialty':
+				$this->firm_id = null;
+				$this->site_id = null;
+				break;
+			case 'firm':
+				$this->subspecialty_id = null;
+				$this->site_id = null;
+				break;
+		}
+
+		return parent::beforeSave();
 	}
 
 	public function substitute($patient)

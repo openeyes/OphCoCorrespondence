@@ -17,29 +17,9 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html The GNU General Public License V3.0
  */
 
-if (!empty($macros)) {
-	foreach ($macros as $i => $macro) {?>
-		<tr class="clickable" data-id="<?php echo $macro->id?>" data-uri="OphCoCorrespondence/admin/editMacro/<?php echo $macro->id?>">
-			<td><input type="checkbox" name="macros[]" value="<?php echo $macro->id?>" /></td>
-			<td><?php echo $macro->id?></td>
-			<td>
-				<?php if ($macro->site) {
-					echo "Site: ".$macro->site->name;
-				} else if ($macro->subspecialty) {
-					echo "Subspecialty: ".$macro->subspecialty->name;
-				} else {
-					echo "Firm: ".$macro->firm->getNameAndSubspecialty();
-				}?>
-			</td>
-			<td><?php echo $macro->name?></td>
-			<td><?php echo $macro->recipient ? $macro->recipient->name : '-'?></td>
-			<td><?php echo $macro->cc_patient ? 'Yes' : 'No'?></td>
-			<td><?php echo $macro->cc_doctor ? 'Yes' : 'No'?></td>
-			<td><?php echo $macro->cc_drss ? 'Yes' : 'No'?></td>
-			<td><?php echo $macro->use_nickname ? 'Yes' : 'No'?></td>
-			<td><?php echo $macro->episode_status ? $macro->episode_status->name : '-'?></td>
-		</tr>
+?><option value="">- Episode status -</option><?php
+if (!empty($statuses)) {
+	foreach ($statuses as $id => $name) {?>
+		<option value="<?php echo $id?>"><?php echo $name?></option>
 	<?php }
-} else {?>
-	<tr><td>No letter macros match your filters.</td></tr>
-<?php }?>
+}?>
