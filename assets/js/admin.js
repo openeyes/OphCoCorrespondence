@@ -39,7 +39,46 @@ $(document).ready(function() {
 	$('#LetterMacro_type').change(function() {
 		setTypeFilter($(this).val());
 	});
+
+	$('#LetterMacro_body').select(function() {
+		if ($(this)[0].selectionStart != undefined) {
+			var text = $(this).val().substring($(this)[0].selectionStart-1,$(this)[0].selectionEnd+1);
+
+			var m = text.match(/^\[([a-z]{3})\]$/);
+
+			if (m) {
+				$.ajax({
+					'type': 'GET',
+					'url': baseUrl + '/patient/shortCodeDescription?shortcode=' + m[1],
+					'success': function(description) {
+						$('.shortCodeDescription').html(description);
+					}
+				});
+			} else {
+				$('.shortCodeDescription').html('&nbsp;');
+			}
+		} else {
+			$('.shortCodeDescription').html('&nbsp;');
+		}
+	});
+
+	$('#LetterMacro_body').unbind('keyup').bind('keyup',function() {
+		macro_cursor_position = $(this).prop('selectionEnd');
+	});
+
+	$('#shortcode').change(function() {
+		if ($(this).val() != '') {
+			var current = $('#LetterMacro_body').val();
+
+			$('#LetterMacro_body').val(current.substring(0,macro_cursor_position) + '[' + $(this).val() + ']' + current.substring(macro_cursor_position,current.length));
+			$(this).val('');
+		}
+	});
+
+	macro_cursor_position = $('#LetterMacro_body').val().length;
 });
+
+var macro_cursor_position = 0;
 
 function setTypeFilter(type)
 {

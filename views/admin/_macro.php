@@ -44,6 +44,25 @@
 		<?php echo $form->dropDownList($macro,'episode_status_id',CHtml::listData(EpisodeStatus::model()->findAll(array('order' => 'id asc')),'id','name'),array('empty' => '- None -'))?>
 		<?php echo $form->textArea($macro,'body')?>
 		<div class="row field-row">
+			<div class="large-10 large-offset-2 column shortCodeDescription">
+				&nbsp;
+			</div>
+		</div>
+		<div class="row field-row">
+			<div class="large-8 large-offset-2 column">
+				<div class="row field-row">
+					<div class="large-3 column">
+						<label for="shortcode">
+							Add shortcode:
+						</label>
+					</div>
+					<div class="large-6 column end">
+						<?php echo CHtml::dropDownList('shortcode','',CHtml::listData(PatientShortcode::model()->findAll(array('order' => 'description asc')),'code','description'),array('empty' => '- Select -'))?>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row field-row">
 			<div class="large-10 large-offset-2 column">
 				<button class="button small primary event-action" name="save" type="submit" id="et_save">Save</button>
 				<button class="warning button small primary cancelEditMacro" name="cancel" type="submit">Cancel</button>
