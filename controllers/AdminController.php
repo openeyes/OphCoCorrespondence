@@ -179,4 +179,17 @@ class AdminController extends \ModuleAdminController
 			'errors' => $errors,
 		));
 	}
+
+	public function actionDeleteLetterMacros()
+	{
+		$criteria = new CDbCriteria;
+
+		$criteria->addInCondition('id',@$_POST['id']);
+
+		if (LetterMacro::model()->deleteAll($criteria)) {
+			echo "1";
+		} else {
+			echo "0";
+		}
+	}
 }

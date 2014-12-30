@@ -72,4 +72,9 @@
 			</tbody>
 		</table>
 	</form>
+	<div class="row field-row">
+		<div class="large-4 column end">
+			<?php echo CHtml::htmlButton("Delete macros",array('class' => 'button small deleteMacros'))?>
+		</div>
+	</div>
 </div>

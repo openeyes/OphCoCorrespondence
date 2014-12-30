@@ -75,7 +75,42 @@ $(document).ready(function() {
 		}
 	});
 
-	macro_cursor_position = $('#LetterMacro_body').val().length;
+	$('#selectall').click(function() {
+		if ($(this).is(':checked')) {
+			$(this).closest('thead').next('tbody').find('input[type="checkbox"]').attr('checked','checked');
+		} else {
+			$(this).closest('thead').next('tbody').find('input[type="checkbox"]').attr('checked',false);
+		}
+	});
+
+	$('.deleteMacros').click(function() {
+		if ($('#admin_letter_macros tbody').find('input[type="checkbox"]:checked').length == 0) {
+			alert("Please select one or more macros to delete.");
+		} else {
+			var list = {"id": []};
+
+			$('#admin_letter_macros tbody').find('input[type="checkbox"]:checked').map(function() {
+				list["id"].push($(this).val());
+			});
+
+			$.ajax({
+				'type': 'POST',
+				'url': baseUrl + '/OphCoCorrespondence/admin/deleteLetterMacros',
+				'data': $.param(list) + '&YII_CSRF_TOKEN=' + YII_CSRF_TOKEN,
+				'success': function(resp) {
+					if (resp != "1") {
+						alert("Something went wrong trying to delete the macro(s). Please try again or contact support for assistance.");
+					} else {
+						window.location.reload();
+					}
+				}
+			});
+		}
+	});
+
+	if ($('#LetterMacro_body').length >0) {
+		macro_cursor_position = $('#LetterMacro_body').val().length;
+	}
 });
 
 var macro_cursor_position = 0;
