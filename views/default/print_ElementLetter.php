@@ -51,7 +51,7 @@
 <p nobr="true">
 	<?php if ($element->cc) {?>
 		To:
-		<?php echo $element->renderToAddress()?>
+		<?php echo $element->renderSourceAddress()?>
 		<?php foreach (explode("\n",trim($element->cc)) as $line) {
 				if (trim($line)) {?>
 		<br />CC:

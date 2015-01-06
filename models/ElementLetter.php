@@ -29,6 +29,9 @@ class ElementLetter extends BaseEventTypeElement
 {
 	public $cc_targets = array();
 	public $address_target = null;
+	// track the original source address so when overridden for copies to cc addresses, we can still keep
+	// the correct cc footer information
+	public $source_address = null;
 	public $lock_period_hours = 24;
 	public $macro = null;
 
@@ -120,6 +123,12 @@ class ElementLetter extends BaseEventTypeElement
 		return new CActiveDataProvider(get_class($this), array(
 			'criteria' => $criteria,
 		));
+	}
+
+	public function afterFind()
+	{
+		parent::afterFind();
+		$this->source_address = $this->address;
 	}
 
 	public function getAddress_targets()
@@ -574,8 +583,22 @@ class ElementLetter extends BaseEventTypeElement
 		return str_replace("\n","<br/>",CHtml::encode($this->footer));
 	}
 
+	/**
+	 * Single line render of to address
+	 *
+	 * @return mixed
+	 */
 	public function renderToAddress()
 	{
 		return preg_replace('/[\r\n]+/',', ',CHtml::encode($this->address));
+	}
+
+	/**
+	 * Single line render of source_address
+	 * @return mixed
+	 */
+	public function renderSourceAddress()
+	{
+		return preg_replace('/[\r\n]+/',', ',CHtml::encode($this->source_address));
 	}
 }
