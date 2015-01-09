@@ -21,13 +21,11 @@
 <div id="correspondence_out" class="correspondence-letter<?php if ($element->draft) {?> draft<?php }?>">
 	<header>
 		<?php $this->renderPartial("letter_start", array(
-			'site' => $element->site,
 			'toAddress' => $element->address,
 			'patient' => $this->patient,
 			'date' => $element->date,
 			'clinicDate' => $element->clinic_date,
-			'directLine' => $element->direct_line,
-			'faxNumber' => $element->fax,
+			'element' => $element,
 		))?>
 	</header>
 
@@ -37,6 +35,7 @@
 
 	<?php $this->renderPartial("print_ElementLetter", array(
 			'element' => $element,
+			'no_header' => true,
 	))?>
 
 	<input type="hidden" name="OphCoCorrespondence_printLetter" id="OphCoCorrespondence_printLetter" value="<?php echo $element->print?>" />

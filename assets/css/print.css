@@ -151,33 +151,42 @@ body {
 	height: 70px;
 }
 
-.banner .seal {
-	float: left;
+.banner .letter-seal {
+	width: 50% !important;
+	display: inline-block;
 }
 
-.banner .seal img {
-	width: 96px;
+.banner .letter-seal img {
+	width: 80px !important;
 }
 
-.banner .logo {
-	float: right;
+.banner .correspondence-letter-logo {
+	width: 49%;
+	display: inline-block;
 }
 
-.banner .logo img {
-	width: 400px;
+.banner .correspondence-letter-logo img {
+	width: 350px;
 }
 
-.banner.compact .logo img {
+.banner.compact .correspondence-letter-logo img {
 	width: 250px;
 }
 
 .fromAddress {
-	width: 300px
+	width: 300px;
 	margin-top:30px;
 	text-align: right;
 	float: right;
 	text-align: right;
 }
+
+.from-address {
+        float: right;
+        text-align: right;
+        width: 20em;
+}
+
 
 .toAddress {
 	width: 300px;
@@ -211,4 +220,28 @@ body {
 	text-align: right;
 	font-size: 10pt;
 	margin-top: 40px;
+}
+
+.print-letter-div {
+	page-break-after: always;
+}
+
+.accessible {
+	font-size: 16pt;
+}
+
+.to-address {
+        display: inline-block;
+        padding-left: 0;
+        margin-top: 0.5em;
+        margin-bottom: 1em;
+}
+
+.to-address-header {
+        margin-bottom: 0.5em;
+}
+
+.to-address-address {
+        width: 16em;
+        height: 8em;
 }

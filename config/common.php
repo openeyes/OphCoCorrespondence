@@ -22,5 +22,6 @@ return array(
 		'reports' => array(
 			'Letters' => '/OphCoCorrespondence/report/letters',
 		),
+		'populate_clinic_date_from_last_examination' => false,
 	)
 );
