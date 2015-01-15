@@ -1,4 +1,3 @@
-<?php
 /**
  * OpenEyes
  *
@@ -17,11 +16,14 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html The GNU General Public License V3.0
  */
 
-return array(
-	'params' => array(
-		'reports' => array(
-			'Letters' => '/OphCoCorrespondence/report/letters',
-		),
-		'populate_clinic_date_from_last_examination' => false,
-	)
-);
+$(document).ready(function() {
+	$(".lettersReport #add_letter_phrase").on("click", function(e) {
+		var container = $('.lettersReport .phraseList').first();
+		container.append('<div><input type="text" value="" name="phrases[]"/> <a class="removePhrase" href="#">Remove</a></div>');
+		e.preventDefault();
+	});
+	$(".lettersReport").on("click", ".removePhrase", function(e) {
+		$(this).parent().remove();
+		e.preventDefault();
+	});
+});
