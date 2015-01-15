@@ -32,4 +32,13 @@ class OphCoCorrespondence_API extends BaseAPI
 
 		return $letter->isEditable();
 	}
+
+	public function getLatestEvent($episode)
+	{
+		$event_type = $this->getEventType();
+
+		if ($event = $episode->getMostRecentEventByType($event_type->id)) {
+				return $event;
+		}
+	}
 }
