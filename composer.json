@@ -1,4 +1,8 @@
 {
-  "name": "openeyes/oph-co-correspondence",
-  "description": "Correspondence module for OpenEyes, allows generation of letters"
+  "name": "openeyes/OphCoCorrespondence",
+  "description": "Correspondence module for OpenEyes, allows generation of letters",
+  "type": "openeyes-module",
+  "require": {
+    "openeyes/module-installer": "*"
+  }
 }
