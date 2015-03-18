@@ -61,10 +61,8 @@ class AdminController  extends BaseAdminController
 			}
 		} else {
 			//Find all of the contacts for the current firm
-			$criteria = new CDbCriteria();
-			$criteria->condition = 'firm_id = :firm_id';
-			$criteria->params = array(':firm_id' => (int) $firmId);
-			$siteSecretaries = FirmSiteSecretary::model()->findAll($criteria);
+			$siteSecretary = new FirmSiteSecretary();
+			$siteSecretaries = $siteSecretary->findSiteSecretaryForFirm($firmId);
 		}
 		//Add a blank one to the end of the form for adding
 		$siteSecretaries[] = new FirmSiteSecretary();

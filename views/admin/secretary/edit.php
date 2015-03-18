@@ -16,6 +16,8 @@
  * @copyright Copyright (c) 2011-2012, OpenEyes Foundation
  * @license http://www.gnu.org/licenses/gpl-3.0.html The GNU General Public License V3.0
  */
+$path = Yii::app()->assetManager->publish(Yii::getPathOfAlias('application.modules.OphCoCorrespondence.assets'));
+Yii::app()->clientScript->registerScriptFile($path.'/js/siteSecretary.js');
 ?>
 <div class="box admin">
 	<div class="row">
@@ -25,7 +27,7 @@
 	</div>
 	<?php
 	$deleteForm = $this->beginWidget('BaseEventTypeCActiveForm', array(
-		'id' => 'deleteform',
+		'id' => 'deleteSecretaryForm',
 		'action' => '/OphCoCorrespondence/admin/deleteSiteSecretary/',
 		'enableAjaxValidation' => false
 	)) ?>
@@ -36,7 +38,7 @@
 	<?php echo $this->renderPartial('//admin/_form_errors', array('errors' => $errors)) ?>
 	<?php
 	$form = $this->beginWidget('BaseEventTypeCActiveForm', array(
-		'id' => 'adminform',
+		'id' => 'editSecretaryForm',
 		'enableAjaxValidation' => false,
 		'layoutColumns' => array(
 			'label' => 2,
@@ -54,7 +56,7 @@
 		</thead>
 		<tbody>
 		<?php foreach($siteSecretaries as $id => $siteSecretary): ?>
-			<tr>
+			<tr class="secretaryFormRow">
 				<td>
 					<?php echo CHtml::activeHiddenField($siteSecretary, "[$id]firm_id"); ?>
 					<?php echo CHtml::activeHiddenField($siteSecretary, "[$id]id"); ?>
@@ -67,7 +69,7 @@
 					<?php echo CHtml::activeTextField($siteSecretary, "[$id]fax", array('autocomplete' => Yii::app()->params['html_autocomplete'])) ?>
 				</td>
 				<td>
-					<button type="submit" form="deleteform" name="id" value="<?php echo $siteSecretary->id ?>">delete</button>
+					<button type="submit" form="deleteSecretaryForm" name="id" value="<?php echo $siteSecretary->id ?>">delete</button>
 				</td>
 			</tr>
 		<?php endforeach;?>

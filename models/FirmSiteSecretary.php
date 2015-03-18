@@ -106,4 +106,16 @@ class FirmSiteSecretary extends BaseEventTypeElement
 			'criteria' => $criteria,
 		));
 	}
+
+	/**
+	 * @param $firmId
+	 * @return mixed
+	 */
+	public function findSiteSecretaryForFirm($firmId)
+	{
+		$criteria = new CDbCriteria();
+		$criteria->condition = 'firm_id = :firm_id';
+		$criteria->params = array(':firm_id' => (int)$firmId);
+		return FirmSiteSecretary::model()->findAll($criteria);
+	}
 }
