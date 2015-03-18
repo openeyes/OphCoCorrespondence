@@ -23,6 +23,16 @@
 			<h2>Site Secretary</h2>
 		</div>
 	</div>
+	<?php
+	$deleteForm = $this->beginWidget('BaseEventTypeCActiveForm', array(
+		'id' => 'deleteform',
+		'action' => '/OphCoCorrespondence/admin/deleteSiteSecretary/',
+		'enableAjaxValidation' => false
+	)) ?>
+
+	<?php $this->endWidget() ?>
+	<form action="/OphCoCorrespondence/admin/deleteSiteSecretary/" method="post" id="deleteform">
+	</form>
 	<?php echo $this->renderPartial('//admin/_form_errors', array('errors' => $errors)) ?>
 	<?php
 	$form = $this->beginWidget('BaseEventTypeCActiveForm', array(
@@ -57,7 +67,7 @@
 					<?php echo CHtml::activeTextField($siteSecretary, "[$id]fax", array('autocomplete' => Yii::app()->params['html_autocomplete'])) ?>
 				</td>
 				<td>
-					&nbsp;
+					<button type="submit" form="deleteform" name="id" value="<?php echo $siteSecretary->id ?>">delete</button>
 				</td>
 			</tr>
 		<?php endforeach;?>

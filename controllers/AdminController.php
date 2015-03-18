@@ -10,12 +10,20 @@ class AdminController  extends BaseAdminController
 {
 	public function actionIndex()
 	{
+		//For now redirect to firms because thats where the site secretary functionality will be accessed
 		$this->redirect('/admin/firms');
 	}
 
-	public function actionAddSiteSecretary($firmId = null)
+	/**
+	 * Adds or edits a Site Secretary for a Firm
+	 *
+	 * @param null $id
+	 * @throws CHttpException
+	 * @throws Exception
+	 */
+	public function actionAddSiteSecretary($id = null)
 	{
-		$siteSecretary = new FirmSiteSecretary();
+		$firmId = $id;
 		$siteSecretaries = array();
 		$errors = array();
 		if($firmId === null && isset(Yii::app()->session['selected_firm_id']) ){
@@ -24,8 +32,20 @@ class AdminController  extends BaseAdminController
 
 		if(Yii::app()->request->isPostRequest){
 			foreach($_POST['FirmSiteSecretary'] as $i => $siteSecretaryPost){
-				$siteSecretary = new FirmSiteSecretary();
+				if(empty($siteSecretaryPost['id']) && empty($siteSecretaryPost['direct_line']) &&  empty($siteSecretaryPost['fax'])){
+					//The entire row is empty, ignore it
+					continue;
+				}
+
+				//Are we updating an existing object
+				if($siteSecretaryPost['id'] !== ''){
+					$siteSecretary = FirmSiteSecretary::model()->findByPk($siteSecretaryPost['id']);
+				} else {
+					$siteSecretary = new FirmSiteSecretary();
+				}
+				//Set to have posted attributes
 				$siteSecretary->attributes = $siteSecretaryPost;
+
 				if(!$siteSecretary->firm_id) {
 					$siteSecretary->firm_id = (int) $firmId;
 				}
@@ -36,10 +56,13 @@ class AdminController  extends BaseAdminController
 						throw new CHttpException(500, 'Unable to save Site Secretary: ' . $siteSecretary->site->name);
 					}
 				}
+				//Add to array so updated version can be rendered
 				$siteSecretaries[] = $siteSecretary;
 			}
 		} else {
+			//Find all of the contacts for the current firm
 			$criteria = new CDbCriteria();
+			$criteria->condition = 'firm_id = :firm_id';
 			$criteria->params = array(':firm_id' => (int) $firmId);
 			$siteSecretaries = FirmSiteSecretary::model()->findAll($criteria);
 		}
@@ -53,8 +76,25 @@ class AdminController  extends BaseAdminController
 		));
 	}
 
-	public function actionEditSiteSecretary($id)
+	/**
+	 * Deletes a site secretary
+	 *
+	 * @throws CHttpException
+	 */
+	public function actionDeleteSiteSecretary()
 	{
-
+		if(Yii::app()->request->isPostRequest){
+			if(!isset($_POST['id'])){
+				throw new CHttpException(400, 'Unable to delete Site Secretary: no ID provided');
+			}
+			$siteSecretary = FirmSiteSecretary::model()->findByPk($_POST['id']);
+			if(!$siteSecretary){
+				throw new CHttpException(404, 'Unable to delete Site Secretary: Can not find Site Secretary');
+			}
+			$firmId = $siteSecretary->firm_id;
+			$siteSecretary->delete();
+			$this->redirect('/OphCoCorrespondence/admin/addSiteSecretary/'.$firmId);
+		}
+		throw new CHttpException(400, 'Invalid method for delete');
 	}
 }
