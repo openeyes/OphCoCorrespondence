@@ -29,10 +29,10 @@ class AdminController  extends BaseAdminController
 		if($firmId === null && isset(Yii::app()->session['selected_firm_id']) ){
 			$firmId = Yii::app()->session['selected_firm_id'];
 		}
-
+		$errorList = array();
 		if(Yii::app()->request->isPostRequest){
 			foreach($_POST['FirmSiteSecretary'] as $i => $siteSecretaryPost){
-				if(empty($siteSecretaryPost['id']) && empty($siteSecretaryPost['direct_line']) &&  empty($siteSecretaryPost['fax'])){
+				if(empty($siteSecretaryPost['site_id']) && empty($siteSecretaryPost['direct_line']) &&  empty($siteSecretaryPost['fax'])){
 					//The entire row is empty, ignore it
 					continue;
 				}
@@ -50,7 +50,7 @@ class AdminController  extends BaseAdminController
 					$siteSecretary->firm_id = (int) $firmId;
 				}
 				if(!$siteSecretary->validate()){
-					$errors = array_merge($errors, $siteSecretary->getErrors());
+					$errorList[] = $siteSecretary->getErrors();
 				} else {
 					if(!$siteSecretary->save()){
 						throw new CHttpException(500, 'Unable to save Site Secretary: ' . $siteSecretary->site->name);
@@ -66,12 +66,21 @@ class AdminController  extends BaseAdminController
 		}
 		//Add a blank one to the end of the form for adding
 		$siteSecretaries[] = new FirmSiteSecretary();
+		if(count($errorList)){
+			$errors = call_user_func_array('array_merge', $errorList);
+		}
 
-
-		$this->render('/admin/secretary/edit', array(
+		$outputArray = array(
 			'siteSecretaries' => $siteSecretaries,
 			'errors' => $errors,
-		));
+		);
+
+		if(Yii::app()->request->isAjaxRequest ){
+			$this->renderJSON($outputArray);
+		} else {
+			$this->render('/admin/secretary/edit', $outputArray);
+		}
+
 	}
 
 	/**

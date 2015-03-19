@@ -6,24 +6,38 @@ OpenEyes.CO = OpenEyes.CO || {};
 
 OpenEyes.CO.SiteSecretary = (function(){
     "use strict";
-    var editForm,
-        editFormTable,
-        saveRow,
-        lastEdit,
-        saveButton,
-        blankEdit,
+    var $editForm,
+        $editFormTable,
+        $saveRow,
+        $lastEdit,
+        $blankEdit,
+        saveButton = '<button class="addButton">Add</button>',
+        deleteButton = '<button type="submit" form="deleteSecretaryForm" name="id" value="">delete</button>',
         addUrl = "/OphCoCorrespondence/admin/addSiteSecretary",
         postData = {};
 
     return {
         addEvent: function(e){
             e.preventDefault();
-            postData.FirmSiteSecretary = $(e.target).parents(".secretaryFormRow").find(':input').serialize();
+            var $targetButton = $(e.target),
+                $targetRow = $targetButton.parents(".secretaryFormRow");
+
+            $targetRow.find(':input').serializeArray().map(function(x){postData[x.name] = x.value;});
+            postData.YII_CSRF_TOKEN = $editForm.find(':input[name="YII_CSRF_TOKEN"]').val();
+
             $.ajax(addUrl, {
                 type: "POST",
                 data: postData,
+                dataType: 'json',
                 success: function(data, status, xhr){
-                    editFormTable.append(blankEdit);
+                    console.log(data.errors.length);
+                    if(data.errors.length){
+
+                    } else {
+                        $targetButton.replaceWith(deleteButton);
+                        $editFormTable.children('tbody').append($blankEdit);
+                        $targetRow.find('button[form="deleteSecretaryForm"]').val(data.siteSecretaries[0].id);
+                    }
                 },
                 error: function(jqXHR, textStatus, errorThrown){
                     alert('Error saving contact');
@@ -31,19 +45,16 @@ OpenEyes.CO.SiteSecretary = (function(){
             });
         },
         init: function(){
-            editForm = $('#editSecretaryForm');
-            editFormTable = editForm.children('table');
-            saveRow = editFormTable.find('tr:last');
-            lastEdit = saveRow.prev();
-            saveButton = '<button class="addButton">Add</button>';
+            $editForm = $('#editSecretaryForm');
+            $editFormTable = $editForm.children('table');
+            $saveRow = $editFormTable.find('tr:last');
+            $lastEdit = $saveRow.prev();
+            $lastEdit.find('button[form="deleteSecretaryForm"]').replaceWith(saveButton);
+            $blankEdit = $lastEdit.clone();
 
-            lastEdit.find('button[form="deleteSecretaryForm"]').replaceWith(saveButton);
-            blankEdit = lastEdit.clone();
             //We'll handle these with fancy JS actions now so remove them
-            saveRow.remove();
-
-            $('.addButton').on('click', this.addEvent);
-
+            $saveRow.remove();
+            $editForm.on('click', '.addButton', this.addEvent);
         }
     };
 })();
