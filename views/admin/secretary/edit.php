@@ -16,8 +16,8 @@
  * @copyright Copyright (c) 2011-2012, OpenEyes Foundation
  * @license http://www.gnu.org/licenses/gpl-3.0.html The GNU General Public License V3.0
  */
-$path = Yii::app()->assetManager->publish(Yii::getPathOfAlias('application.modules.OphCoCorrespondence.assets'));
-Yii::app()->clientScript->registerScriptFile($path.'/js/siteSecretary.js');
+$modulePath = Yii::app()->assetManager->publish(Yii::getPathOfAlias('application.modules.OphCoCorrespondence.assets'));
+Yii::app()->clientScript->registerScriptFile($modulePath.'/js/siteSecretary.js');
 ?>
 <div class="box admin">
 	<div class="row">
@@ -33,8 +33,6 @@ Yii::app()->clientScript->registerScriptFile($path.'/js/siteSecretary.js');
 	)) ?>
 
 	<?php $this->endWidget() ?>
-	<form action="/OphCoCorrespondence/admin/deleteSiteSecretary/" method="post" id="deleteform">
-	</form>
 	<?php echo $this->renderPartial('//admin/_form_errors', array('errors' => $errors)) ?>
 	<?php
 	$form = $this->beginWidget('BaseEventTypeCActiveForm', array(

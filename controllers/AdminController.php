@@ -73,9 +73,13 @@ class AdminController  extends BaseAdminController
 		$outputArray = array(
 			'siteSecretaries' => $siteSecretaries,
 			'errors' => $errors,
+			'success' => (count($errors) === 0)
 		);
 
 		if(Yii::app()->request->isAjaxRequest ){
+			if(!$outputArray['success']){
+				$outputArray['errors'] = iterator_to_array(new RecursiveIteratorIterator(new RecursiveArrayIterator($outputArray['errors'])), false);
+			}
 			$this->renderJSON($outputArray);
 		} else {
 			$this->render('/admin/secretary/edit', $outputArray);
