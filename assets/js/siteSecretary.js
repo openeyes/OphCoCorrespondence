@@ -13,8 +13,9 @@ OpenEyes.CO.SiteSecretary = (function(){
         $blankEdit,
         $targetButton,
         $targetRow,
-        saveButton = '<button class="addButton">Add</button>',
-        deleteButton = '<button type="submit" form="deleteSecretaryForm" name="id" value="">delete</button>',
+        $loaderImage,
+        saveButton = '<button class="addButton small">{{text}}</button>',
+        deleteButton = '<button type="submit" form="deleteSecretaryForm" name="id" class="small" value="">delete</button>',
         addUrl = "/OphCoCorrespondence/admin/addSiteSecretary",
         deleteUrl = "/OphCoCorrespondence/admin/deleteSiteSecretary",
         postData = {},
@@ -27,14 +28,27 @@ OpenEyes.CO.SiteSecretary = (function(){
         if(!data.success){
             $editForm.parent().prepend(Mustache.render(errorTmpl, data));
         } else {
-            $targetButton.replaceWith(deleteButton);
-            $editFormTable.children('tbody').append($blankEdit);
-            $targetRow.find('button[form="deleteSecretaryForm"]').val(data.siteSecretaries[0].id);
+            if($targetButton.text() === 'Add'){
+                $targetButton.replaceWith(deleteButton);
+                $editFormTable.children('tbody').append($blankEdit);
+                $targetRow.find('button[form="deleteSecretaryForm"]').val(data.siteSecretaries[0].id);
+            }
         }
     }
 
     function deleteSuccess(data, status, xhr){
         $targetRow.remove();
+    }
+
+    function beforeSend(jqXHR, settings){
+        $targetButton.addClass('inactive')
+            .parent()
+            .append($loaderImage.show());
+    }
+
+    function afterSend(jqXHR, status)
+    {
+        $targetButton.removeClass('inactive').siblings('.loader').remove();
     }
 
     function formEvent(e){
@@ -61,8 +75,12 @@ OpenEyes.CO.SiteSecretary = (function(){
             data: postData,
             dataType: 'json',
             success: successFunction,
+            beforeSend: beforeSend,
+            complete: afterSend,
             error: function(jqXHR, textStatus, errorThrown){
-                alert('Error saving contact');
+                new OpenEyes.UI.Dialog.Alert({
+                    content: "An error occured, plese try again."
+                }).open();
             }
         });
     }
@@ -74,11 +92,13 @@ OpenEyes.CO.SiteSecretary = (function(){
             $editFormTable = $editForm.children('table');
             $saveRow = $editFormTable.find('tr:last');
             $lastEdit = $saveRow.prev();
-            $lastEdit.find('button[form="deleteSecretaryForm"]').replaceWith(saveButton);
+            $lastEdit.find('button[form="deleteSecretaryForm"]').replaceWith(Mustache.render(saveButton, {text:"Add"}));
             $blankEdit = $lastEdit.clone();
+            $loaderImage = $saveRow.find('.loader').clone();
 
             //We'll handle these with fancy JS actions now so remove them
             $saveRow.remove();
+            $('button[form="deleteSecretaryForm"]').parent().prepend(Mustache.render(saveButton, {text:"Save"}));
             $editForm.on('click', 'button[form="deleteSecretaryForm"], .addButton', formEvent);
 
         }

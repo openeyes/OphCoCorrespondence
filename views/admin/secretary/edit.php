@@ -22,7 +22,7 @@ Yii::app()->clientScript->registerScriptFile($modulePath.'/js/siteSecretary.js')
 <div class="box admin">
 	<div class="row">
 		<div class="large-8 column">
-			<h2>Site Secretary</h2>
+			<h2>Contact Numbers</h2>
 		</div>
 	</div>
 	<?php
@@ -67,7 +67,7 @@ Yii::app()->clientScript->registerScriptFile($modulePath.'/js/siteSecretary.js')
 					<?php echo CHtml::activeTextField($siteSecretary, "[$id]fax", array('autocomplete' => Yii::app()->params['html_autocomplete'])) ?>
 				</td>
 				<td>
-					<button type="submit" form="deleteSecretaryForm" name="id" value="<?php echo $siteSecretary->id ?>">delete</button>
+					<button type="submit" form="deleteSecretaryForm" name="id" class="small" value="<?php echo $siteSecretary->id ?>">Delete</button>
 				</td>
 			</tr>
 		<?php endforeach;?>
