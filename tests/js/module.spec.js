@@ -1,3 +1,5 @@
+/*jshint expr: true*/
+
 describe('OpenEyes.CO.SiteSecretary', function () {
     describe('Namespace', function () {
         it('should create a "SiteSecretary" namespace on the "CO" namespace', function () {
