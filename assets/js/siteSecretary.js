@@ -31,7 +31,7 @@ OpenEyes.CO.SiteSecretary = (function () {
             if ($targetButton.text() === 'Add') {
                 $targetButton.parent().prepend(Mustache.render(saveButton, {text: "Save"}));
                 $targetButton.replaceWith(deleteButton);
-                $editFormTable.children('tbody').append($blankEdit);
+                $editFormTable.children('tbody').append($blankEdit.clone());
                 $targetRow.find('input[name$=\\[id\\]]').val(data.siteSecretaries[0].id);
                 $targetRow.find('button[form="deleteSecretaryForm"]').val(data.siteSecretaries[0].id);
             }

@@ -34,6 +34,7 @@ class AdminController  extends BaseAdminController
 			foreach($_POST['FirmSiteSecretary'] as $i => $siteSecretaryPost){
 				if(empty($siteSecretaryPost['site_id']) && empty($siteSecretaryPost['direct_line']) &&  empty($siteSecretaryPost['fax'])){
 					//The entire row is empty, ignore it
+					$errorList[] = array('You must supply at least a Site and Direct Line');
 					continue;
 				}
 
