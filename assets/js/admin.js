@@ -37,7 +37,7 @@ $(document).ready(function() {
 	});
 
 	$('#LetterMacro_type').change(function() {
-		setTypeFilter($(this).val());
+        setTypeFilter($(this).val());
 	});
 
 	$('#LetterMacro_body').select(function() {
@@ -115,41 +115,15 @@ $(document).ready(function() {
 
 var macro_cursor_position = 0;
 
+/**
+ * Shows/Hides the correct dropdowns in the letter macro form
+ *
+ * @param type
+ */
 function setTypeFilter(type)
 {
-	var site = 0;
-	var subspecialty = 0;
-	var firm = 0;
-
-	switch (type) {
-		case 'site':
-			site = 1; break;
-		case 'subspecialty':
-			subspecialty = 1; break;
-		case 'firm':
-			firm = 1; break;
-	}
-
-	if (site) {
-		$('.typeSite').show();
-	} else {
-		$('.typeSite').hide();
-		$('#site_id').val('');
-	}
-
-	if (subspecialty) {
-		$('.typeSubspecialty').show();
-	} else {
-		$('.typeSubspecialty').hide();
-		$('#subspecialty_id').val('');
-	}
-
-	if (firm) {
-		$('.typeFirm').show();
-	} else {
-		$('.typeFirm').hide();
-		$('#firm_id').val('');
-	}
+    $('#div_LetterMacro_site_id, #div_LetterMacro_subspecialty_id, #div_LetterMacro_firm_id').hide();
+    $('#div_LetterMacro_'+type+'_id').show();
 }
 
 function updateMacroList(preserve)
