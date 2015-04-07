@@ -246,12 +246,12 @@ $(document).ready(function() {
 		var obj = $(this);
 
 		if ($(this).val() != '') {
-			var m = $(this).val().match(/^([a-z]+)([0-9]+)$/);
+			var macro_id = $(this).val();
 
 			$.ajax({
 				'type': 'GET',
 				'dataType': 'json',
-				'url': baseUrl+'/OphCoCorrespondence/Default/getMacroData?patient_id='+OE_patient_id+'&macro_type='+m[1]+'&macro_id='+m[2]+'&nickname='+nickname,
+				'url': baseUrl+'/OphCoCorrespondence/Default/getMacroData?patient_id=' + OE_patient_id + '&macro_id=' + macro_id + '&nickname=' + nickname,
 				'success': function(data) {
 					if (data['error'] == 'DECEASED') {
 						new OpenEyes.UI.Dialog.Alert({
