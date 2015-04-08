@@ -25,8 +25,10 @@
  * The followings are the available model relations:
  * @property Event $event
  */
-class LetterMacro extends BaseEventTypeElement
+class LetterMacro extends BaseActiveRecordVersioned
 {
+	public $type;
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @return ElementOperation the static model class
@@ -49,14 +51,12 @@ class LetterMacro extends BaseEventTypeElement
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
-			array('name, recipient_patient, recipient_doctor, use_nickname, body, cc_patient, cc_doctor, display_order', 'safe'),
-			array('name, recipient_patient, recipient_doctor, use_nickname, body, cc_patient, cc_doctor', 'required'),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('name, recipient_patient, recipient_doctor, use_nickname, body, cc_patient, cc_doctor, display_order', 'safe', 'on' => 'search'),
+			array('name, recipient_id, use_nickname, body, cc_patient, cc_doctor, display_order, site_id, subspecialty_id, firm_id, cc_drss, episode_status_id', 'safe'),
+			array('name, use_nickname, body, cc_patient, cc_doctor, type', 'required'),
+			array('site_id','RequiredIfFieldValidator','field' => 'type', 'value' => 'site'),
+			array('subspecialty_id','RequiredIfFieldValidator','field' => 'type', 'value' => 'subspecialty'),
+			array('firm_id','RequiredIfFieldValidator','field' => 'type', 'value' => 'firm'),
 		);
 	}
 
@@ -68,11 +68,11 @@ class LetterMacro extends BaseEventTypeElement
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'element_type' => array(self::HAS_ONE, 'ElementType', 'id','on' => "element_type.class_name='".get_class($this)."'"),
-			'eventType' => array(self::BELONGS_TO, 'EventType', 'event_type_id'),
-			'event' => array(self::BELONGS_TO, 'Event', 'event_id'),
-			'user' => array(self::BELONGS_TO, 'User', 'created_user_id'),
-			'usermodified' => array(self::BELONGS_TO, 'User', 'last_modified_user_id'),
+			'site' => array(self::BELONGS_TO, 'Site', 'site_id'),
+			'subspecialty' => array(self::BELONGS_TO, 'Subspecialty', 'subspecialty_id'),
+			'firm' => array(self::BELONGS_TO, 'Firm', 'firm_id'),
+			'episode_status' => array(self::BELONGS_TO, 'EpisodeStatus', 'episode_status_id'),
+			'recipient' => array(self::BELONGS_TO, 'LetterRecipient', 'recipient_id'),
 		);
 	}
 
@@ -82,6 +82,15 @@ class LetterMacro extends BaseEventTypeElement
 	public function attributeLabels()
 	{
 		return array(
+			'use_nickname' => 'Use nickname',
+			'cc_patient' => 'CC patient',
+			'cc_doctor' => 'CC doctor',
+			'cc_drss' => 'CC DRSS',
+			'site_id' => 'Site',
+			'subspecialty_id' => 'Subspecialty',
+			'firm_id' => 'Firm',
+			'episode_status_id' => 'Episode status',
+			'recipient_id' => 'Default recipient',
 		);
 	}
 
@@ -102,6 +111,37 @@ class LetterMacro extends BaseEventTypeElement
 		return new CActiveDataProvider(get_class($this), array(
 			'criteria' => $criteria,
 		));
+	}
+
+	public function afterFind()
+	{
+		if ($this->site_id) {
+			$this->type = 'site';
+		} else if ($this->subspecialty_id) {
+			$this->type = 'subspecialty';
+		} else if ($this->firm_id) {
+			$this->type = 'firm';
+		}
+	}
+
+	public function beforeSave()
+	{
+		switch ($this->type) {
+			case 'site':
+				$this->firm_id = null;
+				$this->subspecialty = null;
+				break;
+			case 'subspecialty':
+				$this->firm_id = null;
+				$this->site_id = null;
+				break;
+			case 'firm':
+				$this->subspecialty_id = null;
+				$this->site_id = null;
+				break;
+		}
+
+		return parent::beforeSave();
 	}
 
 	public function substitute($patient)

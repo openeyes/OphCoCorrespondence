@@ -134,31 +134,15 @@ class DefaultController extends BaseEventTypeController
 			throw new Exception('Patient not found: '.@$_GET['patient_id']);
 		}
 
-		switch (@$_GET['macro_type']) {
-			case 'site':
-				if (!$macro = LetterMacro::model()->findByPk(@$_GET['macro_id'])) {
-					throw new Exception('Site macro not found: '.@$_GET['macro_id']);
-				}
-				break;
-			case 'subspecialty':
-				if (!$macro = SubspecialtyLetterMacro::model()->findByPk(@$_GET['macro_id'])) {
-					throw new Exception('Subspecialty macro not found: '.@$_GET['macro_id']);
-				}
-				break;
-			case 'firm':
-				if (!$macro = FirmLetterMacro::model()->findByPk(@$_GET['macro_id'])) {
-					throw new Exception('Firm macro not found: '.@$_GET['macro_id']);
-				}
-				break;
-			default:
-				throw new Exception('Unknown macro type: '.@$_GET['macro_type']);
+		if (!$macro = LetterMacro::model()->findByPk(@$_GET['macro_id'])) {
+			throw new Exception('Macro not found: '.@$_GET['macro_id']);
 		}
 
 		$data = array();
 
 		$macro->substitute($patient);
 
-		if ($macro->recipient_patient) {
+		if ($macro->recipient && $macro->recipient->name == 'Patient') {
 			$data['sel_address_target'] = 'Patient'.$patient->id;
 			$contact = $patient;
 			if ($patient->date_of_death) {
@@ -167,7 +151,7 @@ class DefaultController extends BaseEventTypeController
 			}
 		}
 
-		if ($macro->recipient_doctor && $contact = ($patient->gp) ? $patient->gp : $patient->practice) {
+		if ($macro->recipient && $macro->recipient->name == 'GP' && $contact = ($patient->gp) ? $patient->gp : $patient->practice) {
 			$data['sel_address_target'] = get_class($contact).$contact->id;
 		}
 

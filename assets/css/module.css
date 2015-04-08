@@ -34,6 +34,17 @@
   font-size: 1rem;
 }
 
+/* line 27, ../sass/components/_event.scss */
+textarea[name="LetterMacro[body]"] {
+    width: 45em;
+    height: 20em;
+}
+
+/* line 17, ../sass/components/_forms.scss */
+textarea {
+    font-size: 1rem;
+}
+
 /* line 17, ../sass/components/_letter.scss */
 .correspondence-letter {
   -webkit-box-shadow: 4px 4px 4px 0 #cccccc;
