@@ -52,11 +52,11 @@ class LetterString extends LetterStringBase
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('letter_string_group_id, name, body, display_order', 'safe'),
+			array('letter_string_group_id, name, body, display_order, site_id, event_type, element_type', 'safe'),
 			array('letter_string_group_id, name, body', 'required'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('letter_string_group_id, name, body, display_order', 'safe', 'on' => 'search'),
+			array('letter_string_group_id, name, body, display_order, site_id', 'safe', 'on' => 'search'),
 		);
 	}
 

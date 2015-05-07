@@ -60,14 +60,16 @@ class SnippetGroupController extends ModuleAdminController
 	 */
 	public function actionEdit($id = false)
 	{
+
 		if($id){
 			$this->admin->setModelId($id);
 		}
 		$this->admin->setEditFields(array(
 			'name' => 'text',
-			/*'siteLetterStrings' => array(
+			'siteLetterStrings' => array(
 				'widget' => 'RelationList',
  				'relation' => 'siteLetterStrings',
+				'action' => 'OphCoCorrespondence/oeadmin/snippet',
 				'listFields' => array(
 					'display_order',
 					'name',
@@ -75,7 +77,7 @@ class SnippetGroupController extends ModuleAdminController
 					'element_type.name',
 					'eventTypeName',
 				)
-			)*/
+			)
 		));
 		$this->admin->editModel();
 	}

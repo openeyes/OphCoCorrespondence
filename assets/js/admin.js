@@ -62,12 +62,12 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#LetterMacro_body').unbind('keyup').bind('keyup',function() {
+	$('#LetterMacro_body').unbind('blur').bind('blur',function() {
 		macro_cursor_position = $(this).prop('selectionEnd');
 	});
 
 	$('#shortcode').change(function() {
-		if ($(this).val() != '') {
+		if ($(this).val() !== '') {
 			var current = $('#LetterMacro_body').val();
 
 			$('#LetterMacro_body').val(current.substring(0,macro_cursor_position) + '[' + $(this).val() + ']' + current.substring(macro_cursor_position,current.length));

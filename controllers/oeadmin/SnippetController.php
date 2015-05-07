@@ -68,6 +68,13 @@ class SnippetController extends ModuleAdminController
 			$this->admin->setModelId($id);
 		}
 		$this->admin->setEditFields(array(
+			'site_id' => array(
+				'widget' => 'DropDownList',
+				'options' => CHtml::listData(Site::model()->findAll(),'id', 'name'),
+				'htmlOptions' => null,
+				'hidden' => false,
+				'layoutColumns' => null
+			),
 			'letter_string_group_id' => array(
 				'widget' => 'DropDownList',
 				'options' => CHtml::listData(LetterStringGroup::model()->findAll(),'id', 'name'),
@@ -76,7 +83,11 @@ class SnippetController extends ModuleAdminController
 				'layoutColumns' => null
 			),
 			'name' => 'text',
-			'body' => 'text',
+			'body' => array(
+				'widget' => 'CustomView',
+				'viewName' => '//admin/generic/shortcodeText',
+				'viewArguments' => array('model' => $this->admin->getModel())
+			),
 			'event_type' => 'text',
 			'element_type' => 'text',
 		));
