@@ -1,5 +1,5 @@
 <?php
- /**
+/**
  * OpenEyes
  *
  * (C) Moorfields Eye Hospital NHS Foundation Trust, 2008-2011
@@ -18,7 +18,7 @@
  */
 
 
-class SnippetGroupController extends ModuleAdminController
+class SnippetController extends ModuleAdminController
 {
 
 	protected $admin;
@@ -31,14 +31,14 @@ class SnippetGroupController extends ModuleAdminController
 
 	protected function beforeAction($action)
 	{
-		$this->admin = new Admin(LetterStringGroup::model(), $this);
-		$this->admin->setModelDisplayName('Letter Snippet Group');
+		$this->admin = new Admin(LetterString::model(), $this);
+		$this->admin->setModelDisplayName('Letter String');
 
 		return parent::beforeAction($action);
 	}
 
 	/**
-	 * Lists procedures
+	 * Lists snippets
 	 *
 	 * @throws CHttpException
 	 */
@@ -48,12 +48,16 @@ class SnippetGroupController extends ModuleAdminController
 			'display_order',
 			'id',
 			'name',
+			'body',
+			'element_type.name',
+			'eventTypeName',
+			'user.username'
 		));
 		$this->admin->listModel();
 	}
 
 	/**
-	 * Edits or adds a Procedure
+	 * Edits or adds a snippets
 	 *
 	 * @param bool|int $id
 	 * @throws CHttpException
@@ -64,18 +68,17 @@ class SnippetGroupController extends ModuleAdminController
 			$this->admin->setModelId($id);
 		}
 		$this->admin->setEditFields(array(
+			'letter_string_group_id' => array(
+				'widget' => 'DropDownList',
+				'options' => CHtml::listData(LetterStringGroup::model()->findAll(),'id', 'name'),
+				'htmlOptions' => null,
+				'hidden' => false,
+				'layoutColumns' => null
+			),
 			'name' => 'text',
-			/*'siteLetterStrings' => array(
-				'widget' => 'RelationList',
- 				'relation' => 'siteLetterStrings',
-				'listFields' => array(
-					'display_order',
-					'name',
-					'body',
-					'element_type.name',
-					'eventTypeName',
-				)
-			)*/
+			'body' => 'text',
+			'event_type' => 'text',
+			'element_type' => 'text',
 		));
 		$this->admin->editModel();
 	}
