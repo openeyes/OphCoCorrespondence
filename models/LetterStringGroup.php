@@ -27,6 +27,8 @@
  */
 class LetterStringGroup extends BaseEventTypeElement
 {
+	protected $auto_update_relations = true;
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @return ElementOperation the static model class
@@ -106,7 +108,7 @@ class LetterStringGroup extends BaseEventTypeElement
 
 	public function getStrings($patient, $event_types)
 	{
-		if ($this->name == 'Findings') {
+		if ($this->name === 'Findings') {
 			if ($api = Yii::app()->moduleAPI->get('OphCiExamination')) {
 				if ($episode = $patient->getEpisodeForCurrentSubspecialty()) {
 					$strings = array();

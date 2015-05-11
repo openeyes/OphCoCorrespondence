@@ -49,9 +49,13 @@ class SnippetController extends ModuleAdminController
 			'id',
 			'name',
 			'body',
-			'element_type.name',
+			'elementTypeName',
 			'eventTypeName',
-			'user.username'
+		));
+		$this->admin->getSearch()->addSearchItem('site_id', array(
+			'type' => 'dropdown',
+			'options' => CHtml::listData(Institution::model()->getCurrent()->sites,'id', 'name'),
+			'default' => Yii::app()->session['selected_site_id'],
 		));
 		$this->admin->listModel();
 	}
@@ -70,7 +74,8 @@ class SnippetController extends ModuleAdminController
 		$this->admin->setEditFields(array(
 			'site_id' => array(
 				'widget' => 'DropDownList',
-				'options' => CHtml::listData(Site::model()->findAll(),'id', 'name'),
+				'options' => CHtml::listData(Institution::model()->getCurrent()->sites, 'id', 'name'),
+				'default' => Yii::app()->request->getParam('site_id'),
 				'htmlOptions' => null,
 				'hidden' => false,
 				'layoutColumns' => null
@@ -78,6 +83,7 @@ class SnippetController extends ModuleAdminController
 			'letter_string_group_id' => array(
 				'widget' => 'DropDownList',
 				'options' => CHtml::listData(LetterStringGroup::model()->findAll(),'id', 'name'),
+				'default' => Yii::app()->request->getParam('group_id'),
 				'htmlOptions' => null,
 				'hidden' => false,
 				'layoutColumns' => null
@@ -88,8 +94,20 @@ class SnippetController extends ModuleAdminController
 				'viewName' => '//admin/generic/shortcodeText',
 				'viewArguments' => array('model' => $this->admin->getModel())
 			),
-			'event_type' => 'text',
-			'element_type' => 'text',
+			'event_type' =>  array(
+				'widget' => 'DropDownList',
+				'options' => CHtml::listData(EventType::model()->findAll(),'class_name', 'name'),
+				'htmlOptions' => array('empty' => '- Select -'),
+				'hidden' => false,
+				'layoutColumns' => null
+			),
+			'element_type' => array(
+				'widget' => 'DropDownList',
+				'options' => CHtml::listData(ElementType::model()->findAll(),'class_name', 'name'),
+				'htmlOptions' => array('empty' => '- Select -'),
+				'hidden' => false,
+				'layoutColumns' => null
+			),
 		));
 		$this->admin->editModel();
 	}

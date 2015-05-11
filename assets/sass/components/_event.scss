@@ -24,7 +24,7 @@
 	}
 }
 
-textarea[name="LetterMacro[body]"] {
+textarea[name="LetterMacro[body]"], textarea[name="LetterString[body]"] {
 	width: 45em;
 	height: 20em;
 }

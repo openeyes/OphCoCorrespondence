@@ -21,9 +21,17 @@ class LetterStringBase extends BaseEventTypeElement
 {
 	public function shouldShow($patient, $event_types)
 	{
-		if (!$this->event_type|| !$this->element_type) return true;
-		if (!isset($event_types[$this->event_type])) return false;
-		if (!in_array($this->element_type,$event_types[$this->event_type])) return false;
+		if (!$this->event_type || !$this->element_type){
+			return true;
+		}
+
+		if (!isset($event_types[$this->event_type])){
+			return false;
+		}
+
+		if (!in_array($this->element_type, $event_types[$this->event_type])) {
+			return false;
+		}
 
 		if ( ($api = Yii::app()->moduleAPI->get($this->event_type)) && 
 				($episode = $patient->getEpisodeForCurrentSubspecialty()) )  {

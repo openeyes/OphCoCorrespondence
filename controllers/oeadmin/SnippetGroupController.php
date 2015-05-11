@@ -70,6 +70,11 @@ class SnippetGroupController extends ModuleAdminController
 				'widget' => 'RelationList',
  				'relation' => 'siteLetterStrings',
 				'action' => 'OphCoCorrespondence/oeadmin/snippet',
+				'search' => array('site_id' => array(
+					'type' => 'dropdown',
+					'options' => CHtml::listData(Institution::model()->getCurrent()->sites,'id', 'name'),
+					'default' => Yii::app()->session['selected_site_id'],
+				)),
 				'listFields' => array(
 					'display_order',
 					'name',

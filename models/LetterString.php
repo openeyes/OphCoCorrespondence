@@ -80,6 +80,8 @@ class LetterString extends LetterStringBase
 	public function attributeLabels()
 	{
 		return array(
+			'site_id' => 'Site',
+			'letter_string_group_id' => 'Letter String Group'
 		);
 	}
 
