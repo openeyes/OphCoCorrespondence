@@ -25,8 +25,7 @@ return array(
 		'populate_clinic_date_from_last_examination' => false,
 		'admin_menu' => array(
 			'Letter macros' => '/OphCoCorrespondence/admin/letterMacros',
-			'Letter Snippet Groups' => '/OphCoCorrespondence/oeadmin/snippetGroup/list',
-			'Letter Snippets' => '/OphCoCorrespondence/oeadmin/snippet/list',
+			'Letter Snippets' => '/OphCoCorrespondence/oeadmin/snippetGroup/list',
 		),
 	)
 );
