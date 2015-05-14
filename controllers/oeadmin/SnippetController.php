@@ -74,7 +74,7 @@ class SnippetController extends ModuleAdminController
 		$this->admin->setEditFields(array(
 			'site_id' => array(
 				'widget' => 'DropDownList',
-				'options' => CHtml::listData(Institution::model()->getCurrent()->sites, 'id', 'name'),
+				'options' => CHtml::listData(Institution::model()->getCurrent()->sites, 'id', 'short_name'),
 				'default' => Yii::app()->request->getParam('site_id'),
 				'htmlOptions' => null,
 				'hidden' => false,
