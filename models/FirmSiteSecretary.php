@@ -55,6 +55,8 @@ class FirmSiteSecretary extends BaseEventTypeElement
 		// will receive user inputs.
 		return array(
 			array('firm_id, site_id, direct_line, fax', 'safe'),
+			array('firm_id, site_id, direct_line', 'required'),
+			array('firm_id', 'ext.validators.UniqueSiteFirmValidator', 'message' => 'Only one contact can be added for each firm and site'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('firm_id, site_id, direct_line', 'safe', 'on' => 'search'),
@@ -102,5 +104,17 @@ class FirmSiteSecretary extends BaseEventTypeElement
 		return new CActiveDataProvider(get_class($this), array(
 			'criteria' => $criteria,
 		));
+	}
+
+	/**
+	 * @param $firmId
+	 * @return mixed
+	 */
+	public function findSiteSecretaryForFirm($firmId)
+	{
+		$criteria = new CDbCriteria();
+		$criteria->condition = 'firm_id = :firm_id';
+		$criteria->params = array(':firm_id' => (int)$firmId);
+		return FirmSiteSecretary::model()->findAll($criteria);
 	}
 }

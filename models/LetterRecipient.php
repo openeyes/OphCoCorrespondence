@@ -17,27 +17,17 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html The GNU General Public License V3.0
  */
 
-class LetterStringBase extends BaseEventTypeElement
+class LetterRecipient extends BaseActiveRecordVersioned
 {
-	public function shouldShow($patient, $event_types)
+	public function tableName()
 	{
-		if (!$this->event_type || !$this->element_type){
-			return true;
-		}
+		return 'ophcocorrespondence_letter_recipient';
+	}
 
-		if (!isset($event_types[$this->event_type])){
-			return false;
-		}
-
-		if (!in_array($this->element_type, $event_types[$this->event_type])) {
-			return false;
-		}
-
-		if ( ($api = Yii::app()->moduleAPI->get($this->event_type)) && 
-				($episode = $patient->getEpisodeForCurrentSubspecialty()) )  {
-			return $api->getElementForLatestEventInEpisode($episode, $this->element_type);
-		}
-
-		return false;
+	public function rules()
+	{
+		return array(
+			array('name', 'safe'),
+		);
 	}
 }
