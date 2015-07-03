@@ -25,6 +25,7 @@ class OphCoCorrespondence_ReportLettersTest extends CDbTestCase
 		'episodes' => 'Episode',
 		'users' => 'User',
 		'legacy_letters' => 'Element_OphLeEpatientletter_EpatientLetter',
+		'contact' => 'Contact'
 	);
 
 	public function setUp()
