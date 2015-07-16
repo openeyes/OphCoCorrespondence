@@ -28,13 +28,13 @@
 		<?php $this->displayErrors($errors)?>
 		<div style="width:300px; margin-bottom: 0.6em;">
 			<p>Reason for deletion:</p>
-			<?php echo CHtml::textArea('delete_reason','')?>
+			<?php echo CHtml::textArea('delete_reason', '')?>
 		</div>
 		<p>
 			<strong>Are you sure you want to proceed?</strong>
 		</p>
 		<?php
-			echo CHtml::hiddenField('event_id', $this->event->id); ?>
+            echo CHtml::hiddenField('event_id', $this->event->id); ?>
 			<button type="submit" class="warning" id="et_deleteevent" name="et_deleteevent">
 				Request deletion
 			</button>

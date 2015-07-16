@@ -25,33 +25,47 @@
 		<img src="<?php echo Yii::app()->assetManager->createUrl('img/_print/letterhead_Moorfields_NHS.jpg')?>" alt="letterhead_Moorfields_NHS" width="350" />
 	</div>
 </div>
-<?php if ($element->site) {?>
+<?php if ($element->site) {
+    ?>
 	<div class="from-address">
 		<?php
-		echo $element->site->getLetterAddress(array(
-			'include_name' => true,
-			'delimiter' => '<br />',
-			'include_telephone' => true,
-			'include_fax' => true,
-		))?>
-		<?php if ($element->direct_line || $element->fax) {?>
+        echo $element->site->getLetterAddress(array(
+            'include_name' => true,
+            'delimiter' => '<br />',
+            'include_telephone' => true,
+            'include_fax' => true,
+        ))?>
+		<?php if ($element->direct_line || $element->fax) {
+    ?>
 			<br/>
-		<?php }?>
-		<?php if ($element->direct_line) {?>
+		<?php 
+}
+    ?>
+		<?php if ($element->direct_line) {
+    ?>
 			<br /><?php echo $element->getAttributeLabel('direct_line')?>: <?php echo $element->direct_line?>
-		<?php }?>
-		<?php if ($element->fax) {?>
+		<?php 
+}
+    ?>
+		<?php if ($element->fax) {
+    ?>
 			<br/><?php echo $element->getAttributeLabel('fax')?>: <?php echo $element->fax?>
-		<?php }?>
-		<div class="date"><?php echo date(Helper::NHS_DATE_FORMAT,strtotime($date))?><?php if ($clinicDate) {?> (clinic date <?php echo date(Helper::NHS_DATE_FORMAT,strtotime($clinicDate))?>)<?php }?></div>
+		<?php 
+}
+    ?>
+		<div class="date"><?php echo date(Helper::NHS_DATE_FORMAT, strtotime($date))?><?php if ($clinicDate) {
+    ?> (clinic date <?php echo date(Helper::NHS_DATE_FORMAT, strtotime($clinicDate))?>)<?php 
+}
+    ?></div>
 	</div>
-<?php }?>
+<?php 
+}?>
 <div class="to-address">
 	<div class="to-address-header">
 		To:
 	</div>
 	<div class="to-address-address">
-		<?php echo str_replace("\n","<br/>",CHtml::encode($toAddress))?>
+		<?php echo str_replace("\n", "<br/>", CHtml::encode($toAddress))?>
 	</div>
 </div>
 <br/><br/>

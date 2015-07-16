@@ -26,23 +26,23 @@ Yii::app()->clientScript->registerScriptFile($modulePath.'/js/siteSecretary.js')
 		</div>
 	</div>
 	<?php
-	$deleteForm = $this->beginWidget('BaseEventTypeCActiveForm', array(
-		'id' => 'deleteSecretaryForm',
-		'action' => '/OphCoCorrespondence/admin/deleteSiteSecretary/',
-		'enableAjaxValidation' => false
-	)) ?>
+    $deleteForm = $this->beginWidget('BaseEventTypeCActiveForm', array(
+        'id' => 'deleteSecretaryForm',
+        'action' => '/OphCoCorrespondence/admin/deleteSiteSecretary/',
+        'enableAjaxValidation' => false
+    )) ?>
 
 	<?php $this->endWidget() ?>
 	<?php echo $this->renderPartial('//admin/_form_errors', array('errors' => $errors)) ?>
 	<?php
-	$form = $this->beginWidget('BaseEventTypeCActiveForm', array(
-		'id' => 'editSecretaryForm',
-		'enableAjaxValidation' => false,
-		'layoutColumns' => array(
-			'label' => 2,
-			'field' => 5
-		)
-	)) ?>
+    $form = $this->beginWidget('BaseEventTypeCActiveForm', array(
+        'id' => 'editSecretaryForm',
+        'enableAjaxValidation' => false,
+        'layoutColumns' => array(
+            'label' => 2,
+            'field' => 5
+        )
+    )) ?>
 	<table>
 		<thead>
 			<tr>
@@ -53,7 +53,7 @@ Yii::app()->clientScript->registerScriptFile($modulePath.'/js/siteSecretary.js')
 			</tr>
 		</thead>
 		<tbody>
-		<?php foreach($siteSecretaries as $id => $siteSecretary): ?>
+		<?php foreach ($siteSecretaries as $id => $siteSecretary): ?>
 			<tr class="secretaryFormRow">
 				<td>
 					<?php echo CHtml::activeHiddenField($siteSecretary, "[$id]firm_id"); ?>

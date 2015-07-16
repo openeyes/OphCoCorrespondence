@@ -19,22 +19,22 @@
 
 class OphCoCorrespondence_Substitution
 {
-	public static function replace($text, $patient)
-	{
-		preg_match_all('/\[([a-z]{3})\]/is',$text,$m);
+    public static function replace($text, $patient)
+    {
+        preg_match_all('/\[([a-z]{3})\]/is', $text, $m);
 
-		foreach ($m[1] as $el) {
-			$count = PatientShortcode::model()->count('code=?',array(strtolower($el)));
+        foreach ($m[1] as $el) {
+            $count = PatientShortcode::model()->count('code=?', array(strtolower($el)));
 
-			if ($count == 1) {
-				if ($code = PatientShortcode::model()->find('code=?',array(strtolower($el)))) {
-					$text = $code->replaceText($text,$patient,(boolean) preg_match('/^[A-Z]/',$el));
-				}
-			} elseif ($count >1) {
-				throw new Exception("Multiple shortcode definitions for $el");
-			}
-		}
+            if ($count == 1) {
+                if ($code = PatientShortcode::model()->find('code=?', array(strtolower($el)))) {
+                    $text = $code->replaceText($text, $patient, (boolean) preg_match('/^[A-Z]/', $el));
+                }
+            } elseif ($count >1) {
+                throw new Exception("Multiple shortcode definitions for $el");
+            }
+        }
 
-		return $text;
-	}
+        return $text;
+    }
 }

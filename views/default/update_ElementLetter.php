@@ -59,7 +59,7 @@ $layoutColumns = $form->layoutColumns;
 			</label>
 		</div>
 		<div class="large-2 column end">
-			<?php echo $form->datePicker($element, 'clinic_date', array('maxDate' => 'today'), array('nowrapper'=>true,'null'=>true))?>
+			<?php echo $form->datePicker($element, 'clinic_date', array('maxDate' => 'today'), array('nowrapper'=>true, 'null'=>true))?>
 		</div>
 	</div>
 
@@ -78,15 +78,17 @@ $layoutColumns = $form->layoutColumns;
 		</div>
 	</div>
 
-	<div class="row field-row"<?php if ((empty($_POST) && strlen($element->re) <1) || (!empty($_POST) && strlen(@$_POST['ElementLetter']['re']) <1)) {?> style="display: none;"<?php }?>>
+	<div class="row field-row"<?php if ((empty($_POST) && strlen($element->re) <1) || (!empty($_POST) && strlen(@$_POST['ElementLetter']['re']) <1)) {
+    ?> style="display: none;"<?php 
+}?>>
 		<div class="large-<?php echo $layoutColumns['field'];?> column large-offset-<?php echo $layoutColumns['label'];?> end">
 			<?php echo $form->textArea(
-				$element,
-				're',
-				array('rows' => 2, 'label' => false, 'nowrapper' => true),
-				empty($_POST) ? strlen($element->re) == 0 : strlen(@$_POST['ElementLetter']['re']) == 0,
-				array('class' => 'address')
-			)?>
+                $element,
+                're',
+                array('rows' => 2, 'label' => false, 'nowrapper' => true),
+                empty($_POST) ? strlen($element->re) == 0 : strlen(@$_POST['ElementLetter']['re']) == 0,
+                array('class' => 'address')
+            )?>
 		</div>
 	</div>
 
@@ -94,58 +96,60 @@ $layoutColumns = $form->layoutColumns;
 	<div class="row field-row">
 		<div class="large-<?php echo $layoutColumns['label'];?> column">
 			<?php
-			$firm = Firm::model()->with('serviceSubspecialtyAssignment')->findByPk(Yii::app()->session['selected_firm_id']);
+            $firm = Firm::model()->with('serviceSubspecialtyAssignment')->findByPk(Yii::app()->session['selected_firm_id']);
 
-			$event_types = array();
-			foreach (EventType::model()->with('elementTypes')->findAll() as $event_type) {
-				$event_types[$event_type->class_name] = array();
+            $event_types = array();
+            foreach (EventType::model()->with('elementTypes')->findAll() as $event_type) {
+                $event_types[$event_type->class_name] = array();
 
-				foreach ($event_type->elementTypes as $elementType) {
-					$event_types[$event_type->class_name][] = $elementType->class_name;
-				}
-			}
+                foreach ($event_type->elementTypes as $elementType) {
+                    $event_types[$event_type->class_name][] = $elementType->class_name;
+                }
+            }
 
-			if (isset($_GET['patient_id'])) {
-				$patient = Patient::model()->findByPk($_GET['patient_id']);
-			} else {
-				$patient = Yii::app()->getController()->patient;
-			}
+            if (isset($_GET['patient_id'])) {
+                $patient = Patient::model()->findByPk($_GET['patient_id']);
+            } else {
+                $patient = Yii::app()->getController()->patient;
+            }
 
-			$with = array(
-				'firmLetterStrings' => array(
-					'condition' => 'firm_id is null or firm_id = :firm_id',
-					'params' => array(
-						':firm_id' => $firm->id,
-					),
-					'order' => 'firmLetterStrings.display_order asc',
-				),
-				'subspecialtyLetterStrings' => array(
-					'condition' => 'subspecialty_id is null',
-					'order' => 'subspecialtyLetterStrings.display_order asc',
-				),
-				'siteLetterStrings' => array(
-					'condition' => 'site_id is null or site_id = :site_id',
-					'params' => array(
-						':site_id' => Yii::app()->session['selected_site_id'],
-					),
-					'order' => 'siteLetterStrings.display_order',
-				),
-			);
-			if ($firm->getSubspecialtyID()) {
-				$with['subspecialtyLetterStrings']['condition'] = 'subspecialty_id is null or subspecialty_id = :subspecialty_id';
-				$with['subspecialtyLetterStrings']['params'] = array(':subspecialty_id' => $firm->getSubspecialtyID());
-			}
-			foreach (LetterStringGroup::model()->with($with)->findAll(array('order'=>'t.display_order')) as $string_group) {
-				$strings = $string_group->getStrings($patient,$event_types);?>
+            $with = array(
+                'firmLetterStrings' => array(
+                    'condition' => 'firm_id is null or firm_id = :firm_id',
+                    'params' => array(
+                        ':firm_id' => $firm->id,
+                    ),
+                    'order' => 'firmLetterStrings.display_order asc',
+                ),
+                'subspecialtyLetterStrings' => array(
+                    'condition' => 'subspecialty_id is null',
+                    'order' => 'subspecialtyLetterStrings.display_order asc',
+                ),
+                'siteLetterStrings' => array(
+                    'condition' => 'site_id is null or site_id = :site_id',
+                    'params' => array(
+                        ':site_id' => Yii::app()->session['selected_site_id'],
+                    ),
+                    'order' => 'siteLetterStrings.display_order',
+                ),
+            );
+            if ($firm->getSubspecialtyID()) {
+                $with['subspecialtyLetterStrings']['condition'] = 'subspecialty_id is null or subspecialty_id = :subspecialty_id';
+                $with['subspecialtyLetterStrings']['params'] = array(':subspecialty_id' => $firm->getSubspecialtyID());
+            }
+            foreach (LetterStringGroup::model()->with($with)->findAll(array('order'=>'t.display_order')) as $string_group) {
+                $strings = $string_group->getStrings($patient, $event_types);
+                ?>
 				<div class="field-row">
 					<?php echo $form->dropDownListNoPost(strtolower($string_group->name), $strings, '', array(
-						'empty' => '- '.$string_group->name.' -',
-						'nowrapper' => true,
-						'class' => 'stringgroup full-width',
-						'disabled' => empty($strings)
-					))?>
+                        'empty' => '- '.$string_group->name.' -',
+                        'nowrapper' => true,
+                        'class' => 'stringgroup full-width',
+                        'disabled' => empty($strings)
+                    ))?>
 				</div>
-			<?php }?>
+			<?php 
+            }?>
 		</div>
 		<div class="large-<?php echo $layoutColumns['field'];?> column end">
 			<?php echo $form->textArea($element, 'body', array('rows' => 20, 'label' => false, 'nowrapper' => true), false, array('class' => 'address'))?>
@@ -162,24 +166,24 @@ $layoutColumns = $form->layoutColumns;
 			<div class="row field-row">
 				<div class="large-6 column end">
 					<?php
-						$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
-							'id'=>'OphCoCorrespondence_footerAutoComplete',
-							'name'=>'OphCoCorrespondence_footerAutoComplete',
-							'value'=>'',
-							'sourceUrl'=>array('default/users'),
-							'options'=>array(
-								'minLength'=>'3',
-								'select'=>"js:function(event, ui) {
+                        $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
+                            'id'=>'OphCoCorrespondence_footerAutoComplete',
+                            'name'=>'OphCoCorrespondence_footerAutoComplete',
+                            'value'=>'',
+                            'sourceUrl'=>array('default/users'),
+                            'options'=>array(
+                                'minLength'=>'3',
+                                'select'=>"js:function(event, ui) {
 									$('#ElementLetter_footer').val(\"Yours sincerely\\n\\n\\n\\n\\n\"+ui.item.fullname+\"\\n\"+ui.item.role+\"\\n\"+(ui.item.consultant?\"Consultant: \"+ui.item.consultant:''));
 									$('#OphCoCorrespondence_footerAutoComplete').val('');
 									return false;
 								}",
-							),
-							'htmlOptions'=>array(
-								'placeholder' => 'type to search for users'
-							),
-						));
-					?>
+                            ),
+                            'htmlOptions'=>array(
+                                'placeholder' => 'type to search for users'
+                            ),
+                        ));
+                    ?>
 				</div>
 			</div>
 			<div class="row field-row" id="OphCoCorrespondence_footerDiv">
@@ -207,15 +211,25 @@ $layoutColumns = $form->layoutColumns;
 		<div class="label OphCoCorrespondence_footerLabel">Enclosures:</div>
 		<div class="right">
 			<div id="enclosureItems">
-				<?php if (is_array(@$_POST['EnclosureItems'])) {?>
-					<?php foreach ($_POST['EnclosureItems'] as $key => $value) {?>
-						<div class="enclosureItem"><?php echo CHtml::textField("EnclosureItems[$key]",$value,array('autocomplete' => Yii::app()->params['html_autocomplete'], 'size'=>60))?><a href="#" class="removeEnclosure">Remove</a></div>
-					<?php }?>
-				<?php } else {?>
-					<?php foreach ($element->enclosures as $i => $item) {?>
-						<div class="enclosureItem"><?php echo CHtml::textField("EnclosureItems[enclosure$i]",$item->content,array('autocomplete' => Yii::app()->params['html_autocomplete'], 'size'=>60))?><a href="#" class="removeEnclosure">Remove</a></div>
-					<?php }?>
-				<?php }?>
+				<?php if (is_array(@$_POST['EnclosureItems'])) {
+    ?>
+					<?php foreach ($_POST['EnclosureItems'] as $key => $value) {
+    ?>
+						<div class="enclosureItem"><?php echo CHtml::textField("EnclosureItems[$key]", $value, array('autocomplete' => Yii::app()->params['html_autocomplete'], 'size'=>60))?><a href="#" class="removeEnclosure">Remove</a></div>
+					<?php 
+}
+    ?>
+				<?php 
+} else {
+    ?>
+					<?php foreach ($element->enclosures as $i => $item) {
+    ?>
+						<div class="enclosureItem"><?php echo CHtml::textField("EnclosureItems[enclosure$i]", $item->content, array('autocomplete' => Yii::app()->params['html_autocomplete'], 'size'=>60))?><a href="#" class="removeEnclosure">Remove</a></div>
+					<?php 
+}
+    ?>
+				<?php 
+}?>
 			</div>
 			<div>
 				<button class="addEnclosure classy green mini" type="button">
@@ -233,29 +247,39 @@ $layoutColumns = $form->layoutColumns;
 		<div class="large-<?php echo $layoutColumns['field'];?> column end">
 			<input type="hidden" name="update_enclosures" value="1" />
 			<div id="enclosureItems" class="field-row<?php echo !is_array(@$_POST['EnclosureItems']) && empty($element->enclosures) ? ' hide' : '';?>">
-				<?php if (is_array(@$_POST['EnclosureItems'])) {?>
-					<?php foreach ($_POST['EnclosureItems'] as $key => $value) {?>
+				<?php if (is_array(@$_POST['EnclosureItems'])) {
+    ?>
+					<?php foreach ($_POST['EnclosureItems'] as $key => $value) {
+    ?>
 						<div class="field-row row collapse enclosureItem">
 							<div class="large-8 column">
-								<?php echo CHtml::textField("EnclosureItems[$key]",$value,array('autocomplete' => Yii::app()->params['html_autocomplete']))?>
+								<?php echo CHtml::textField("EnclosureItems[$key]", $value, array('autocomplete' => Yii::app()->params['html_autocomplete']))?>
 							</div>
 							<div class="large-4 column end">
 								<div class="postfix align"><a href="#" class="field-info removeEnclosure">Remove</a></div>
 							</div>
 						</div>
-					<?php }?>
-				<?php } else {?>
-					<?php foreach ($element->enclosures as $i => $item) {?>
+					<?php 
+}
+    ?>
+				<?php 
+} else {
+    ?>
+					<?php foreach ($element->enclosures as $i => $item) {
+    ?>
 						<div class="field-row row collapse enclosureItem">
 							<div class="large-8 column">
-								<?php echo CHtml::textField("EnclosureItems[enclosure$i]",$item->content,array('autocomplete' => Yii::app()->params['html_autocomplete']))?>
+								<?php echo CHtml::textField("EnclosureItems[enclosure$i]", $item->content, array('autocomplete' => Yii::app()->params['html_autocomplete']))?>
 							</div>
 							<div class="large-4 column end">
 								<div class="postfix align"><a href="#" class="field-info removeEnclosure">Remove</a></div>
 							</div>
 						</div>
-					<?php }?>
-				<?php }?>
+					<?php 
+}
+    ?>
+				<?php 
+}?>
 			</div>
 			<div class="field-row">
 				<button class="addEnclosure secondary small" type="button">

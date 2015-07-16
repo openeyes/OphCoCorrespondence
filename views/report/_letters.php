@@ -29,24 +29,31 @@
 			<th>Link</th>
 		</tr>
 	<tbody>
-		<?php if (empty($report->letters)) {?>
+		<?php if (empty($report->letters)) {
+    ?>
 			<tr>
 				<td colspan="6">
 					No letters were found with the selected search criteria.
 				</td>
 			</tr>
-		<?php }else{?>
-			<?php foreach ($report->letters as $letter) {?>
+		<?php 
+} else {
+    ?>
+			<?php foreach ($report->letters as $letter) {
+    ?>
 				<tr>
 					<td><?php echo $letter['hos_num']?></td>
-					<td><?php echo $letter['dob'] ? date('j M Y',strtotime($letter['dob'])) : 'Unknown'?></td>
+					<td><?php echo $letter['dob'] ? date('j M Y', strtotime($letter['dob'])) : 'Unknown'?></td>
 					<td><?php echo $letter['first_name']?></td>
 					<td><?php echo $letter['last_name']?></td>
-					<td><?php echo date('j M Y',strtotime($letter['created_date']))?> <?php echo substr($letter['created_date'],11,5)?></td>
+					<td><?php echo date('j M Y', strtotime($letter['created_date']))?> <?php echo substr($letter['created_date'], 11, 5)?></td>
 					<td><?php echo $letter['type']?></td>
 					<td><a href="<?php echo $letter['link']?>">view</a></td>
 				</tr>
-			<?php }?>
-		<?php }?>
+			<?php 
+}
+    ?>
+		<?php 
+}?>
 	</tbody>
 </table>

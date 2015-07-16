@@ -20,86 +20,84 @@
 
 class SnippetGroupController extends ModuleAdminController
 {
+    protected $admin;
 
-	protected $admin;
-
-	/**
-	 * @var int
-	 */
-	public $itemsPerPage = 100;
+    /**
+     * @var int
+     */
+    public $itemsPerPage = 100;
 
 
-	protected function beforeAction($action)
-	{
-		$this->admin = new Admin(LetterStringGroup::model(), $this);
-		$this->admin->setModelDisplayName('Letter Snippet Group');
+    protected function beforeAction($action)
+    {
+        $this->admin = new Admin(LetterStringGroup::model(), $this);
+        $this->admin->setModelDisplayName('Letter Snippet Group');
 
-		return parent::beforeAction($action);
-	}
+        return parent::beforeAction($action);
+    }
 
-	/**
-	 * Lists procedures
-	 *
-	 * @throws CHttpException
-	 */
-	public function actionList()
-	{
-		$this->admin->setListFields(array(
-			'display_order',
-			'id',
-			'name',
-		));
-		$this->admin->listModel();
-	}
+    /**
+     * Lists procedures
+     *
+     * @throws CHttpException
+     */
+    public function actionList()
+    {
+        $this->admin->setListFields(array(
+            'display_order',
+            'id',
+            'name',
+        ));
+        $this->admin->listModel();
+    }
 
-	/**
-	 * Edits or adds a Procedure
-	 *
-	 * @param bool|int $id
-	 * @throws CHttpException
-	 */
-	public function actionEdit($id = false)
-	{
+    /**
+     * Edits or adds a Procedure
+     *
+     * @param bool|int $id
+     * @throws CHttpException
+     */
+    public function actionEdit($id = false)
+    {
+        if ($id) {
+            $this->admin->setModelId($id);
+        }
+        $this->admin->setEditFields(array(
+            'name' => 'text',
+            'siteLetterStrings' => array(
+                'widget' => 'RelationList',
+                'relation' => 'siteLetterStrings',
+                'action' => 'OphCoCorrespondence/oeadmin/snippet',
+                'search' => array('site_id' => array(
+                    'type' => 'dropdown',
+                    'options' => CHtml::listData(Institution::model()->getCurrent()->sites, 'id', 'short_name'),
+                    'default' => Yii::app()->session['selected_site_id'],
+                )),
+                'listFields' => array(
+                    'display_order',
+                    'name',
+                    'body',
+                    'element_type.name',
+                    'eventTypeName',
+                )
+            )
+        ));
+        $this->admin->editModel();
+    }
 
-		if($id){
-			$this->admin->setModelId($id);
-		}
-		$this->admin->setEditFields(array(
-			'name' => 'text',
-			'siteLetterStrings' => array(
-				'widget' => 'RelationList',
- 				'relation' => 'siteLetterStrings',
-				'action' => 'OphCoCorrespondence/oeadmin/snippet',
-				'search' => array('site_id' => array(
-					'type' => 'dropdown',
-					'options' => CHtml::listData(Institution::model()->getCurrent()->sites,'id', 'short_name'),
-					'default' => Yii::app()->session['selected_site_id'],
-				)),
-				'listFields' => array(
-					'display_order',
-					'name',
-					'body',
-					'element_type.name',
-					'eventTypeName',
-				)
-			)
-		));
-		$this->admin->editModel();
-	}
+    /**
+     * Deletes rows for the model
+     */
+    public function actionDelete()
+    {
+        $this->admin->deleteModel();
+    }
 
-	/**
-	 * Deletes rows for the model
-	 */
-	public function actionDelete()
-	{
-		$this->admin->deleteModel();
-	}
-
-	/**
-	 * Save ordering of the objects
-	 */
-	public function actionSort()
-	{
-		$this->admin->sortModel();
-	}
+    /**
+     * Save ordering of the objects
+     */
+    public function actionSort()
+    {
+        $this->admin->sortModel();
+    }
 }

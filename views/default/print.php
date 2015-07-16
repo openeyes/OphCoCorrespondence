@@ -18,5 +18,5 @@
  */
 ?>
 <div class="print-letter-div">
-	<?php echo $this->renderPartial('print_ElementLetter',array('element' => $element))?>
+	<?php echo $this->renderPartial('print_ElementLetter', array('element' => $element))?>
 </div>

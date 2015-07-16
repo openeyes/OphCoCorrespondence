@@ -19,15 +19,15 @@
 
 class LetterRecipient extends BaseActiveRecordVersioned
 {
-	public function tableName()
-	{
-		return 'ophcocorrespondence_letter_recipient';
-	}
+    public function tableName()
+    {
+        return 'ophcocorrespondence_letter_recipient';
+    }
 
-	public function rules()
-	{
-		return array(
-			array('name', 'safe'),
-		);
-	}
+    public function rules()
+    {
+        return array(
+            array('name', 'safe'),
+        );
+    }
 }

@@ -19,7 +19,9 @@
 
 ?><option value="">- Name -</option><?php
 if (!empty($names)) {
-	foreach ($names as $name) {?>
+    foreach ($names as $name) {
+        ?>
 		<option value="<?php echo $name?>"><?php echo $name?></option>
-	<?php }
+	<?php 
+    }
 }?>

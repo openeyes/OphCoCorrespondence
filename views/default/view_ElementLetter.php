@@ -18,25 +18,27 @@
  */
 ?>
 
-<div id="correspondence_out" class="correspondence-letter<?php if ($element->draft) {?> draft<?php }?>">
+<div id="correspondence_out" class="correspondence-letter<?php if ($element->draft) {
+    ?> draft<?php 
+}?>">
 	<header>
 		<?php $this->renderPartial("letter_start", array(
-			'toAddress' => $element->address,
-			'patient' => $this->patient,
-			'date' => $element->date,
-			'clinicDate' => $element->clinic_date,
-			'element' => $element,
-		))?>
+            'toAddress' => $element->address,
+            'patient' => $this->patient,
+            'date' => $element->date,
+            'clinicDate' => $element->clinic_date,
+            'element' => $element,
+        ))?>
 	</header>
 
 	<?php $this->renderPartial("reply_address", array(
-			'site' => $element->site,
-	))?>
+            'site' => $element->site,
+    ))?>
 
 	<?php $this->renderPartial("print_ElementLetter", array(
-			'element' => $element,
-			'no_header' => true,
-	))?>
+            'element' => $element,
+            'no_header' => true,
+    ))?>
 
 	<input type="hidden" name="OphCoCorrespondence_printLetter" id="OphCoCorrespondence_printLetter" value="<?php echo $element->print?>" />
 	<input type="hidden" name="OphCoCorrespondence_printLetter" id="OphCoCorrespondence_printLetter_all" value="<?php echo $element->print_all?>" />

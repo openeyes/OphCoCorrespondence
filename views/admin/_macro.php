@@ -20,29 +20,29 @@
 ?>
 <div class="box admin">
 	<h2>Edit macro</h2>
-	<?php echo $this->renderPartial('_form_errors',array('errors'=>$errors))?>
+	<?php echo $this->renderPartial('_form_errors', array('errors'=>$errors))?>
 	<?php
-	$form = $this->beginWidget('BaseEventTypeCActiveForm', array(
-		'id'=>'adminform',
-		'enableAjaxValidation'=>false,
-		'focus'=>'#username',
-		'layoutColumns'=>array(
-			'label' => 2,
-			'field' => 4
-		)
-	))?>
-		<?php echo $form->dropDownList($macro,'type',array('site' => 'Site','subspecialty' => 'Subspecialty','firm' => 'Firm'),array('empty' => '- Type -'))?>
-		<?php echo $form->dropDownList($macro,'site_id',Site::model()->getListForCurrentInstitution(),array('empty' => '- Site -','div-class' => 'typeSite'),$macro->type != 'site')?>
-		<?php echo $form->dropDownList($macro,'subspecialty_id',CHtml::listData(Subspecialty::model()->findAll(array('order' => 'name asc')),'id','name'),array('empty' => '- Subspecialty -','div-class' => 'typeSubspecialty'),$macro->type != 'subspecialty')?>
-		<?php echo $form->dropDownList($macro,'firm_id',Firm::model()->getListWithSpecialties(),array('empty' => '- Firm -','div-class' => 'typeFirm'),$macro->type != 'firm')?>
-		<?php echo $form->textField($macro,'name',array('autocomplete'=>Yii::app()->params['html_autocomplete']))?>
-		<?php echo $form->radioButtons($macro,'recipient_id',CHtml::listData(LetterRecipient::model()->findAll(array('order' => 'display_order asc')),'id','name'),null,false,false,false,false,array('empty' => 'None','empty-after' => true))?>
-		<?php echo $form->checkBox($macro,'cc_patient',array('text-align' => 'right'))?>
-		<?php echo $form->checkBox($macro,'cc_doctor',array('text-align' => 'right'))?>
-		<?php echo $form->checkBox($macro,'cc_drss',array('text-align' => 'right'))?>
-		<?php echo $form->checkBox($macro,'use_nickname',array('text-align' => 'right'))?>
-		<?php echo $form->dropDownList($macro,'episode_status_id',CHtml::listData(EpisodeStatus::model()->findAll(array('order' => 'id asc')),'id','name'),array('empty' => '- None -'))?>
-		<?php echo $form->textArea($macro,'body')?>
+    $form = $this->beginWidget('BaseEventTypeCActiveForm', array(
+        'id'=>'adminform',
+        'enableAjaxValidation'=>false,
+        'focus'=>'#username',
+        'layoutColumns'=>array(
+            'label' => 2,
+            'field' => 4
+        )
+    ))?>
+		<?php echo $form->dropDownList($macro, 'type', array('site' => 'Site', 'subspecialty' => 'Subspecialty', 'firm' => 'Firm'), array('empty' => '- Type -'))?>
+		<?php echo $form->dropDownList($macro, 'site_id', Site::model()->getListForCurrentInstitution(), array('empty' => '- Site -', 'div-class' => 'typeSite'), $macro->type != 'site')?>
+		<?php echo $form->dropDownList($macro, 'subspecialty_id', CHtml::listData(Subspecialty::model()->findAll(array('order' => 'name asc')), 'id', 'name'), array('empty' => '- Subspecialty -', 'div-class' => 'typeSubspecialty'), $macro->type != 'subspecialty')?>
+		<?php echo $form->dropDownList($macro, 'firm_id', Firm::model()->getListWithSpecialties(), array('empty' => '- Firm -', 'div-class' => 'typeFirm'), $macro->type != 'firm')?>
+		<?php echo $form->textField($macro, 'name', array('autocomplete'=>Yii::app()->params['html_autocomplete']))?>
+		<?php echo $form->radioButtons($macro, 'recipient_id', CHtml::listData(LetterRecipient::model()->findAll(array('order' => 'display_order asc')), 'id', 'name'), null, false, false, false, false, array('empty' => 'None', 'empty-after' => true))?>
+		<?php echo $form->checkBox($macro, 'cc_patient', array('text-align' => 'right'))?>
+		<?php echo $form->checkBox($macro, 'cc_doctor', array('text-align' => 'right'))?>
+		<?php echo $form->checkBox($macro, 'cc_drss', array('text-align' => 'right'))?>
+		<?php echo $form->checkBox($macro, 'use_nickname', array('text-align' => 'right'))?>
+		<?php echo $form->dropDownList($macro, 'episode_status_id', CHtml::listData(EpisodeStatus::model()->findAll(array('order' => 'id asc')), 'id', 'name'), array('empty' => '- None -'))?>
+		<?php echo $form->textArea($macro, 'body')?>
 		<div class="row field-row">
 			<div class="large-10 large-offset-2 column shortCodeDescription">
 				&nbsp;
@@ -57,7 +57,7 @@
 						</label>
 					</div>
 					<div class="large-6 column end">
-						<?php echo CHtml::dropDownList('shortcode','',CHtml::listData(PatientShortcode::model()->findAll(array('order' => 'description asc')),'code','description'),array('empty' => '- Select -'))?>
+						<?php echo CHtml::dropDownList('shortcode', '', CHtml::listData(PatientShortcode::model()->findAll(array('order' => 'description asc')), 'code', 'description'), array('empty' => '- Select -'))?>
 					</div>
 				</div>
 			</div>

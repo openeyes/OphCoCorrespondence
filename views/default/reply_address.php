@@ -18,14 +18,16 @@
  */
 ?>
 <div class="reply-address">
-	<?php if ($site->replyTo) {?>
+	<?php if ($site->replyTo) {
+    ?>
 		<strong>Please reply to:</strong>
 		<br/>
 		<?php
-		echo $site->getLetterAddress(array(
-			'contact' => 'replyTo',
-			'include_name' => true,
-			'delimiter' => ', ',
-		))?>
-	<?php }?>
+        echo $site->getLetterAddress(array(
+            'contact' => 'replyTo',
+            'include_name' => true,
+            'delimiter' => ', ',
+        ))?>
+	<?php 
+}?>
 </div>

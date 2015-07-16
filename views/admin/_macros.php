@@ -18,18 +18,20 @@
  */
 
 if (!empty($macros)) {
-	foreach ($macros as $i => $macro) {?>
+    foreach ($macros as $i => $macro) {
+        ?>
 		<tr class="clickable" data-id="<?php echo $macro->id?>" data-uri="OphCoCorrespondence/admin/editMacro/<?php echo $macro->id?>">
 			<td><input type="checkbox" name="macros[]" value="<?php echo $macro->id?>" /></td>
 			<td><?php echo $macro->id?></td>
 			<td>
 				<?php if ($macro->site) {
-					echo "Site: ".$macro->site->name;
-				} else if ($macro->subspecialty) {
-					echo "Subspecialty: ".$macro->subspecialty->name;
-				} else {
-					echo "Firm: ".$macro->firm->getNameAndSubspecialty();
-				}?>
+    echo "Site: ".$macro->site->name;
+} elseif ($macro->subspecialty) {
+    echo "Subspecialty: ".$macro->subspecialty->name;
+} else {
+    echo "Firm: ".$macro->firm->getNameAndSubspecialty();
+}
+        ?>
 			</td>
 			<td><?php echo $macro->name?></td>
 			<td><?php echo $macro->recipient ? $macro->recipient->name : '-'?></td>
@@ -39,7 +41,10 @@ if (!empty($macros)) {
 			<td><?php echo $macro->use_nickname ? 'Yes' : 'No'?></td>
 			<td><?php echo $macro->episode_status ? $macro->episode_status->name : '-'?></td>
 		</tr>
-	<?php }
-} else {?>
+	<?php 
+    }
+} else {
+    ?>
 	<tr><td>No letter macros match your filters.</td></tr>
-<?php }?>
+<?php 
+}?>

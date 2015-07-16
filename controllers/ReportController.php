@@ -20,20 +20,20 @@
 
 class ReportController extends BaseReportController
 {
-	public $renderPatientPanel = false;
+    public $renderPatientPanel = false;
 
-	public function accessRules()
-	{
-		return array(
-			array('allow',
-				'actions' => array('letters','runReport','downloadReport'),
-				'roles' => array('OprnGenerateReport','admin'),
-			)
-		);
-	}
+    public function accessRules()
+    {
+        return array(
+            array('allow',
+                'actions' => array('letters','runReport','downloadReport'),
+                'roles' => array('OprnGenerateReport','admin'),
+            )
+        );
+    }
 
-	public function actionLetters()
-	{
-		$this->render('letters');
-	}
+    public function actionLetters()
+    {
+        $this->render('letters');
+    }
 }

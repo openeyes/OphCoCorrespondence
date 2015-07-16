@@ -20,111 +20,110 @@
 
 class SnippetController extends ModuleAdminController
 {
+    protected $admin;
 
-	protected $admin;
-
-	/**
-	 * @var int
-	 */
-	public $itemsPerPage = 100;
+    /**
+     * @var int
+     */
+    public $itemsPerPage = 100;
 
 
-	protected function beforeAction($action)
-	{
-		$this->admin = new Admin(LetterString::model(), $this);
-		$this->admin->setModelDisplayName('Letter String');
+    protected function beforeAction($action)
+    {
+        $this->admin = new Admin(LetterString::model(), $this);
+        $this->admin->setModelDisplayName('Letter String');
 
-		return parent::beforeAction($action);
-	}
+        return parent::beforeAction($action);
+    }
 
-	/**
-	 * Lists snippets
-	 *
-	 * @throws CHttpException
-	 */
-	public function actionList()
-	{
-		$this->admin->setListFields(array(
-			'display_order',
-			'id',
-			'name',
-			'body',
-			'elementTypeName',
-			'eventTypeName',
-		));
-		$this->admin->getSearch()->addSearchItem('site_id', array(
-			'type' => 'dropdown',
-			'options' => CHtml::listData(Institution::model()->getCurrent()->sites,'id', 'name'),
-			'default' => Yii::app()->session['selected_site_id'],
-		));
-		$this->admin->listModel();
-	}
+    /**
+     * Lists snippets
+     *
+     * @throws CHttpException
+     */
+    public function actionList()
+    {
+        $this->admin->setListFields(array(
+            'display_order',
+            'id',
+            'name',
+            'body',
+            'elementTypeName',
+            'eventTypeName',
+        ));
+        $this->admin->getSearch()->addSearchItem('site_id', array(
+            'type' => 'dropdown',
+            'options' => CHtml::listData(Institution::model()->getCurrent()->sites, 'id', 'name'),
+            'default' => Yii::app()->session['selected_site_id'],
+        ));
+        $this->admin->listModel();
+    }
 
-	/**
-	 * Edits or adds a snippets
-	 *
-	 * @param bool|int $id
-	 * @throws CHttpException
-	 */
-	public function actionEdit($id = false)
-	{
-		if($id){
-			$this->admin->setModelId($id);
-		}
-		$this->admin->setEditFields(array(
-			'site_id' => array(
-				'widget' => 'DropDownList',
-				'options' => CHtml::listData(Institution::model()->getCurrent()->sites, 'id', 'short_name'),
-				'default' => Yii::app()->request->getParam('site_id'),
-				'htmlOptions' => null,
-				'hidden' => false,
-				'layoutColumns' => null
-			),
-			'letter_string_group_id' => array(
-				'widget' => 'DropDownList',
-				'options' => CHtml::listData(LetterStringGroup::model()->findAll(),'id', 'name'),
-				'default' => Yii::app()->request->getParam('group_id'),
-				'htmlOptions' => null,
-				'hidden' => false,
-				'layoutColumns' => null
-			),
-			'name' => 'text',
-			'body' => array(
-				'widget' => 'CustomView',
-				'viewName' => '//admin/generic/shortcodeText',
-				'viewArguments' => array('model' => $this->admin->getModel())
-			),
-			'event_type' =>  array(
-				'widget' => 'DropDownList',
-				'options' => CHtml::listData(EventType::model()->findAll(),'class_name', 'name'),
-				'htmlOptions' => array('empty' => '- Select -'),
-				'hidden' => false,
-				'layoutColumns' => null
-			),
-			'element_type' => array(
-				'widget' => 'DropDownList',
-				'options' => CHtml::listData(ElementType::model()->findAll(),'class_name', 'name'),
-				'htmlOptions' => array('empty' => '- Select -'),
-				'hidden' => false,
-				'layoutColumns' => null
-			),
-		));
-		$this->admin->editModel();
-	}
+    /**
+     * Edits or adds a snippets
+     *
+     * @param bool|int $id
+     * @throws CHttpException
+     */
+    public function actionEdit($id = false)
+    {
+        if ($id) {
+            $this->admin->setModelId($id);
+        }
+        $this->admin->setEditFields(array(
+            'site_id' => array(
+                'widget' => 'DropDownList',
+                'options' => CHtml::listData(Institution::model()->getCurrent()->sites, 'id', 'short_name'),
+                'default' => Yii::app()->request->getParam('site_id'),
+                'htmlOptions' => null,
+                'hidden' => false,
+                'layoutColumns' => null
+            ),
+            'letter_string_group_id' => array(
+                'widget' => 'DropDownList',
+                'options' => CHtml::listData(LetterStringGroup::model()->findAll(), 'id', 'name'),
+                'default' => Yii::app()->request->getParam('group_id'),
+                'htmlOptions' => null,
+                'hidden' => false,
+                'layoutColumns' => null
+            ),
+            'name' => 'text',
+            'body' => array(
+                'widget' => 'CustomView',
+                'viewName' => '//admin/generic/shortcodeText',
+                'viewArguments' => array('model' => $this->admin->getModel())
+            ),
+            'event_type' =>  array(
+                'widget' => 'DropDownList',
+                'options' => CHtml::listData(EventType::model()->findAll(), 'class_name', 'name'),
+                'htmlOptions' => array('empty' => '- Select -'),
+                'hidden' => false,
+                'layoutColumns' => null
+            ),
+            'element_type' => array(
+                'widget' => 'DropDownList',
+                'options' => CHtml::listData(ElementType::model()->findAll(), 'class_name', 'name'),
+                'htmlOptions' => array('empty' => '- Select -'),
+                'hidden' => false,
+                'layoutColumns' => null
+            ),
+        ));
+        $this->admin->editModel();
+    }
 
-	/**
-	 * Deletes rows for the model
-	 */
-	public function actionDelete()
-	{
-		$this->admin->deleteModel();
-	}
+    /**
+     * Deletes rows for the model
+     */
+    public function actionDelete()
+    {
+        $this->admin->deleteModel();
+    }
 
-	/**
-	 * Save ordering of the objects
-	 */
-	public function actionSort()
-	{
-		$this->admin->sortModel();
-	}
+    /**
+     * Save ordering of the objects
+     */
+    public function actionSort()
+    {
+        $this->admin->sortModel();
+    }
 }
