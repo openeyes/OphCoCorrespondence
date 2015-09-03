@@ -185,6 +185,7 @@ body {
         float: right;
         text-align: right;
         width: 20em;
+		line-height: 19px;
 }
 
 
@@ -244,4 +245,5 @@ body {
 .to-address-address {
         width: 16em;
         height: 8em;
+		line-height: 19px;
 }
