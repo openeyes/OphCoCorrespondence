@@ -1,7 +1,5 @@
-OphCoCorrespondence
-===================
+## THIS REPOSITORY IS NO LONGER IN USE
 
-letter generation module.
+As of Openeyes release 1.12.1, this module has been merged into the core [openeyes](https://github.com/openeyes/openeyes) repository.
 
-[complete documentation TBD]
-
+This repository is kept for historic purposes only
